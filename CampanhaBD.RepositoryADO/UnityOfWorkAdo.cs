@@ -14,12 +14,12 @@ namespace CampanhaBD.RepositoryADO
 
         public void Commit()
         {
-            throw new NotImplementedException();
+            
         }
 
         public void RollBack()
         {
-            throw new NotImplementedException();
+            
         }
 
         protected virtual void Dispose(bool disposing)

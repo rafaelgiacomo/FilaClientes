@@ -21,10 +21,7 @@ namespace CampanhaBD.RepositoryADO
             strQuery += " INSERT INTO Clientes (Cpf, Nome, Ddd, Telefone) ";
             strQuery += string.Format(" VALUES ('{0}','{1}', '{2}', '{3}') ",
                 entidade.Cpf, entidade.Nome, entidade.Ddd, entidade.Telefone);
-            using (_context = new Context())
-            {
-                _context.ExecutaComando(strQuery);
-            }
+            _context.ExecutaComando(strQuery);
         }
 
         public void Alterar(ClientModel entidade)
@@ -36,38 +33,27 @@ namespace CampanhaBD.RepositoryADO
             strQuery += string.Format(" Ddd = '{0}', ", entidade.Ddd);
             strQuery += string.Format(" Telefone = '{0}' ", entidade.Telefone);
             strQuery += string.Format(" WHERE Id = {0} ", entidade.Id);
-            using (_context = new Context())
-            {
-                _context.ExecutaComando(strQuery);
-            }
+            _context.ExecutaComando(strQuery);
         }
 
         public void Excluir(ClientModel entidade)
         {
-            using (_context = new Context())
-            {
-                var strQuery = string.Format(" DELETE FROM Clientes WHERE Id = {0}", entidade.Id);
-                _context.ExecutaComando(strQuery);
-            }
+            var strQuery = string.Format(" DELETE FROM Clientes WHERE Id = {0}", entidade.Id);
+            _context.ExecutaComando(strQuery);
         }
 
         public IEnumerable<ClientModel> ListarTodos()
         {
-            using (_context = new Context())
-            {
-                var strQuery = " SELECT * FROM Clientes ";
-                var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
-                return TransformaReaderEmListaDeObjeto(retornoDataReader);
-            }
+            var strQuery = " SELECT * FROM Clientes ";
+            var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
+            return TransformaReaderEmListaDeObjeto(retornoDataReader);
         }
 
         public ClientModel ListarPorId(string id)
         {
-            {
-                var strQuery = string.Format(" SELECT * FROM Clientes WHERE Id = {0} ", id);
-                var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
-                return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
-            }
+            var strQuery = string.Format(" SELECT * FROM Clientes WHERE Id = {0} ", id);
+            var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
+            return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
         }
 
         private List<ClientModel> TransformaReaderEmListaDeObjeto(SqlDataReader reader)
@@ -88,5 +74,6 @@ namespace CampanhaBD.RepositoryADO
             reader.Close();
             return usuarios;
         }
+
     }
 }
