@@ -6,18 +6,22 @@ namespace CampanhaBD.UI.WEB.ViewModel
     public class UsuarioViewModel
     {
         [Required]
-        public string Cpf { get; set; }
+        public string Nome { get; set; }
 
         [Required]
-        public string Nome { get; set; }
+        [DataType(DataType.EmailAddress)]
+        public string Email { get; set; }
 
         [Required]
         public string Login { get; set; }
 
         [Required]
+        [DataType(DataType.Password)]
         public string Senha { get; set; }
 
         [Required]
+        [DataType(DataType.Password)]
+        [Compare("Senha")]
         public string ConfirmarSenha { get; set; }
 
         public string Empresa { get; set; }
@@ -26,8 +30,8 @@ namespace CampanhaBD.UI.WEB.ViewModel
         {
             Usuario usuario = new Usuario()
             {
-                Cpf = this.Cpf,
                 Nome = this.Nome,
+                Email = this.Email,
                 Login = this.Login,
                 Senha = this.Senha,
                 Empresa = this.Empresa

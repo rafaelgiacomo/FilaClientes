@@ -217,10 +217,9 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Conta\Registrar.cshtml" />
     <Content Include="Views\Conta\LogIn.cshtml" />
-    <Content Include="Views\Conta\Registrar.cshtml" />
     <Content Include="Views\Import\Importar.cshtml" />
+    <Content Include="Views\Conta\Registrar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

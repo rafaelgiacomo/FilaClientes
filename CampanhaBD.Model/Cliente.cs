@@ -4,7 +4,7 @@ namespace CampanhaBD.Model
 {
     public class Cliente : Pessoa
     {
-        public DateTime DataNascimento { get; set; }
+        public string Cpf { get; set; }
 
         public string Uf { get; set; }
 
@@ -15,6 +15,8 @@ namespace CampanhaBD.Model
         public string Ddd { get; set; }
 
         public string Telefone { get; set; }
+
+        public DateTime DataNascimento { get; set; }
 
         public string Logradouro { get; set; }
 

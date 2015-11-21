@@ -18,13 +18,13 @@ namespace CampanhaBD.RepositoryADO
 
         public void Inserir(Usuario entidade)
         {
-            entidade.Classificacao = "Usuario";
+            entidade.Classificacao = Pessoa.CLIENTE;
             _pessoaRepositorioADO.Inserir((Pessoa) entidade);
             entidade.Id = _pessoaRepositorioADO.UltimoId;
 
             var strQuery = "";
-            strQuery += " INSERT INTO Usuarios (Id, Login, Senha, Empresa) ";
-            strQuery += string.Format(" VALUES ('{0}','{1}', '{2}', '{3}') ",
+            strQuery += " INSERT INTO USUARIOS (Id, Email, Login, Senha, Empresa) ";
+            strQuery += string.Format(" VALUES ('{0}','{1}', '{2}', '{3}', '{4}') ",
                 entidade.Id, entidade.Login, entidade.Senha, entidade.Empresa);
             _context.ExecutaComando(strQuery);
         }
@@ -32,7 +32,8 @@ namespace CampanhaBD.RepositoryADO
         public void Alterar(Usuario entidade)
         {
             var strQuery = "";
-            strQuery += " UPDATE Usuarios SET ";
+            strQuery += " UPDATE USUARIOS SET ";
+            strQuery += string.Format(" Email = '{0}', ", entidade.Login);
             strQuery += string.Format(" Login = '{0}', ", entidade.Login);
             strQuery += string.Format(" Senha = '{0}', ", entidade.Senha);
             strQuery += string.Format(" Empresa = '{0}' ", entidade.Empresa);
@@ -42,20 +43,20 @@ namespace CampanhaBD.RepositoryADO
 
         public void Excluir(Usuario entidade)
         {
-            var strQuery = string.Format(" DELETE FROM Usuarios WHERE Id = {0}", entidade.Id);
+            var strQuery = string.Format(" DELETE FROM USUARIOS WHERE Id = {0}", entidade.Id);
             _context.ExecutaComando(strQuery);
         }
 
         public IEnumerable<Usuario> ListarTodos()
         {
-            var strQuery = " SELECT * FROM Usuarios ";
+            var strQuery = " SELECT * FROM USUARIOS ";
             var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             return TransformaReaderEmListaDeObjeto(retornoDataReader);
         }
 
         public Usuario ListarPorId(string id)
         {
-            var strQuery = string.Format(" SELECT * FROM Usuarios WHERE Id = {0} ", id);
+            var strQuery = string.Format(" SELECT * FROM USUARIOS WHERE Id = {0} ", id);
             var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
         }
@@ -69,6 +70,7 @@ namespace CampanhaBD.RepositoryADO
                 {
                     Id = int.Parse(reader["Id"].ToString()),
                     Login = reader["Login"].ToString(),
+                    Email = reader["Email"].ToString(),
                     Senha = reader["Senha"].ToString(),
                     Empresa = reader["Empresa"].ToString()
                 };
@@ -77,6 +79,5 @@ namespace CampanhaBD.RepositoryADO
             reader.Close();
             return usuarios;
         }
-
     }
 }

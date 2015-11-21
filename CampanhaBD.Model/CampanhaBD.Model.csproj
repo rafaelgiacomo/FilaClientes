@@ -45,6 +45,7 @@
     <Compile Include="Campanha.cs" />
     <Compile Include="Cliente.cs" />
     <Compile Include="Emprestimo.cs" />
+    <Compile Include="Hash.cs" />
     <Compile Include="Importacao.cs" />
     <Compile Include="Pessoa.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

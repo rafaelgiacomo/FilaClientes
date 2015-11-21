@@ -20,15 +20,15 @@ namespace CampanhaBD.RepositoryADO
 
         public void Inserir(Cliente entidade)
         {
-            entidade.Classificacao = "Cliente";
+            entidade.Classificacao = Pessoa.CLIENTE;
             _pessoaRepositorioADO.Inserir((Pessoa)entidade);
             entidade.Id = _pessoaRepositorioADO.UltimoId;
 
             var strQuery = "";
-            strQuery += " INSERT INTO Clientes (DataNascimento, Uf, Cidade, Bairro, Ddd, Telefone, Logradouro, Numero," +
+            strQuery += " INSERT INTO CLIENTES (Cpf, DataNascimento, Uf, Cidade, Bairro, Ddd, Telefone, Logradouro, Numero," +
                         " Cep, Trabalhado) ";
-            strQuery += string.Format(" VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}') ", 
-                entidade.DataNascimento, entidade.Uf, entidade.Cidade, entidade.Bairro, entidade.Ddd, 
+            strQuery += string.Format(" VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}'," +
+                " '{10}') ", entidade.Cpf, entidade.DataNascimento, entidade.Uf, entidade.Cidade, entidade.Bairro, entidade.Ddd, 
                 entidade.Telefone, entidade.Logradouro, entidade.Numero, entidade.Cep, entidade.Trabalhado);
             _context.ExecutaComando(strQuery);
         }
@@ -37,6 +37,7 @@ namespace CampanhaBD.RepositoryADO
         {
             var strQuery = "";
             strQuery += " UPDATE Clientes SET ";
+            strQuery += string.Format(" Cpf = '{0}', ", entidade.DataNascimento);
             strQuery += string.Format(" DataNascimento = '{0}', ", entidade.DataNascimento);
             strQuery += string.Format(" Uf = '{0}', ", entidade.Uf);
             strQuery += string.Format(" Cidade = '{0}', ", entidade.Cidade);
@@ -79,6 +80,7 @@ namespace CampanhaBD.RepositoryADO
                 var temObjeto = new Cliente()
                 {
                     Id = int.Parse(reader["Id"].ToString()),
+                    Cpf = reader["Cpf"].ToString(),
                     DataNascimento = DateTime.Parse(reader["DataNascimento"].ToString()),
                     Uf = reader["Uf"].ToString(),
                     Cidade = reader["Cidade"].ToString(),
