@@ -1,8 +1,12 @@
 ﻿using CampanhaBD.UI.WEB.ViewModel;
-using System.Web.Mvc;
 using CampanhaBD.RepositoryADO;
 using CampanhaBD.Model;
+using System;
+using System.Linq;
 using System.Security.Cryptography;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Security;
 
 namespace CampanhaBD.UI.WEB.Controllers
 {
@@ -23,6 +27,24 @@ namespace CampanhaBD.UI.WEB.Controllers
         [HttpPost]
         public ActionResult LogIn(LoginViewModel model)
         {
+            Hash hash = new Hash(SHA512.Create());
+            Usuario usuario = _unityOfWork.Usuarios.ListarTodos().Where(x => x.Login == model.Login).FirstOrDefault();
+
+            if (usuario != null)
+            {
+                if (hash.VerificarSenha(model.Senha, usuario.Senha))
+                {
+                    FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, usuario.Login, DateTime.Now,
+                        DateTime.Now.AddMinutes(30), false, null, FormsAuthentication.FormsCookiePath);
+                    HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName,
+                        FormsAuthentication.Encrypt(ticket));
+
+                    Response.Cookies.Add(cookie);
+                    //FormsAuthentication.SetAuthCookie();
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            ViewBag.Mensagem = "Login ou Senha inválido";
             return View();
         }
 

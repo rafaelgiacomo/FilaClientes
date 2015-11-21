@@ -24,8 +24,8 @@ namespace CampanhaBD.RepositoryADO
 
             var strQuery = "";
             strQuery += " INSERT INTO USUARIOS (Id, Email, Login, Senha, Empresa) ";
-            strQuery += string.Format(" VALUES ('{0}','{1}', '{2}', '{3}', '{4}') ",
-                entidade.Id, entidade.Login, entidade.Senha, entidade.Empresa);
+            strQuery += string.Format(" VALUES ('{0}', '{1}', '{2}', '{3}', '{4}') ",
+                entidade.Id, entidade.Email, entidade.Login, entidade.Senha, entidade.Empresa);
             _context.ExecutaComando(strQuery);
         }
 
