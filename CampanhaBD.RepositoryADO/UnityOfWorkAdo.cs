@@ -9,7 +9,8 @@ namespace CampanhaBD.RepositoryADO
         private bool _disposed;
 
         #pragma warning disable 649
-        private ClientRepositoryAdo _clientRepository;
+        private ClienteRepositoryAdo _clientRepository;
+        private UsuarioRepositoryAdo _usuarioRepository;
         #pragma warning restore 649
 
         public void Commit()
@@ -40,9 +41,14 @@ namespace CampanhaBD.RepositoryADO
             GC.SuppressFinalize(this);
         }
 
-        public ClientRepositoryAdo Clients
+        public ClienteRepositoryAdo Clients
         {
-            get { return (_clientRepository ?? new ClientRepositoryAdo(_context)); }
+            get { return (_clientRepository ?? new ClienteRepositoryAdo(_context)); }
+        }
+
+        public UsuarioRepositoryAdo Usuarios
+        {
+            get { return (_usuarioRepository ?? new UsuarioRepositoryAdo(_context)); }
         }
     }
 }
