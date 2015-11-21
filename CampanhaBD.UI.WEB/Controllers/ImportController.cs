@@ -19,7 +19,7 @@ namespace CampanhaBD.UI.WEB.Controllers
             return View();
         }
 
-        public ActionResult Importar(HttpPostedFileBase file)
+        public ActionResult Index(HttpPostedFileBase file)
         {
             DataSet ds = new DataSet();
             if (Request.Files["file"].ContentLength > 0)
@@ -98,6 +98,9 @@ namespace CampanhaBD.UI.WEB.Controllers
                 {
                     string conn = ConfigurationManager.ConnectionStrings["dbconnection"].ConnectionString;
                     SqlConnection con = new SqlConnection(conn);
+                    string query = "Insert into Person(Name,Email,Mobile) Values('" +
+                    ds.Tables[0].Rows[i][0].ToString() + "','" + ds.Tables[0].Rows[i][1].ToString() +
+                    "','" + ds.Tables[0].Rows[i][2].ToString() + "')";
                     con.Open();
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.ExecuteNonQuery();
@@ -106,6 +109,5 @@ namespace CampanhaBD.UI.WEB.Controllers
             }
             return View();
         }
-
     }
 }
