@@ -18,6 +18,12 @@ namespace CampanhaBD.UI.WEB.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult LogIn(LoginViewModel model)
+        {
+            return View();
+        }
+
         public ActionResult Registrar()
         {
             return View();
