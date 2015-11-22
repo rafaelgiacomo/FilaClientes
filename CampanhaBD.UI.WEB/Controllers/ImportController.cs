@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CampanhaBD.UI.WEB.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -11,6 +12,7 @@ using System.Xml;
 
 namespace CampanhaBD.UI.WEB.Controllers
 {
+    [Authorize]
     public class ImportController : Controller
     {
         // GET: Import
@@ -19,7 +21,23 @@ namespace CampanhaBD.UI.WEB.Controllers
             return View();
         }
 
-        public ActionResult Index(HttpPostedFileBase file)
+        public ActionResult Importar()
+        {
+            return View();
+        }
+
+        public ActionResult Associar()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Associar(ImportacaoClienteViewModel model)
+        {
+            return View();
+        }
+
+        public ActionResult Importar(HttpPostedFileBase file)
         {
             DataSet ds = new DataSet();
             if (Request.Files["file"].ContentLength > 0)

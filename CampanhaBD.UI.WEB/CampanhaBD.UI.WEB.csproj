@@ -166,6 +166,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\CampanhaController.cs" />
     <Compile Include="Controllers\ContaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImportController.cs" />
@@ -177,6 +178,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModel\ImportacaoClienteViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\UsuarioViewModel.cs" />
   </ItemGroup>
@@ -220,6 +222,9 @@
     <Content Include="Views\Conta\LogIn.cshtml" />
     <Content Include="Views\Import\Importar.cshtml" />
     <Content Include="Views\Conta\Registrar.cshtml" />
+    <Content Include="Views\Campanha\Index.cshtml" />
+    <Content Include="Views\Import\Index.cshtml" />
+    <Content Include="Views\Import\Associar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

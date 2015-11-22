@@ -16,7 +16,6 @@ namespace CampanhaBD.UI.WEB.Controllers
             return View();
         }
 
-        [Authorize]
         public ActionResult Contato()
         {
             ViewBag.Message = "Your contact page.";

@@ -10,6 +10,7 @@ namespace CampanhaBD.UI.WEB.ViewModel
 
         [Required]
         [Display(Name = "Senha")]
+        [DataType(DataType.Password)]
         public string Senha { get; set; }
     }
 }

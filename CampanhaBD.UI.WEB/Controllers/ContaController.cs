@@ -34,13 +34,7 @@ namespace CampanhaBD.UI.WEB.Controllers
             {
                 if (hash.VerificarSenha(model.Senha, usuario.Senha))
                 {
-                    FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, usuario.Login, DateTime.Now,
-                        DateTime.Now.AddMinutes(30), false, null, FormsAuthentication.FormsCookiePath);
-                    HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName,
-                        FormsAuthentication.Encrypt(ticket));
-
-                    Response.Cookies.Add(cookie);
-                    //FormsAuthentication.SetAuthCookie();
+                    FormsAuthentication.SetAuthCookie(usuario.Login, false);
                     return RedirectToAction("Index", "Home");
                 }
             }
