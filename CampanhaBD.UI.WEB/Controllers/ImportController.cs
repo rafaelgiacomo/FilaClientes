@@ -13,6 +13,7 @@ using CampanhaBD.Model;
 using CampanhaBD.UI.WEB.Models;
 using CampanhaBD.RepositoryADO;
 using System.IO;
+using Excel;
 
 namespace CampanhaBD.UI.WEB.Controllers
 {
@@ -49,100 +50,144 @@ namespace CampanhaBD.UI.WEB.Controllers
         }
 
         [HttpPost]
-        public ActionResult Associar(ImportacaoClienteViewModel model)
+        public ActionResult Associar(HttpPostedFileBase File)
         {
-            return View();
-        }
-
-        /*public ActionResult Importar(HttpPostedFileBase file)
-        {
-            DataSet ds = new DataSet();
-            if (Request.Files["file"].ContentLength > 0)
             {
-                string fileExtension =
-                                     System.IO.Path.GetExtension(Request.Files["file"].FileName);
-
-                if (fileExtension == ".xls" || fileExtension == ".xlsx")
+                if (ModelState.IsValid)
                 {
-                    string fileLocation = Server.MapPath("~/Content/") + Request.Files["file"].FileName;
-                    if (System.IO.File.Exists(fileLocation))
-                    {
 
-                        System.IO.File.Delete(fileLocation);
-                    }
-                    Request.Files["file"].SaveAs(fileLocation);
-                    string excelConnectionString = string.Empty;
-                    excelConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" +
-                    fileLocation + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
-                    //connection String for xls file format.
-                    if (fileExtension == ".xls")
+                    if (File != null && File.ContentLength > 0)
                     {
-                        excelConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" +
-                        fileLocation + ";Extended Properties=\"Excel 8.0;HDR=Yes;IMEX=2\"";
+                        // ExcelDataReader works with the binary Excel file, so it needs a FileStream
+                        // to get started. This is how we avoid dependencies on ACE or Interop:
+                        Stream stream = File.InputStream;
+
+                        // We return the interface, so that
+                        IExcelDataReader reader = null;
+
+
+                        if (File.FileName.EndsWith(".xls"))
+                        {
+                            reader = ExcelReaderFactory.CreateBinaryReader(stream);
+                        }
+                        else if (File.FileName.EndsWith(".xlsx"))
+                        {
+                            reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("File", "This file format is not supported");
+                            return View();
+                        }
+                        List<string> map_data = new List<string>();
+                        for (int i = 0; i <= reader.FieldCount - 1; i++)
+                        {
+                            map_data.Add(i + "-" + reader.GetName(i));
+                        }
+
+
+                        reader.Close();
+
+                        return View(map_data, File);
                     }
-                    //connection String for xlsx file format.
-                    else if (fileExtension == ".xlsx")
+                    else
                     {
+                        ModelState.AddModelError("File", "Please Upload Your file");
+                    }
+                }
+                return View();
+            }
+
+            /*public ActionResult Importar(HttpPostedFileBase file)
+            {
+                DataSet ds = new DataSet();
+                if (Request.Files["file"].ContentLength > 0)
+                {
+                    string fileExtension =
+                                         System.IO.Path.GetExtension(Request.Files["file"].FileName);
+
+                    if (fileExtension == ".xls" || fileExtension == ".xlsx")
+                    {
+                        string fileLocation = Server.MapPath("~/Content/") + Request.Files["file"].FileName;
+                        if (System.IO.File.Exists(fileLocation))
+                        {
+
+                            System.IO.File.Delete(fileLocation);
+                        }
+                        Request.Files["file"].SaveAs(fileLocation);
+                        string excelConnectionString = string.Empty;
                         excelConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" +
                         fileLocation + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
+                        //connection String for xls file format.
+                        if (fileExtension == ".xls")
+                        {
+                            excelConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" +
+                            fileLocation + ";Extended Properties=\"Excel 8.0;HDR=Yes;IMEX=2\"";
+                        }
+                        //connection String for xlsx file format.
+                        else if (fileExtension == ".xlsx")
+                        {
+                            excelConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" +
+                            fileLocation + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
+                        }
+                        //Create Connection to Excel work book and add oledb namespace
+                        OleDbConnection excelConnection = new OleDbConnection(excelConnectionString);
+                        excelConnection.Open();
+                        DataTable dt = new DataTable();
+
+                        dt = excelConnection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                        if (dt == null)
+                        {
+                            return null;
+                        }
+
+                        String[] excelSheets = new String[dt.Rows.Count];
+                        int t = 0;
+                        //excel data saves in temp file here.
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            excelSheets[t] = row["TABLE_NAME"].ToString();
+                            t++;
+                        }
+                        OleDbConnection excelConnection1 = new OleDbConnection(excelConnectionString);
+
+
+                        string query = string.Format("Select * from [{0}]", excelSheets[0]);
+                        using (OleDbDataAdapter dataAdapter = new OleDbDataAdapter(query, excelConnection1))
+                        {
+                            dataAdapter.Fill(ds);
+                        }
                     }
-                    //Create Connection to Excel work book and add oledb namespace
-                    OleDbConnection excelConnection = new OleDbConnection(excelConnectionString);
-                    excelConnection.Open();
-                    DataTable dt = new DataTable();
-
-                    dt = excelConnection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-                    if (dt == null)
+                    if (fileExtension.ToString().ToLower().Equals(".xml"))
                     {
-                        return null;
+                        string fileLocation = Server.MapPath("~/Content/") + Request.Files["FileUpload"].FileName;
+                        if (System.IO.File.Exists(fileLocation))
+                        {
+                            System.IO.File.Delete(fileLocation);
+                        }
+
+                        Request.Files["FileUpload"].SaveAs(fileLocation);
+                        XmlTextReader xmlreader = new XmlTextReader(fileLocation);
+                        // DataSet ds = new DataSet();
+                        ds.ReadXml(xmlreader);
+                        xmlreader.Close();
                     }
 
-                    String[] excelSheets = new String[dt.Rows.Count];
-                    int t = 0;
-                    //excel data saves in temp file here.
-                    foreach (DataRow row in dt.Rows)
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        excelSheets[t] = row["TABLE_NAME"].ToString();
-                        t++;
-                    }
-                    OleDbConnection excelConnection1 = new OleDbConnection(excelConnectionString);
-
-
-                    string query = string.Format("Select * from [{0}]", excelSheets[0]);
-                    using (OleDbDataAdapter dataAdapter = new OleDbDataAdapter(query, excelConnection1))
-                    {
-                        dataAdapter.Fill(ds);
+                        string conn = ConfigurationManager.ConnectionStrings["dbconnection"].ConnectionString;
+                        SqlConnection con = new SqlConnection(conn);
+                        string query = "Insert into Person(Name,Email,Mobile) Values('" +
+                        ds.Tables[0].Rows[i][0].ToString() + "','" + ds.Tables[0].Rows[i][1].ToString() +
+                        "','" + ds.Tables[0].Rows[i][2].ToString() + "')";
+                        con.Open();
+                        SqlCommand cmd = new SqlCommand(query, con);
+                        cmd.ExecuteNonQuery();
+                        con.Close();
                     }
                 }
-                if (fileExtension.ToString().ToLower().Equals(".xml"))
-                {
-                    string fileLocation = Server.MapPath("~/Content/") + Request.Files["FileUpload"].FileName;
-                    if (System.IO.File.Exists(fileLocation))
-                    {
-                        System.IO.File.Delete(fileLocation);
-                    }
-
-                    Request.Files["FileUpload"].SaveAs(fileLocation);
-                    XmlTextReader xmlreader = new XmlTextReader(fileLocation);
-                    // DataSet ds = new DataSet();
-                    ds.ReadXml(xmlreader);
-                    xmlreader.Close();
-                }
-
-                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                {
-                    string conn = ConfigurationManager.ConnectionStrings["dbconnection"].ConnectionString;
-                    SqlConnection con = new SqlConnection(conn);
-                    string query = "Insert into Person(Name,Email,Mobile) Values('" +
-                    ds.Tables[0].Rows[i][0].ToString() + "','" + ds.Tables[0].Rows[i][1].ToString() +
-                    "','" + ds.Tables[0].Rows[i][2].ToString() + "')";
-                    con.Open();
-                    SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                }
-            }
-            return View();
-        }*/
+                return View();
+            }*/
+        }
     }
 }
