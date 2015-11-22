@@ -64,5 +64,11 @@ namespace CampanhaBD.UI.WEB.Controllers
             
             return View();
         }
+
+        public ActionResult LogOff()
+        {
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Index", "Home");
+        }
     }
 }

@@ -9,21 +9,38 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml;
+using CampanhaBD.Model;
+using CampanhaBD.UI.WEB.Models;
+using CampanhaBD.RepositoryADO;
+using System.IO;
 
 namespace CampanhaBD.UI.WEB.Controllers
 {
     [Authorize]
     public class ImportController : Controller
     {
+        private readonly UnityOfWorkAdo _unityOfWork = new UnityOfWorkAdo();
+
         // GET: Import
         public ActionResult Index()
         {
-            return View();
+            return View(new List<Importacao>());
         }
 
         public ActionResult Importar()
         {
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult Importar(HttpPostedFileBase File)
+        {
+            if (File != null)
+            {
+                string caminho = Path.Combine(Server.MapPath("~/Content/Uploads"), File.FileName);
+                File.SaveAs(caminho);
+            }
+            return RedirectToAction("Associar");
         }
 
         public ActionResult Associar()
@@ -37,7 +54,7 @@ namespace CampanhaBD.UI.WEB.Controllers
             return View();
         }
 
-        public ActionResult Importar(HttpPostedFileBase file)
+        /*public ActionResult Importar(HttpPostedFileBase file)
         {
             DataSet ds = new DataSet();
             if (Request.Files["file"].ContentLength > 0)
@@ -126,6 +143,6 @@ namespace CampanhaBD.UI.WEB.Controllers
                 }
             }
             return View();
-        }
+        }*/
     }
 }

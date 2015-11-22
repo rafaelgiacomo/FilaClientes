@@ -1,7 +1,19 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Importar";
 }
 
-<h2>Importar .xls ou .xlsx</h2>
+<div class="box-header with-border">
+    <h3 class="box-title">Selecione os arquivos a serem importados (.xls ou .xlsx)</h3>
+</div>
 
+@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="form-group">
+        <input type="file" class="btn btn-file" name="File" id="File" />
+    </div>
+
+    <div class="box-footer">
+        <input type="submit" class="btn btn-primary" name="submit" value="Importar" />
+        @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-info pull-right" })
+    </div>
+}
