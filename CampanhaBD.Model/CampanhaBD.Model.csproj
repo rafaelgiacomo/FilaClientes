@@ -51,6 +51,7 @@
     <Compile Include="Banco.cs" />
     <Compile Include="Beneficio.cs" />
     <Compile Include="Campanha.cs" />
+    <Compile Include="Campanha_Importacao.cs" />
     <Compile Include="Cliente.cs" />
     <Compile Include="Emprestimo.cs" />
     <Compile Include="Hash.cs" />

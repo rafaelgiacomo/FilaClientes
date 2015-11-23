@@ -52,6 +52,7 @@
     <Compile Include="BancoRepositoryAdo.cs" />
     <Compile Include="BeneficioRepositoryAdo.cs" />
     <Compile Include="CampanhaRepositoryAdo.cs" />
+    <Compile Include="Campanha_ImportacaoRepositoryAdo.cs" />
     <Compile Include="ClienteRepositoryAdo.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="EmprestimoRepositoryAdo.cs" />

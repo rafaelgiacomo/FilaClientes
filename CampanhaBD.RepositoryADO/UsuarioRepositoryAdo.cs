@@ -23,27 +23,27 @@ namespace CampanhaBD.RepositoryADO
             entidade.Id = _pessoaRepositorioADO.UltimoId;
 
             var strQuery = "";
-            strQuery += " INSERT INTO USUARIOS (Id, Email, Login, Senha, Empresa) ";
+            strQuery += " INSERT INTO Usuario (pessoa_id, login, senha, empresa, email) ";
             strQuery += string.Format(" VALUES ('{0}', '{1}', '{2}', '{3}', '{4}') ",
-                entidade.Id, entidade.Email, entidade.Login, entidade.Senha, entidade.Empresa);
+                entidade.Id, entidade.Login, entidade.Senha, entidade.Empresa, entidade.Email);
             _context.ExecutaComando(strQuery);
         }
 
         public void Alterar(Usuario entidade)
         {
             var strQuery = "";
-            strQuery += " UPDATE USUARIOS SET ";
-            strQuery += string.Format(" Email = '{0}', ", entidade.Login);
-            strQuery += string.Format(" Login = '{0}', ", entidade.Login);
-            strQuery += string.Format(" Senha = '{0}', ", entidade.Senha);
-            strQuery += string.Format(" Empresa = '{0}' ", entidade.Empresa);
-            strQuery += string.Format(" WHERE Id = {0} ", entidade.Id);
+            strQuery += " UPDATE Usuario SET ";
+            strQuery += string.Format(" login = '{0}', ", entidade.Login);
+            strQuery += string.Format(" senha = '{0}', ", entidade.Senha);
+            strQuery += string.Format(" empresa = '{0}' ", entidade.Empresa);
+            strQuery += string.Format(" email = '{0}', ", entidade.Email);
+            strQuery += string.Format(" WHERE pessoa_id = {0} ", entidade.Id);
             _context.ExecutaComando(strQuery);
         }
 
         public void Excluir(Usuario entidade)
         {
-            var strQuery = string.Format(" DELETE FROM USUARIOS WHERE Id = {0}", entidade.Id);
+            var strQuery = string.Format(" DELETE FROM Usuario WHERE pessoa_id = {0}", entidade.Id);
             _context.ExecutaComando(strQuery);
         }
 
@@ -56,7 +56,7 @@ namespace CampanhaBD.RepositoryADO
 
         public Usuario ListarPorId(string id)
         {
-            var strQuery = string.Format(" SELECT * FROM USUARIOS WHERE Id = {0} ", id);
+            var strQuery = string.Format(" SELECT * FROM Usuario WHERE pessoa_id = {0} ", id);
             var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
         }
@@ -68,11 +68,11 @@ namespace CampanhaBD.RepositoryADO
             {
                 var temObjeto = new Usuario()
                 {
-                    Id = int.Parse(reader["Id"].ToString()),
-                    Login = reader["Login"].ToString(),
-                    Email = reader["Email"].ToString(),
-                    Senha = reader["Senha"].ToString(),
-                    Empresa = reader["Empresa"].ToString()
+                    Id = int.Parse(reader["pessoa_id"].ToString()),
+                    Login = reader["login"].ToString(),
+                    Senha = reader["senha"].ToString(),
+                    Empresa = reader["empresa"].ToString(),
+                    Email = reader["email"].ToString(),
                 };
                 usuarios.Add(temObjeto);
             }

@@ -17,46 +17,47 @@ namespace CampanhaBD.RepositoryADO
         public void Inserir(Emprestimo entidade)
         {
             var strQuery = "";
-            strQuery += " INSERT INTO Emprestimos (ClienteId, NumBeneficio, NumEmprestimo, ParcelasNoContrato, " +
-                        "ParcelasPagas, Saldo, InicioPagamento, BancoId) ";
-            strQuery += string.Format(" VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}') ",
-                entidade.ClienteId, entidade.NumBeneficio, entidade.NumEmprestimo, entidade.ParcelasNoContrato, 
-                entidade.ParcelasPagas, entidade.Saldo, entidade.InicioPagamento, entidade.BancoId);
+            strQuery += " INSERT INTO Emprestimo (emp_id, numero, pessoa_id, parcelasContrato " +
+                        "parcelasPagas, saldo, inicioPag, ban_id, valorParcela) ";
+            strQuery += string.Format(" VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}') ",
+                entidade.NumEmprestimo, entidade.NumBeneficio, entidade.ClienteId, entidade.ParcelasNoContrato, 
+                entidade.ParcelasPagas, entidade.Saldo, entidade.InicioPagamento, entidade.BancoId, entidade.ValorParcela);
             _context.ExecutaComando(strQuery);
         }
 
         public void Alterar(Emprestimo entidade)
         {
             var strQuery = "";
-            strQuery += " UPDATE Emprestimos SET ";
+            strQuery += " UPDATE Emprestimo SET ";
             strQuery += string.Format(" ParcelasNoContrato = '{0}', ", entidade.ParcelasNoContrato);
             strQuery += string.Format(" ParcelasPagas = '{0}', ", entidade.ParcelasPagas);
             strQuery += string.Format(" Saldo = '{0}', ", entidade.Saldo);
             strQuery += string.Format(" InicioPagamento = '{0}', ", entidade.InicioPagamento);
             strQuery += string.Format(" BancoId = '{0}' ", entidade.BancoId);
-            strQuery += string.Format(" WHERE ClienteId = '{0}' AND NumBeneficio = '{1}' AND NumEmprestimo = '{2}' ", 
-                entidade.ClienteId, entidade.NumBeneficio, entidade.NumEmprestimo);
+            strQuery += string.Format(" valorParcela = '{0}' ", entidade.ValorParcela;
+            strQuery += string.Format(" WHERE emp_id = '{0}' AND  numero = '{1}' AND  pessoa_id = '{2}' ", 
+                entidade.NumEmprestimo, entidade.NumBeneficio, entidade.ClienteId);
             _context.ExecutaComando(strQuery);
         }
 
         public void Excluir(Emprestimo entidade)
         {
-            var strQuery = string.Format(" DELETE FROM Emprestimos WHERE ClienteId = '{0}' AND NumBeneficio = '{1}' " +
-                                         "AND NumEmprestimo = '{2}' ", entidade.ClienteId, entidade.NumBeneficio, 
-                                         entidade.NumEmprestimo);
+            var strQuery = string.Format(" DELETE FROM Emprestimo WHERE  emp_id = '{0}' AND numero = '{1}' " +
+                                         "AND pessoa_id = '{2}' ", entidade.NumEmprestimo, entidade.NumBeneficio, 
+                                         entidade.ClienteId);
             _context.ExecutaComando(strQuery);
         }
 
         public IEnumerable<Emprestimo> ListarTodos()
         {
-            var strQuery = " SELECT * FROM Emprestimos ";
+            var strQuery = " SELECT * FROM Emprestimo ";
             var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             return TransformaReaderEmListaDeObjeto(retornoDataReader);
         }
 
-        public Emprestimo ListarPorId(string id)
+        public Emprestimo ListarPorId(string id, string numero, string pessoa_id)
         {
-            var strQuery = string.Format(" SELECT * FROM Emprestimos WHERE Id = {0} ", id);
+            var strQuery = string.Format(" SELECT * FROM Emprestimo  WHERE emp_id = '{0}' AND  numero = '{1}' AND  pessoa_id = '{2}' ", id, numero, pessoa_id);
             var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
         }
@@ -68,11 +69,11 @@ namespace CampanhaBD.RepositoryADO
             {
                 var temObjeto = new Emprestimo()
                 {
-                    ClienteId = int.Parse(reader["ClienteId"].ToString()),
-                    NumBeneficio = int.Parse(reader["NumBeneficio"].ToString()),
-                    NumEmprestimo = int.Parse(reader["NumEmprestimo"].ToString()),
-                    ParcelasNoContrato = int.Parse(reader["ParcelasNoContrato"].ToString()),
-                    ParcelasPagas = int.Parse(reader["ParcelasPagas"].ToString())
+                    NumEmprestimo = int.Parse(reader["emp_id"].ToString()),
+                    NumBeneficio = int.Parse(reader["numero"].ToString()),
+                    ClienteId = int.Parse(reader["pessoa_id"].ToString()),
+                    ParcelasNoContrato = int.Parse(reader["parcelasContrato"].ToString()),
+                    ParcelasPagas = int.Parse(reader["parcelasPagas"].ToString()),
                 };
                 usuarios.Add(temObjeto);
             }

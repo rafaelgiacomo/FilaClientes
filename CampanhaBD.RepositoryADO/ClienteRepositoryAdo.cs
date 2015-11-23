@@ -89,9 +89,12 @@ namespace CampanhaBD.RepositoryADO
                     Ddd = reader["ddd"].ToString(),
                     Telefone = reader["telefone"].ToString(),
                     Logradouro = reader["logradouro"].ToString(),
-                    Numero = reader["numero"].ToString(),
                     Cep = reader["cep"].ToString(),
-                    Trabalhado = bool.Parse(reader["trabalhado"].ToString())
+                    Numero = reader["numero"].ToString(),
+                    Trabalhado = bool.Parse(reader["trabalhado"].ToString()),
+                    Complemento = reader["complemento"].ToString(),
+                    Cpf = reader["CPF"].ToString(),
+                    ImportacaoId = reader["imp_id"].ToString(),
                 };
                 usuarios.Add(temObjeto);
             }
