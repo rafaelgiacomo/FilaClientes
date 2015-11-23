@@ -89,8 +89,45 @@ namespace CampanhaBD.UI.WEB.Controllers
         [HttpPost]
         public ActionResult Associar(ImportacaoClienteViewModel model, HttpPostedFileBase File)
         {
-                return View();
+            model.clientes = new List<Cliente>();
+            if (File != null && File.ContentLength > 0)
+            {
+                Stream stream = File.InputStream;
+
+                IExcelDataReader reader = null;
+
+                if (File.FileName.EndsWith(".xls"))
+                {
+                    reader = ExcelReaderFactory.CreateBinaryReader(stream);
+                }
+                else if (File.FileName.EndsWith(".xlsx"))
+                {
+                    reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
+                }
+                reader.IsFirstRowAsColumnNames = true;
+                DataSet result = reader.AsDataSet();
+                int linhas = result.Tables[0].Columns.Count;
+                int i = 1;
+                int j = 0;
+                while (i < linhas)
+                {
+                    Cliente cli = new Cliente();
+                    cli.Nome = (string)result.Tables[0].Rows[i][model.Nome];
+                    cli.Cpf = (string)result.Tables[0].Rows[i][model.Cpf];
+                    cli.Uf = (string)result.Tables[0].Rows[i][model.Uf];
+                    cli.Cidade = (string)result.Tables[0].Rows[i][model.Cidade];
+                    cli.Bairro = (string)result.Tables[0].Rows[i][model.Bairro];
+                    cli.Ddd = (string)result.Tables[0].Rows[i][model.Ddd];
+                    cli.DataNascimento = (System.DateTime)result.Tables[0].Rows[i][model.DataNascimento];
+                    cli.Logradouro = (string)result.Tables[0].Rows[i][model.Logradouro];
+                    cli.Numero = (string)result.Tables[0].Rows[i][model.Numero];
+                    cli.Cep = (string)result.Tables[0].Rows[i][model.Cep];
+                    i++;
+                    _unityOfWork.Clients.Inserir(cli);
+                }
             }
+            return View();
+        }
 
             /*public ActionResult Importar(HttpPostedFileBase file)
             {
