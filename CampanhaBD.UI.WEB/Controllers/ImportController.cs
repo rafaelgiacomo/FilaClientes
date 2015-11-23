@@ -17,6 +17,7 @@ using Excel;
 
 namespace CampanhaBD.UI.WEB.Controllers
 {
+
     [Authorize]
     public class ImportController : Controller
     {
@@ -41,60 +42,53 @@ namespace CampanhaBD.UI.WEB.Controllers
                 string caminho = Path.Combine(Server.MapPath("~/Content/Uploads"), File.FileName);
                 File.SaveAs(caminho);
             }
-            return RedirectToAction("Associar");
+            return RedirectToAction("Associar", File);
         }
 
-        public ActionResult Associar()
-        {
-            return View();
-        }
-
-        [HttpPost]
         public ActionResult Associar(HttpPostedFileBase File)
         {
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+
+                if (File != null && File.ContentLength > 0)
                 {
+                    // ExcelDataReader works with the binary Excel file, so it needs a FileStream
+                    // to get started. This is how we avoid dependencies on ACE or Interop:
+                    Stream stream = File.InputStream;
 
-                    if (File != null && File.ContentLength > 0)
+                    // We return the interface, so that
+                    IExcelDataReader reader = null;
+
+
+                    if (File.FileName.EndsWith(".xls"))
                     {
-                        // ExcelDataReader works with the binary Excel file, so it needs a FileStream
-                        // to get started. This is how we avoid dependencies on ACE or Interop:
-                        Stream stream = File.InputStream;
-
-                        // We return the interface, so that
-                        IExcelDataReader reader = null;
-
-
-                        if (File.FileName.EndsWith(".xls"))
-                        {
-                            reader = ExcelReaderFactory.CreateBinaryReader(stream);
-                        }
-                        else if (File.FileName.EndsWith(".xlsx"))
-                        {
-                            reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
-                        }
-                        else
-                        {
-                            ModelState.AddModelError("File", "This file format is not supported");
-                            return View();
-                        }
-                        List<string> map_data = new List<string>();
-                        for (int i = 0; i <= reader.FieldCount - 1; i++)
-                        {
-                            map_data.Add(i + "-" + reader.GetName(i));
-                        }
-
-
-                        reader.Close();
-
-                        return View(map_data, File);
+                        reader = ExcelReaderFactory.CreateBinaryReader(stream);
+                    }
+                    else if (File.FileName.EndsWith(".xlsx"))
+                    {
+                        reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
                     }
                     else
                     {
-                        ModelState.AddModelError("File", "Please Upload Your file");
+                        ModelState.AddModelError("File", "This file format is not supported");
+                        return View();
                     }
+                    var model = new ImportacaoClienteViewModel();
+                    model.colunas = new List<String>();
+                    for (int i = 0; i <= reader.FieldCount - 1; i++)
+                    {
+                        model.colunas.Add(i + "-" + reader.GetName(i));
+                    }
+                    reader.Close();
+                    return View("Associar",model);
                 }
+            }
+            return RedirectToAction ("Associar");
+        }
+
+        [HttpPost]
+        public ActionResult Associar(ImportacaoClienteViewModel model, HttpPostedFileBase File)
+        {
                 return View();
             }
 
@@ -190,4 +184,3 @@ namespace CampanhaBD.UI.WEB.Controllers
             }*/
         }
     }
-}

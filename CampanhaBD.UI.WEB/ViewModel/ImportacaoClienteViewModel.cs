@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CampanhaBD.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,6 +10,9 @@ namespace CampanhaBD.UI.WEB.ViewModel
     public class ImportacaoClienteViewModel
     {
         public int Nome { get; set; }
+
+        public List<string> colunas { get; set; }
+        public List<Cliente> clientes { get; set; }
 
         [Required]
         public int Cpf { get; set; }
