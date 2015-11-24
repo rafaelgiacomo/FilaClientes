@@ -15,6 +15,8 @@ namespace CampanhaBD.RepositoryADO
             _context = context;
         }
 
+        /*
+
         public void Inserir(Campanha entidade)
         {
             var strQuery = "";
@@ -66,14 +68,11 @@ namespace CampanhaBD.RepositoryADO
                     Id = int.Parse(reader["cam_id"].ToString()),
                     UsuarioId = int.Parse(reader["pessoa_id"].ToString()),
                     Nome = reader["nome"].ToString(),
-                    DataCriacao = DateTime.Parse(reader["dataCriacao"].ToString()),
-                    DataFinal = DateTime.Parse(reader["dataCriacao"].ToString()),
-                    Status = int.Parse(reader["status"].ToString())
                 };
                 usuarios.Add(temObjeto);
             }
             reader.Close();
             return usuarios;
-        }
+        }*/
     }
 }

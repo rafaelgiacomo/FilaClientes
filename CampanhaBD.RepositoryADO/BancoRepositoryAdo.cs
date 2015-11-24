@@ -17,7 +17,7 @@ namespace CampanhaBD.RepositoryADO
         public void Inserir(Banco entidade)
         {
             var strQuery = "";
-            strQuery += " INSERT INTO BANCOS (Codigo, Nome) ";
+            strQuery += " INSERT INTO Banco (ban_id, nome) ";
             strQuery += string.Format(" VALUES ('{0}','{1}') ", entidade.Codigo, entidade.Nome);
             _context.ExecutaComando(strQuery);
         }
@@ -25,28 +25,28 @@ namespace CampanhaBD.RepositoryADO
         public void Alterar(Banco entidade)
         {
             var strQuery = "";
-            strQuery += " UPDATE BANCOS SET ";
-            strQuery += string.Format(" Nome = '{0}' ", entidade.Nome);
-            strQuery += string.Format(" WHERE Codigo = '{0}' ", entidade.Codigo);
+            strQuery += " UPDATE Banco SET ";
+            strQuery += string.Format(" nome = '{0}' ", entidade.Nome);
+            strQuery += string.Format(" WHERE ban_id = '{0}' ", entidade.Codigo);
             _context.ExecutaComando(strQuery);
         }
 
         public void Excluir(Banco entidade)
         {
-            var strQuery = string.Format(" DELETE FROM BANCOS WHERE Codigo = {0}", entidade.Codigo);
+            var strQuery = string.Format(" DELETE FROM Banco WHERE ban_id = {0}", entidade.Nome);
             _context.ExecutaComando(strQuery);
         }
 
         public IEnumerable<Banco> ListarTodos()
         {
-            var strQuery = " SELECT * FROM BANCOS ";
+            var strQuery = " SELECT * FROM Banco ";
             var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             return TransformaReaderEmListaDeObjeto(retornoDataReader);
         }
 
         public Banco ListarPorId(string id)
         {
-            var strQuery = string.Format(" SELECT * FROM BANCOS WHERE Codigo = {0} ", id);
+            var strQuery = string.Format(" SELECT * FROM Banco WHERE ban_id = {0} ", id);
             var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
         }
@@ -58,8 +58,8 @@ namespace CampanhaBD.RepositoryADO
             {
                 var temObjeto = new Banco()
                 {
-                    Codigo = int.Parse(reader["Codigo"].ToString()),
-                    Nome = reader["Nome"].ToString()
+                    Codigo = int.Parse(reader["ban_id"].ToString()),
+                    Nome = reader["nome"].ToString()
                 };
                 usuarios.Add(temObjeto);
             }

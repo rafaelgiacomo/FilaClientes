@@ -49,7 +49,7 @@ namespace CampanhaBD.RepositoryADO
 
         public IEnumerable<Usuario> ListarTodos()
         {
-            var strQuery = " SELECT * FROM USUARIOS ";
+            var strQuery = " SELECT * FROM Usuario ";
             var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             return TransformaReaderEmListaDeObjeto(retornoDataReader);
         }

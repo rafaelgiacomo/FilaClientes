@@ -34,7 +34,7 @@ namespace CampanhaBD.RepositoryADO
             strQuery += string.Format(" Saldo = '{0}', ", entidade.Saldo);
             strQuery += string.Format(" InicioPagamento = '{0}', ", entidade.InicioPagamento);
             strQuery += string.Format(" BancoId = '{0}' ", entidade.BancoId);
-            strQuery += string.Format(" valorParcela = '{0}' ", entidade.ValorParcela;
+            strQuery += string.Format(" valorParcela = '{0}' ", entidade.ValorParcela);
             strQuery += string.Format(" WHERE emp_id = '{0}' AND  numero = '{1}' AND  pessoa_id = '{2}' ", 
                 entidade.NumEmprestimo, entidade.NumBeneficio, entidade.ClienteId);
             _context.ExecutaComando(strQuery);
