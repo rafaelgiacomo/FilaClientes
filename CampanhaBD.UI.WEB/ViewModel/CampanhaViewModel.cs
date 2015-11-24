@@ -11,12 +11,26 @@ namespace CampanhaBD.UI.WEB.ViewModel
         [Required]
         public string Nome { get; set; }
 
-        public DateTime DataCriacao { get; set; }
+        public float MinParcela { get; set; }
 
-        [Required]
-        public DateTime DataFinal { get; set; }
+        public float MaxParcela { get; set; }
 
-        [Required]
-        public int Status { get; set; }
+        public string MinInicioPag { get; set; }
+
+        public string MaxInicioPag { get; set; }
+
+        public int MinParcelasPagas { get; set; }
+
+        public int MaxParcelasPagas { get; set; }
+
+        public DateTime MinDataNascimento { get; set; }
+
+        public bool ApenasNaoExportados { get; set; }
+
+        public string MinCep { get; set; }
+
+        public string MaxCep { get; set; }
+
+        public int CodigoBanco { get; set; }
     }
 }

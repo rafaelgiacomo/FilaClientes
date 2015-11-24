@@ -10,6 +10,8 @@ namespace CampanhaBD.Model
 
         public int NumEmprestimo { get; set; }
 
+        public float ValorParcela { get; set; }
+
         public int ParcelasNoContrato { get; set; }
 
         public int ParcelasPagas { get; set; }

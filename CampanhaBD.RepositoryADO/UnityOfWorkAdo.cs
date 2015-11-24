@@ -11,6 +11,9 @@ namespace CampanhaBD.RepositoryADO
         #pragma warning disable 649
         private ClienteRepositoryAdo _clientRepository;
         private UsuarioRepositoryAdo _usuarioRepository;
+        private BancoRepositoryAdo _bancoRepository;
+        private ImportacaoRepositoryAdo _importacaoRepository;
+        private CampanhaRepositoryAdo _campanhaRepository;
         #pragma warning restore 649
 
         public void Commit()
@@ -49,6 +52,21 @@ namespace CampanhaBD.RepositoryADO
         public UsuarioRepositoryAdo Usuarios
         {
             get { return (_usuarioRepository ?? new UsuarioRepositoryAdo(_context)); }
+        }
+
+        public BancoRepositoryAdo Bancos
+        {
+            get { return (_bancoRepository ?? new BancoRepositoryAdo(_context)); }
+        }
+
+        public ImportacaoRepositoryAdo Importacoes
+        {
+            get { return (_importacaoRepository ?? new ImportacaoRepositoryAdo(_context)); }
+        }
+
+        public CampanhaRepositoryAdo Campanhas
+        {
+            get { return (_campanhaRepository ?? new CampanhaRepositoryAdo(_context)); }
         }
     }
 }
