@@ -9,6 +9,11 @@
 @using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <div class="form-group">
+        <label for="Nome">Nome</label>
+        <input type="text" class="form-control text-box single-line" name="Nome" id="Nome" />
+    </div>
+
+    <div class="form-group">
         <input type="file" class="btn btn-file" name="File" id="File" />
     </div>
 

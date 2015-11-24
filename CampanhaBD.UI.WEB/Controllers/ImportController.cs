@@ -42,7 +42,7 @@ namespace CampanhaBD.UI.WEB.Controllers
                 string caminho = Path.Combine(Server.MapPath("~/Content/Uploads"), File.FileName);
                 File.SaveAs(caminho);
             }
-            return RedirectToAction("Associar", File);
+            return RedirectToAction("Associar");
         }
 
         public ActionResult Associar(HttpPostedFileBase File)

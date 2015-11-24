@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<CampanhaBD.Model.Campanha>
 
 @{
-    ViewBag.Title = "Campanhas";
+    ViewBag.Title = "Index";
 }
 
-<h3>Campanhas</h3>
+<h2>Campanhas</h2>
 
 <p>
     @Html.ActionLink("Nova Campanha", "Criar")
@@ -15,13 +15,10 @@
             @Html.DisplayNameFor(model => model.Nome)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DataCriacao)
+            @Html.DisplayNameFor(model => model.MinParcela)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DataFinal)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Status)
+            @Html.DisplayNameFor(model => model.CodigoBanco)
         </th>
         <th></th>
     </tr>
@@ -29,21 +26,18 @@
 @foreach (var item in Model) {
     <tr>
         <td>
+            @Html.DisplayFor(modelItem => item.UsuarioId)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.Nome)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.DataCriacao)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DataFinal)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Status)
+            @Html.DisplayFor(modelItem => item.CodigoBanco)
         </td>
         <td>
             @Html.ActionLink("Editar", "Editar", new { id=item.Id }) |
             @Html.ActionLink("Detalhes", "Detalhes", new { id=item.Id }) |
-            @Html.ActionLink("Deletar", "Deletar", new { id=item.Id })
+            @Html.ActionLink("Excluir", "Excluir", new { id=item.Id })
         </td>
     </tr>
 }

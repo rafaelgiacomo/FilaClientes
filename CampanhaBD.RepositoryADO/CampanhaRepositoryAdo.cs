@@ -15,47 +15,70 @@ namespace CampanhaBD.RepositoryADO
             _context = context;
         }
 
-        /*
-
         public void Inserir(Campanha entidade)
         {
             var strQuery = "";
-            strQuery += " INSERT INTO Campanhas (nome, dataCriacao, dataFinal, status) ";
-            strQuery += string.Format(" VALUES ('{0}','{1}', '{2}', '{3}') ",
-                entidade.Nome, entidade.DataCriacao, entidade.DataFinal, entidade.Status);
+            strQuery += " INSERT INTO Campanha (cam_id, pessoa_id, nome, minParcela, maxParcela, minInicioPag, maxInicioPag, "+
+                "minParcelasPagas, maxParcelasPagas, minDataNascimento, apenasNaoExportados) ";
+            strQuery += string.Format(" VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{6}', '{7}', '{8}', '{9}') ",
+                entidade.Id, entidade.UsuarioId, entidade.Nome, entidade.MinParcela, entidade.MaxParcela, entidade.MinInicioPag,
+                entidade.MaxInicioPag, entidade.MinParcelasPagas, entidade.MaxParcelasPagas, entidade.MinDataNascimento,
+                entidade.ApenasNaoExportados);
             _context.ExecutaComando(strQuery);
         }
 
         public void Alterar(Campanha entidade)
         {
             var strQuery = "";
-            strQuery += " UPDATE Campanhas SET ";
+            strQuery += " UPDATE Campanha SET ";
             strQuery += string.Format(" nome = '{0}', ", entidade.Nome);
-            strQuery += string.Format(" dataCriacao = '{0}', ", entidade.DataCriacao);
-            strQuery += string.Format(" dataFinal = '{0}', ", entidade.DataFinal);
-            strQuery += string.Format(" status = '{0}' ", entidade.Status);
+            strQuery += string.Format(" minParcela = '{0}', ", entidade.MinParcela);
+            strQuery += string.Format(" maxParcela = '{0}', ", entidade.MaxParcela);
+            strQuery += string.Format(" minInicioPag = '{0}', ", entidade.MinInicioPag);
+            strQuery += string.Format(" maxInicioPag = '{0}' ", entidade.MaxInicioPag);
+            strQuery += string.Format(" maxParcelasPagas = '{0}', ", entidade.MaxParcelasPagas);
+            strQuery += string.Format(" minDataNascimento = '{0}', ", entidade.MinDataNascimento);
+            strQuery += string.Format(" apenasNaoExportados = '{0}', ", entidade.ApenasNaoExportados);
             strQuery += string.Format(" WHERE cam_id = '{0}' AND pessoa_id = '{1}'", entidade.Id, entidade.UsuarioId);
             _context.ExecutaComando(strQuery);
         }
 
         public void Excluir(Campanha entidade)
         {
-            var strQuery = string.Format(" DELETE FROM Campanhas WHERE cam_id = {0} AND pessoa_id = '{1}'", entidade.Id, entidade.UsuarioId);
+            var strQuery = string.Format(" DELETE FROM Campanha WHERE cam_id = {0} AND pessoa_id = '{1}'", entidade.Id, entidade.UsuarioId);
             _context.ExecutaComando(strQuery);
         }
 
         public IEnumerable<Campanha> ListarTodos()
         {
-            var strQuery = " SELECT * FROM Campanhas ";
+            var strQuery = " SELECT * FROM Campanha ";
             var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             return TransformaReaderEmListaDeObjeto(retornoDataReader);
         }
 
         public Campanha ListarPorId(string id, string usuarioId)
         {
-            var strQuery = string.Format(" SELECT * FROM Campanhas WHERE cam_id = {0} AND pessoa_id = '{1}' ", id, usuarioId);
+            var strQuery = string.Format(" SELECT * FROM Campanha WHERE cam_id = {0} AND pessoa_id = '{1}' ", id, usuarioId);
             var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
+        }
+
+        public int NumeroCampanha(int usuarioId)
+        {
+            int num = 0;
+            var strQuery = string.Format(" SELECT COUNT(*) FROM Campanha WHERE pessoa_id = '{0}' ", usuarioId);
+            var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
+            if (retornoDataReader.Read())
+            {
+                num = int.Parse(retornoDataReader[0].ToString());
+            }
+
+            if(num == 0)
+            {
+                num = 1;
+            }
+
+            return num;
         }
 
         private List<Campanha> TransformaReaderEmListaDeObjeto(SqlDataReader reader)
@@ -73,6 +96,6 @@ namespace CampanhaBD.RepositoryADO
             }
             reader.Close();
             return usuarios;
-        }*/
+        }
     }
 }

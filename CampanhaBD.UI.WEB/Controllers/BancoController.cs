@@ -9,8 +9,7 @@ using System.Web.Mvc;
 
 namespace CampanhaBD.UI.WEB.Controllers
 {
-    [Authorize
-        ]
+    [Authorize]
     public class BancoController : Controller
     {
         private readonly UnityOfWorkAdo _unityOfWork = new UnityOfWorkAdo();
