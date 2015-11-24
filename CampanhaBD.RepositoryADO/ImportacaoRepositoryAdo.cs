@@ -18,7 +18,7 @@ namespace CampanhaBD.RepositoryADO
         public void Inserir(Importacao entidade)
         {
             var strQuery = "";
-            strQuery += " INSERT INTO Importacoes (Nome, Data, Terminado, NumImportados, NumAtualizados) ";
+            strQuery += " INSERT INTO Importacao (nome, data, terminado, numImportados, atualizados) ";
             strQuery += string.Format(" VALUES ('{0}', '{1}', '{2}', '{3}', '{4}') ",
                 entidade.Nome, entidade.Data, entidade.Terminado, entidade.NumImportados, entidade.NumAtualizados);
             _context.ExecutaComando(strQuery);
@@ -27,32 +27,32 @@ namespace CampanhaBD.RepositoryADO
         public void Alterar(Importacao entidade)
         {
             var strQuery = "";
-            strQuery += " UPDATE Importacoes SET ";
-            strQuery += string.Format(" Nome = '{0}', ", entidade.Nome);
-            strQuery += string.Format(" Data = '{0}', ", entidade.Data);
-            strQuery += string.Format(" Terminado = '{0}', ", entidade.Terminado);
-            strQuery += string.Format(" NumImportados = '{0}', ", entidade.NumImportados);
-            strQuery += string.Format(" NumAtualizados = '{0}' ", entidade.NumAtualizados);
-            strQuery += string.Format(" WHERE Id = {0} ", entidade.Id);
+            strQuery += " UPDATE Importacao SET ";
+            strQuery += string.Format(" nome = '{0}', ", entidade.Nome);
+            strQuery += string.Format(" data = '{0}', ", entidade.Data);
+            strQuery += string.Format(" terminado = '{0}', ", entidade.Terminado);
+            strQuery += string.Format(" numImportados = '{0}', ", entidade.NumImportados);
+            strQuery += string.Format(" atualizados = '{0}' ", entidade.NumAtualizados);
+            strQuery += string.Format(" WHERE imp_id = '{0}' AND pessoa_id = '{1}' ", entidade.Id, entidade.ClienteId);
             _context.ExecutaComando(strQuery);
         }
 
         public void Excluir(Importacao entidade)
         {
-            var strQuery = string.Format(" DELETE FROM Importacoes WHERE Id = {0}", entidade.Id);
+            var strQuery = string.Format(" DELETE FROM Importacao WHERE imp_id = '{0}' AND pessoa_id = '{1}' ", entidade.Id, entidade.ClienteId);
             _context.ExecutaComando(strQuery);
         }
 
         public IEnumerable<Importacao> ListarTodos()
         {
-            var strQuery = " SELECT * FROM Importacoes ";
+            var strQuery = " SELECT * FROM Importacao ";
             var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             return TransformaReaderEmListaDeObjeto(retornoDataReader);
         }
 
-        public Importacao ListarPorId(string id)
+        public Importacao ListarPorId(string id, string clienteId)
         {
-            var strQuery = string.Format(" SELECT * FROM Importacoes WHERE Id = {0} ", id);
+            var strQuery = string.Format(" SELECT * FROM Importacao WHERE imp_id = '{0}' AND pessoa_id = '{1}' ", id, clienteId);
             var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
         }
@@ -64,12 +64,13 @@ namespace CampanhaBD.RepositoryADO
             {
                 var temObjeto = new Importacao()
                 {
-                    Id = int.Parse(reader["Id"].ToString()),
-                    Nome = reader["Nome"].ToString(),
-                    Data = DateTime.Parse(reader["DataNascimento"].ToString()),
-                    NumImportados = int.Parse(reader["NumImportados"].ToString()),
-                    NumAtualizados = int.Parse(reader["NumAtualizados"].ToString()),
-                    Terminado = bool.Parse(reader["Terminado"].ToString())
+                    Id = int.Parse(reader["imp_id"].ToString()),
+                    ClienteId = int.Parse(reader["pessoa_id"].ToString()),
+                    Nome = reader["nome"].ToString(),
+                    Data = DateTime.Parse(reader["data"].ToString()),
+                    Terminado = bool.Parse(reader["Terminado"].ToString()),
+                    NumImportados = int.Parse(reader["numImportados"].ToString()),
+                    NumAtualizados = int.Parse(reader["atualizados"].ToString()),
                 };
                 usuarios.Add(temObjeto);
             }

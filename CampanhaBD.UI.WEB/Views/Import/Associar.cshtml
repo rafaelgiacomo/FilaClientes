@@ -110,6 +110,14 @@
     </div>
 }
 
+@model CampanhaBD.UI.WEB.ViewModel.ImportacaoClienteViewModel
+<ul>
+    @foreach (var coluna in Model)
+    {
+        <li><b>@coluna</b></li>
+    }
+</ul>
+
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>

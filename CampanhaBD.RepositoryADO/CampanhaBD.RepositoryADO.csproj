@@ -30,6 +30,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Excel, Version=2.1.2.3, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelDataReader.2.1.2.3\lib\net45\Excel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -44,6 +52,7 @@
     <Compile Include="BancoRepositoryAdo.cs" />
     <Compile Include="BeneficioRepositoryAdo.cs" />
     <Compile Include="CampanhaRepositoryAdo.cs" />
+    <Compile Include="Campanha_ImportacaoRepositoryAdo.cs" />
     <Compile Include="ClienteRepositoryAdo.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="EmprestimoRepositoryAdo.cs" />
@@ -62,6 +71,9 @@
       <Project>{7B038D68-28DB-44AE-8913-D60DB5AE1302}</Project>
       <Name>CampanhaBD.Model</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

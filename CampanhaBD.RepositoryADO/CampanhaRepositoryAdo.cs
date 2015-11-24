@@ -18,7 +18,7 @@ namespace CampanhaBD.RepositoryADO
         public void Inserir(Campanha entidade)
         {
             var strQuery = "";
-            strQuery += " INSERT INTO Campanhas (Nome, DataCriacao, DataFinal, Status) ";
+            strQuery += " INSERT INTO Campanhas (nome, dataCriacao, dataFinal, status) ";
             strQuery += string.Format(" VALUES ('{0}','{1}', '{2}', '{3}') ",
                 entidade.Nome, entidade.DataCriacao, entidade.DataFinal, entidade.Status);
             _context.ExecutaComando(strQuery);
@@ -28,17 +28,17 @@ namespace CampanhaBD.RepositoryADO
         {
             var strQuery = "";
             strQuery += " UPDATE Campanhas SET ";
-            strQuery += string.Format(" Nome = '{0}', ", entidade.Nome);
-            strQuery += string.Format(" DataCriacao = '{0}', ", entidade.DataCriacao);
-            strQuery += string.Format(" DataFinal = '{0}', ", entidade.DataFinal);
-            strQuery += string.Format(" Status = '{0}' ", entidade.Status);
-            strQuery += string.Format(" WHERE Id = '{0}' ", entidade.Id);
+            strQuery += string.Format(" nome = '{0}', ", entidade.Nome);
+            strQuery += string.Format(" dataCriacao = '{0}', ", entidade.DataCriacao);
+            strQuery += string.Format(" dataFinal = '{0}', ", entidade.DataFinal);
+            strQuery += string.Format(" status = '{0}' ", entidade.Status);
+            strQuery += string.Format(" WHERE cam_id = '{0}' AND pessoa_id = '{1}'", entidade.Id, entidade.UsuarioId);
             _context.ExecutaComando(strQuery);
         }
 
         public void Excluir(Campanha entidade)
         {
-            var strQuery = string.Format(" DELETE FROM Campanhas WHERE Id = {0}", entidade.Id);
+            var strQuery = string.Format(" DELETE FROM Campanhas WHERE cam_id = {0} AND pessoa_id = '{1}'", entidade.Id, entidade.UsuarioId);
             _context.ExecutaComando(strQuery);
         }
 
@@ -49,9 +49,9 @@ namespace CampanhaBD.RepositoryADO
             return TransformaReaderEmListaDeObjeto(retornoDataReader);
         }
 
-        public Campanha ListarPorId(string id)
+        public Campanha ListarPorId(string id, string usuarioId)
         {
-            var strQuery = string.Format(" SELECT * FROM Campanhas WHERE Id = {0} ", id);
+            var strQuery = string.Format(" SELECT * FROM Campanhas WHERE cam_id = {0} AND pessoa_id = '{1}' ", id, usuarioId);
             var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
         }
@@ -63,11 +63,12 @@ namespace CampanhaBD.RepositoryADO
             {
                 var temObjeto = new Campanha()
                 {
-                    Id = int.Parse(reader["Id"].ToString()),
-                    Nome = reader["Nome"].ToString(),
-                    DataCriacao = DateTime.Parse(reader["DataCriacao"].ToString()),
-                    DataFinal = DateTime.Parse(reader["DataCriacao"].ToString()),
-                    Status = int.Parse(reader["Status"].ToString())
+                    Id = int.Parse(reader["cam_id"].ToString()),
+                    UsuarioId = int.Parse(reader["pessoa_id"].ToString()),
+                    Nome = reader["nome"].ToString(),
+                    DataCriacao = DateTime.Parse(reader["dataCriacao"].ToString()),
+                    DataFinal = DateTime.Parse(reader["dataCriacao"].ToString()),
+                    Status = int.Parse(reader["status"].ToString())
                 };
                 usuarios.Add(temObjeto);
             }

@@ -16,6 +16,8 @@ namespace CampanhaBD.Model
 
         public int ParcelasPagas { get; set; }
 
+        public int ValorParcela { get; set}
+
         public float Saldo { get; set; }
 
         public DateTime InicioPagamento { get; set; }

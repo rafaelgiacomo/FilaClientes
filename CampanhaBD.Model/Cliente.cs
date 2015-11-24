@@ -4,6 +4,8 @@ namespace CampanhaBD.Model
 {
     public class Cliente : Pessoa
     {
+        public string ImportacaoId { get; set; }
+
         public string Cpf { get; set; }
 
         public string Uf { get; set; }
@@ -21,6 +23,8 @@ namespace CampanhaBD.Model
         public string Logradouro { get; set; }
 
         public string Numero { get; set; }
+
+        public string Complemento { get; set; }
 
         public string Cep { get; set; }
 

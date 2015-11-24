@@ -19,7 +19,7 @@ namespace CampanhaBD.RepositoryADO
         public void Inserir(Pessoa entidade)
         {
             var strQuery = "";
-            strQuery += " INSERT INTO PESSOAS (Nome, Classificacao) ";
+            strQuery += " INSERT INTO Pessoa (nome, classificacao) ";
             strQuery += string.Format(" VALUES ('{0}', '{1}') ", entidade.Nome, entidade.Classificacao);
             _context.ExecutaComando(strQuery);
             UltimoId = Convert.ToInt32(_context.ExecutaScalar("SELECT SCOPE_IDENTITY()"));
@@ -28,29 +28,29 @@ namespace CampanhaBD.RepositoryADO
         public void Alterar(Pessoa entidade)
         {
             var strQuery = "";
-            strQuery += " UPDATE PESSOAS SET ";
-            strQuery += string.Format(" Nome = '{0}', ", entidade.Nome);
-            strQuery += string.Format(" Classificacao = '{0}' ", entidade.Classificacao);
-            strQuery += string.Format(" WHERE Id = '{0}' ", entidade.Id);
+            strQuery += " UPDATE Pessoa SET ";
+            strQuery += string.Format(" nome = '{0}', ", entidade.Nome);
+            strQuery += string.Format(" classificacao = '{0}' ", entidade.Classificacao);
+            strQuery += string.Format(" WHERE pessoa_id = '{0}' ", entidade.Id);
             _context.ExecutaComando(strQuery);
         }
 
         public void Excluir(Pessoa entidade)
         {
-            var strQuery = string.Format(" DELETE FROM PESSOAS WHERE Id = {0}", entidade.Id);
+            var strQuery = string.Format(" DELETE FROM Pessoa WHERE pessoa_id = {0}", entidade.Id);
             _context.ExecutaComando(strQuery);
         }
 
         public IEnumerable<Pessoa> ListarTodos()
         {
-            var strQuery = " SELECT * FROM PESSOAS ";
+            var strQuery = " SELECT * FROM Pessoa ";
             var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             return TransformaReaderEmListaDeObjeto(retornoDataReader);
         }
 
         public Pessoa ListarPorId(string id)
         {
-            var strQuery = string.Format(" SELECT * FROM PESSOAS WHERE Id = {0} ", id);
+            var strQuery = string.Format(" SELECT * FROM Pessoa WHERE pessoa_id = {0} ", id);
             var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
         }
@@ -62,9 +62,9 @@ namespace CampanhaBD.RepositoryADO
             {
                 var temObjeto = new Pessoa()
                 {
-                    Id = int.Parse(reader["Id"].ToString()),
-                    Nome = reader["Nome"].ToString(),
-                    Classificacao = int.Parse(reader["Classificacao"].ToString())
+                    Id = int.Parse(reader["pessoa_id"].ToString()),
+                    Nome = reader["nome"].ToString(),
+                    Classificacao = int.Parse(reader["classificacao"].ToString())
                 };
                 usuarios.Add(temObjeto);
             }
