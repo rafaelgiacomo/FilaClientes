@@ -43,49 +43,21 @@ namespace CampanhaBD.UI.WEB.Controllers
                 caminho = Path.Combine(Server.MapPath("~/Content/Uploads"), File.FileName);
                 File.SaveAs(caminho);
             }
-            return RedirectToAction("Associar", new { caminho = caminho});
+            return RedirectToAction("Associar", new { caminho = caminho });
         }
 
         public ActionResult Associar(string caminho)
         {
-            return View();
-            /*if (ModelState.IsValid)
+            StreamReader stream = new StreamReader(caminho);
+
+            string linha = null;
+            while ((linha = stream.ReadLine()) != null)
             {
-
-                if (File != null && File.ContentLength > 0)
-                {
-                    // ExcelDataReader works with the binary Excel file, so it needs a FileStream
-                    // to get started. This is how we avoid dependencies on ACE or Interop:
-                    Stream stream = File.InputStream;
-
-                    // We return the interface, so that
-                    IExcelDataReader reader = null;
-
-
-                    if (File.FileName.EndsWith(".xls"))
-                    {
-                        reader = ExcelReaderFactory.CreateBinaryReader(stream);
-                    }
-                    else if (File.FileName.EndsWith(".xlsx"))
-                    {
-                        reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("File", "This file format is not supported");
-                        return View();
-                    }
-                    var model = new ImportacaoClienteViewModel();
-                    model.colunas = new List<String>();
-                    for (int i = 0; i <= reader.FieldCount - 1; i++)
-                    {
-                        model.colunas.Add(i + "-" + reader.GetName(i));
-                    }
-                    reader.Close();
-                    return View("Associar",model);
-                }
+                string[] linhaSeparada = linha.Split(';');
             }
-            return RedirectToAction ("Associar");*/
+
+            stream.Close();
+            return View();
         }
 
         [HttpPost]
