@@ -34,6 +34,7 @@ namespace CampanhaBD.UI.WEB.Controllers
                 _unityOfWork.Campanhas.Inserir(modelo.ParaCampanhaModel());
                 return RedirectToAction("Index");
             }
+
             ViewBag.Mensagem = "Erro ao salvar usuario";
             return View();
         }

@@ -14,29 +14,42 @@ namespace CampanhaBD.UI.WEB.ViewModel
         public int UsuarioId { get; set; }
 
         [Required]
+        [Display(Name = "Nome da campanha")]
         public string Nome { get; set; }
 
+        [Display(Name="Mínimo de parcelas")]
         public float MinParcela { get; set; }
 
+        [Display(Name = "Máximo de parcelas")]
         public float MaxParcela { get; set; }
 
+        [Display(Name = "Data mínima de pagto")]
         public string MinInicioPag { get; set; }
 
+        [Display(Name = "Data máxima de pgto")]
         public string MaxInicioPag { get; set; }
 
+        [Display(Name = "Mínimo de parcelas pagas")]
         public int MinParcelasPagas { get; set; }
 
+        [Display(Name = "Máximo de parcelas pagas")]
         public int MaxParcelasPagas { get; set; }
 
+        [Display(Name = "Mínimo data de nascimento")]
         public DateTime MinDataNascimento { get; set; }
 
+        [Display(Name = "Apenas não exportados?")]
         public bool ApenasNaoExportados { get; set; }
 
+        [Display(Name = "CEP mínimo")]
         public string MinCep { get; set; }
 
+        [Display(Name = "CEP máximo")]
         public string MaxCep { get; set; }
 
+        [Display(Name = "Código banco")]
         public int CodigoBanco { get; set; }
+
 
         public Campanha ParaCampanhaModel()
         {
