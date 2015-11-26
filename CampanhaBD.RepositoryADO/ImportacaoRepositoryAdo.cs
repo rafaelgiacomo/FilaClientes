@@ -17,10 +17,12 @@ namespace CampanhaBD.RepositoryADO
 
         public void Inserir(Importacao entidade)
         {
+            entidade.Id = NumeroImportacao(entidade.UsuarioId);
             var strQuery = "";
-            strQuery += " INSERT INTO Importacao (nome, data, terminado, numImportados, atualizados) ";
-            strQuery += string.Format(" VALUES ('{0}', '{1}', '{2}', '{3}', '{4}') ",
-                entidade.Nome, entidade.Data, entidade.Terminado, entidade.NumImportados, entidade.NumAtualizados);
+            strQuery += " INSERT INTO Importacao (imp_id, pessoa_id, nome, data, terminado, numImportados, atualizados) ";
+            strQuery += string.Format(" VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}') ",
+                entidade.Id, entidade.UsuarioId, entidade.Nome, entidade.Data, entidade.Terminado, entidade.NumImportados, 
+                entidade.NumAtualizados);
             _context.ExecutaComando(strQuery);
         }
 
@@ -33,13 +35,14 @@ namespace CampanhaBD.RepositoryADO
             strQuery += string.Format(" terminado = '{0}', ", entidade.Terminado);
             strQuery += string.Format(" numImportados = '{0}', ", entidade.NumImportados);
             strQuery += string.Format(" atualizados = '{0}' ", entidade.NumAtualizados);
-            strQuery += string.Format(" WHERE imp_id = '{0}' AND pessoa_id = '{1}' ", entidade.Id, entidade.ClienteId);
+            strQuery += string.Format(" WHERE imp_id = '{0}' AND pessoa_id = '{1}' ", entidade.Id, entidade.UsuarioId);
             _context.ExecutaComando(strQuery);
         }
 
         public void Excluir(Importacao entidade)
         {
-            var strQuery = string.Format(" DELETE FROM Importacao WHERE imp_id = '{0}' AND pessoa_id = '{1}' ", entidade.Id, entidade.ClienteId);
+            var strQuery = string.Format(" DELETE FROM Importacao WHERE imp_id = '{0}' AND pessoa_id = '{1}' ", entidade.Id, entidade.UsuarioId
+                );
             _context.ExecutaComando(strQuery);
         }
 
@@ -48,6 +51,25 @@ namespace CampanhaBD.RepositoryADO
             var strQuery = " SELECT * FROM Importacao ";
             var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             return TransformaReaderEmListaDeObjeto(retornoDataReader);
+        }
+
+        public int NumeroImportacao(int usuarioId)
+        {
+            int num = 0;
+            var strQuery = string.Format(" SELECT COUNT(*) FROM Importacao WHERE pessoa_id = '{0}' ", usuarioId);
+            var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
+            if (retornoDataReader.Read())
+            {
+                num = int.Parse(retornoDataReader[0].ToString());
+            }
+
+            if (num == 0)
+            {
+                num = 1;
+            }
+
+            retornoDataReader.Close();
+            return num;
         }
 
         public Importacao ListarPorId(string id, string clienteId)
@@ -65,7 +87,7 @@ namespace CampanhaBD.RepositoryADO
                 var temObjeto = new Importacao()
                 {
                     Id = int.Parse(reader["imp_id"].ToString()),
-                    ClienteId = int.Parse(reader["pessoa_id"].ToString()),
+                    UsuarioId = int.Parse(reader["pessoa_id"].ToString()),
                     Nome = reader["nome"].ToString(),
                     Data = DateTime.Parse(reader["data"].ToString()),
                     Terminado = bool.Parse(reader["Terminado"].ToString()),

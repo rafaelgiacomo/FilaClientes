@@ -11,9 +11,6 @@ namespace CampanhaBD.UI.WEB.ViewModel
     {
         public int Nome { get; set; }
 
-        public List<string> colunas { get; set; }
-        public List<Cliente> clientes { get; set; }
-
         [Required]
         public int Cpf { get; set; }
 
@@ -34,5 +31,9 @@ namespace CampanhaBD.UI.WEB.ViewModel
         public int Numero { get; set; }
 
         public int Cep { get; set; }
+
+        public string[] Colunas { get; set; }
+
+        public string CaminhoArquivo { get; set; }
     }
 }

@@ -6,7 +6,7 @@ namespace CampanhaBD.Model
     {
         public int Id { get; set; }
 
-        public int ClienteId { get; set; }
+        public int UsuarioId { get; set; }
 
         public string Nome { get; set; }
 

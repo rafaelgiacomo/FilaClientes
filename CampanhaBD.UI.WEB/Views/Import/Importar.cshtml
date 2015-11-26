@@ -17,8 +17,10 @@
         <input type="file" class="btn btn-file" name="File" id="File" />
     </div>
 
+    <p class="text-red">@ViewBag.Mensagem</p>
+
     <div class="box-footer">
-        <input type="submit" class="btn btn-primary" name="submit" value="Importar" />
+        <input type="submit" class="btn btn-primary" name="submit" value="Salvar" />
         @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-info pull-right" })
     </div>
 }

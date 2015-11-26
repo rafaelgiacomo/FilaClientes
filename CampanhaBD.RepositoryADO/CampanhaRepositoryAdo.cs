@@ -18,6 +18,7 @@ namespace CampanhaBD.RepositoryADO
         public void Inserir(Campanha entidade)
         {
             var strQuery = "";
+            entidade.Id = NumeroCampanha(entidade.UsuarioId);
             strQuery += " INSERT INTO Campanha (cam_id, pessoa_id, nome, minParcela, maxParcela, minInicioPag, maxInicioPag, "+
                 "minParcelasPagas, maxParcelasPagas, minDataNascimento, apenasNaoExportados) ";
             strQuery += string.Format(" VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{6}', '{7}', '{8}', '{9}') ",

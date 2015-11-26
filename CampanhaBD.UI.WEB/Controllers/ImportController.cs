@@ -26,7 +26,7 @@ namespace CampanhaBD.UI.WEB.Controllers
         // GET: Import
         public ActionResult Index()
         {
-            return View(new List<Importacao>());
+            return View(_unityOfWork.Importacoes.ListarTodos());
         }
 
         public ActionResult Importar()
@@ -35,35 +35,58 @@ namespace CampanhaBD.UI.WEB.Controllers
         }
 
         [HttpPost]
-        public ActionResult Importar(HttpPostedFileBase File)
+        public ActionResult Importar(ImportarViewModel viewModel)
         {
-            string caminho = "";
-            if (File != null)
+            if (viewModel.File != null)
             {
-                caminho = Path.Combine(Server.MapPath("~/Content/Uploads"), File.FileName);
-                File.SaveAs(caminho);
+                string caminho = Path.Combine(Server.MapPath("~/Content/Uploads"), viewModel.File.FileName);
+                viewModel.File.SaveAs(caminho);
+
+                Importacao imp = new Importacao()
+                {
+                    Nome = viewModel.Nome,
+                    Data = DateTime.Now,
+                    Terminado = false,
+                    NumImportados = 0,
+                    NumAtualizados = 0
+                };
+
+                _unityOfWork.Importacoes.Inserir(imp);
+                
+                return RedirectToAction("Associar", new { caminho = caminho });
             }
-            return RedirectToAction("Associar", new { caminho = caminho });
+            else
+            {
+                ViewBag.Mensagem = "Adicione uma planilha para importação";
+            }
+            return View();
         }
 
         public ActionResult Associar(string caminho)
         {
             StreamReader stream = new StreamReader(caminho);
+            string[] linhaSeparada = null;
 
             string linha = null;
-            while ((linha = stream.ReadLine()) != null)
+            if((linha = stream.ReadLine()) != null)
             {
-                string[] linhaSeparada = linha.Split(';');
+                linhaSeparada = linha.Split(';');
             }
 
+            ImportacaoClienteViewModel viewModel = new ImportacaoClienteViewModel()
+            {
+                Colunas = linhaSeparada,
+                CaminhoArquivo = caminho
+            };
+
             stream.Close();
-            return View();
+            return View(viewModel);
         }
 
         [HttpPost]
-        public ActionResult Associar(ImportacaoClienteViewModel model, HttpPostedFileBase File)
+        public ActionResult Associar(ImportacaoClienteViewModel model)
         {
-            model.clientes = new List<Cliente>();
+            /*model.clientes = new List<Cliente>();
             if (File != null && File.ContentLength > 0)
             {
                 Stream stream = File.InputStream;
@@ -98,7 +121,7 @@ namespace CampanhaBD.UI.WEB.Controllers
                     i++;
                     _unityOfWork.Clients.Inserir(cli);
                 }
-            }
+            }*/
             return View("Associar", model);
         }
 

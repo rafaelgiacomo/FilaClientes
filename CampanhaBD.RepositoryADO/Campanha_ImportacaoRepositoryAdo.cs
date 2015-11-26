@@ -18,7 +18,7 @@ namespace CampanhaBD.RepositoryADO
             _context = context;
             novo.CampanhaId = cam.Id;
             novo.ImportacaoId = imp.Id;
-            novo.ClienteId = imp.ClienteId;
+            novo.ClienteId = imp.UsuarioId;
         }
 
         public void Inserir(Campanha_Importacao entidade)

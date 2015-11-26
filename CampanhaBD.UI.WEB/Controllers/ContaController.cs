@@ -56,7 +56,7 @@ namespace CampanhaBD.UI.WEB.Controllers
                 usuario.Senha = hash.CriptografarSenha(usuario.Senha);
                 _unityOfWork.Usuarios.Inserir(usuario.ParaUsuarioModel());
                 ViewBag.Mensagem = "Usuario registrado com sucesso!";
-                RedirectToAction("LogIn");
+                return RedirectToAction("LogIn");
             }
             else
             {
