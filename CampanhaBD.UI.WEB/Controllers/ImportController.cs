@@ -37,17 +37,19 @@ namespace CampanhaBD.UI.WEB.Controllers
         [HttpPost]
         public ActionResult Importar(HttpPostedFileBase File)
         {
+            string caminho = "";
             if (File != null)
             {
-                string caminho = Path.Combine(Server.MapPath("~/Content/Uploads"), File.FileName);
+                caminho = Path.Combine(Server.MapPath("~/Content/Uploads"), File.FileName);
                 File.SaveAs(caminho);
             }
-            return RedirectToAction("Associar");
+            return RedirectToAction("Associar", new { caminho = caminho});
         }
 
-        public ActionResult Associar(HttpPostedFileBase File)
+        public ActionResult Associar(string caminho)
         {
-            if (ModelState.IsValid)
+            return View();
+            /*if (ModelState.IsValid)
             {
 
                 if (File != null && File.ContentLength > 0)
@@ -83,7 +85,7 @@ namespace CampanhaBD.UI.WEB.Controllers
                     return View("Associar",model);
                 }
             }
-            return RedirectToAction ("Associar");
+            return RedirectToAction ("Associar");*/
         }
 
         [HttpPost]

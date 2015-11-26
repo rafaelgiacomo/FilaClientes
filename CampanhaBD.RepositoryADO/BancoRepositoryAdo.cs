@@ -33,7 +33,7 @@ namespace CampanhaBD.RepositoryADO
 
         public void Excluir(Banco entidade)
         {
-            var strQuery = string.Format(" DELETE FROM Banco WHERE ban_id = {0}", entidade.Nome);
+            var strQuery = string.Format(" DELETE FROM Banco WHERE ban_id = {0}", entidade.Codigo);
             _context.ExecutaComando(strQuery);
         }
 
