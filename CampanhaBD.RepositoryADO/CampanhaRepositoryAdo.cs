@@ -17,13 +17,23 @@ namespace CampanhaBD.RepositoryADO
 
         public void Inserir(Campanha entidade)
         {
-            var strQuery = "";
-            strQuery += " INSERT INTO Campanha (cam_id, pessoa_id, nome, minParcela, maxParcela, minInicioPag, maxInicioPag, "+
-                "minParcelasPagas, maxParcelasPagas, minDataNascimento, apenasNaoExportados) ";
-            strQuery += string.Format(" VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{6}', '{7}', '{8}', '{9}') ",
-                entidade.Id, entidade.UsuarioId, entidade.Nome, entidade.MinParcela, entidade.MaxParcela, entidade.MinInicioPag,
-                entidade.MaxInicioPag, entidade.MinParcelasPagas, entidade.MaxParcelasPagas, entidade.MinDataNascimento,
-                entidade.ApenasNaoExportados);
+            entidade.Id = NumeroCampanha(entidade.UsuarioId);
+            var strQuery = " INSERT INTO Campanha (cam_id, pessoa_id, nome, minParcela, maxParcela, minInicioPag, maxInicioPag, minParcelasPagas, maxParcelasPagas, minDataNascimento, apenasNaoExportados) ";
+
+            strQuery += string.Format("VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}') ",
+                    entidade.Id,
+                    entidade.UsuarioId,
+                    entidade.Nome,
+                    entidade.MinParcela,
+                    entidade.MaxParcela, 
+                    entidade.MinInicioPag,
+                    entidade.MaxInicioPag,
+                    entidade.MinParcelasPagas,
+                    entidade.MaxParcelasPagas,
+                    entidade.MinDataNascimento,
+                    Convert.ToByte(entidade.ApenasNaoExportados)
+                );
+
             _context.ExecutaComando(strQuery);
         }
 
@@ -31,14 +41,15 @@ namespace CampanhaBD.RepositoryADO
         {
             var strQuery = "";
             strQuery += " UPDATE Campanha SET ";
-            strQuery += string.Format(" nome = '{0}', ", entidade.Nome);
-            strQuery += string.Format(" minParcela = '{0}', ", entidade.MinParcela);
-            strQuery += string.Format(" maxParcela = '{0}', ", entidade.MaxParcela);
-            strQuery += string.Format(" minInicioPag = '{0}', ", entidade.MinInicioPag);
-            strQuery += string.Format(" maxInicioPag = '{0}' ", entidade.MaxInicioPag);
-            strQuery += string.Format(" maxParcelasPagas = '{0}', ", entidade.MaxParcelasPagas);
-            strQuery += string.Format(" minDataNascimento = '{0}', ", entidade.MinDataNascimento);
-            strQuery += string.Format(" apenasNaoExportados = '{0}', ", entidade.ApenasNaoExportados);
+            strQuery += string.Format(" nome = '{0}', ",                             entidade.Nome);
+            strQuery += string.Format(" minParcela = '{0}', ",                       entidade.MinParcela);
+            strQuery += string.Format(" maxParcela = '{0}', ",                       entidade.MaxParcela);
+            strQuery += string.Format(" minInicioPag = '{0}', ",                     entidade.MinInicioPag);
+            strQuery += string.Format(" maxInicioPag = '{0}' ",                      entidade.MaxInicioPag);
+            strQuery += string.Format(" maxParcelasPagas = '{0}', ",                 entidade.MaxParcelasPagas);
+            strQuery += string.Format(" minDataNascimento = '{0}', ",                entidade.MinDataNascimento);
+            strQuery += string.Format(" apenasNaoExportados = '{0}', ",              Convert.ToByte(entidade.ApenasNaoExportados));
+
             strQuery += string.Format(" WHERE cam_id = '{0}' AND pessoa_id = '{1}'", entidade.Id, entidade.UsuarioId);
             _context.ExecutaComando(strQuery);
         }
