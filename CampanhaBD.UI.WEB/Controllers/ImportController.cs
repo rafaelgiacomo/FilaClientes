@@ -110,7 +110,6 @@ namespace CampanhaBD.UI.WEB.Controllers
                 DataSet result = reader.AsDataSet();
                 int linhas = result.Tables[0].Columns.Count;
                 int i = 1;
-                int j = 0;
                 while (i < linhas)
                 {
                     Cliente cli = new Cliente();
@@ -128,7 +127,7 @@ namespace CampanhaBD.UI.WEB.Controllers
                     _unityOfWork.Clients.Inserir(cli);
                 }
             }
-            return View();
+            return View("Associar", model);
         }
 
             /*public ActionResult Importar(HttpPostedFileBase file)

@@ -110,11 +110,10 @@
     </div>
 }
 
-@model CampanhaBD.UI.WEB.ViewModel.ImportacaoClienteViewModel
 <ul>
-    @foreach (var coluna in Model)
+    @foreach (var coluna in Model.colunas)
     {
-        <li><b>@coluna</b></li>
+        <td>@Html.DisplayFor(modelItem => coluna)</td>
     }
 </ul>
 
