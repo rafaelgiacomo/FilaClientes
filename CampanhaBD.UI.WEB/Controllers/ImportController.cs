@@ -44,6 +44,7 @@ namespace CampanhaBD.UI.WEB.Controllers
 
                 Importacao imp = new Importacao()
                 {
+                    UsuarioId = _unityOfWork.Usuarios.ListarPorLogin(User.Identity.Name).Id,
                     Nome = viewModel.Nome,
                     Data = DateTime.Now,
                     Terminado = false,

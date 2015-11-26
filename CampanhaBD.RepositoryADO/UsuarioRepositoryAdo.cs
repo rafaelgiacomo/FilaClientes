@@ -61,6 +61,13 @@ namespace CampanhaBD.RepositoryADO
             return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
         }
 
+        public Usuario ListarPorLogin(string login)
+        {
+            var strQuery = string.Format(" SELECT * FROM Usuario WHERE login = '{0}' ", login);
+            var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
+            return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
+        }
+
         private List<Usuario> TransformaReaderEmListaDeObjeto(SqlDataReader reader)
         {
             var usuarios = new List<Usuario>();
