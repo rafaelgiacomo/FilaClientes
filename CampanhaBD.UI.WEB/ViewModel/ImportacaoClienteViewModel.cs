@@ -1,14 +1,13 @@
-﻿using CampanhaBD.Model;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace CampanhaBD.UI.WEB.ViewModel
 {
     public class ImportacaoClienteViewModel
     {
+        [Display(Name = "N° Benefício")]
+        public int NumBeneficio { get; set; }
+
         public int Nome { get; set; }
 
         [Required]
@@ -24,16 +23,37 @@ namespace CampanhaBD.UI.WEB.ViewModel
 
         public int Telefone { get; set; }
 
+        [Display(Name = "Data de Nascimento")]
         public int DataNascimento { get; set; }
 
         public int Logradouro { get; set; }
 
         public int Numero { get; set; }
 
+        [Display(Name = "CEP")]
         public int Cep { get; set; }
+
+        [Display(Name = "Valor de Parcela")]
+        public float ValorParcela { get; set; }
+
+        [Display(Name = "Parcelas no contrato")]
+        public int ParcelasNoContrato { get; set; }
+
+        [Display(Name = "Parcelas pagas")]
+        public int ParcelasPagas { get; set; }
+
+        public float Saldo { get; set; }
+
+        [Display(Name = "Inicio de Pagamento")]
+        public int InicioPagamento { get; set; }
+
+        [Display(Name = "Código do Banco")]
+        public int BancoId { get; set; }
 
         public string[] Colunas { get; set; }
 
-        public string CaminhoArquivo { get; set; }
+        public int UsuarioId { get; set; }
+
+        public int ImpId { get; set; }
     }
 }

@@ -17,5 +17,7 @@ namespace CampanhaBD.Model
         public int NumImportados { get; set; }
 
         public int NumAtualizados { get; set; }
+
+        public string CaminhoArquivo { get; set; }
     }
 }

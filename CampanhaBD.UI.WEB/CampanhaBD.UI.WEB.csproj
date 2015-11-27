@@ -231,13 +231,13 @@
     <Content Include="Views\Import\Importar.cshtml" />
     <Content Include="Views\Conta\Registrar.cshtml" />
     <Content Include="Views\Import\Index.cshtml" />
-    <Content Include="Views\Import\Associar.cshtml" />
     <Content Include="Views\Banco\Index.cshtml" />
     <Content Include="Views\Banco\Criar.cshtml" />
     <Content Include="Views\Banco\Editar.cshtml" />
     <Content Include="Views\Banco\Excluir.cshtml" />
     <Content Include="Views\Campanha\Index.cshtml" />
     <Content Include="Views\Campanha\Criar.cshtml" />
+    <Content Include="Views\Import\Associar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

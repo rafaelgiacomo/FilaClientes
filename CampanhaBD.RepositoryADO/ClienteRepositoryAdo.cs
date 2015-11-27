@@ -94,7 +94,7 @@ namespace CampanhaBD.RepositoryADO
                     Trabalhado = bool.Parse(reader["trabalhado"].ToString()),
                     Complemento = reader["complemento"].ToString(),
                     Cpf = reader["CPF"].ToString(),
-                    ImportacaoId = reader["imp_id"].ToString(),
+                    ImportacaoId = int.Parse(reader["imp_id"].ToString())
                 };
                 usuarios.Add(temObjeto);
             }
