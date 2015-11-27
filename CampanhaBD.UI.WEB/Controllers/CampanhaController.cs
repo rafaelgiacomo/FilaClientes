@@ -18,6 +18,7 @@ namespace CampanhaBD.UI.WEB.Controllers
         // GET: Banco
         public ActionResult Index()
         {
+            ViewBag.UsuarioID = _unityOfWork.Usuarios.ListarPorLogin(User.Identity.Name).Id;
             return View(_unityOfWork.Campanhas.ListarTodos());
         }
 
@@ -66,24 +67,33 @@ namespace CampanhaBD.UI.WEB.Controllers
             return View(modelo);
         }
 
-        public ActionResult Excluir(int codigo)
+        public ActionResult Detalhes(int usuarioId, int camId)
         {
-            var banco = _unityOfWork.Bancos.ListarPorId(codigo.ToString());
+            Campanha campanha = _unityOfWork.Campanhas.ListarPorId(camId.ToString(), usuarioId.ToString());
+            ViewBag.UsuarioID = _unityOfWork.Usuarios.ListarPorLogin(User.Identity.Name).Id;
+            return View(campanha);
+        }
 
-            if (banco == null)
+        [HttpGet]
+        public ActionResult Excluir(int usuarioId, int camId)
+        {
+            Campanha campanha = _unityOfWork.Campanhas.ListarPorId(camId.ToString(), usuarioId.ToString());
+
+            if (campanha == null)
             {
                 return HttpNotFound();
             }
 
-            return View(banco);
+            return View(campanha);
         }
 
         [HttpPost, ActionName("Excluir")]
         [ValidateAntiForgeryToken]
-        public ActionResult ExcluirConfirmado(int codigo)
+        public ActionResult ExcluirConfirmado(int usuarioId, int camId)
         {
-            var modelo = _unityOfWork.Bancos.ListarPorId(codigo.ToString());
-            _unityOfWork.Bancos.Excluir(modelo);
+            Campanha campanha = _unityOfWork.Campanhas.ListarPorId(camId.ToString(), usuarioId.ToString());
+            _unityOfWork.Campanhas.Excluir(campanha);
+            ViewBag.Message = "Campanha \"" + campanha.Nome + "\" removida.";
             return RedirectToAction("Index");
         }
     }

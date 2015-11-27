@@ -1,0 +1,122 @@
+﻿@model CampanhaBD.Model.Campanha
+
+@{
+    ViewBag.Title = "Detalhes";
+}
+
+<h2>Detalhes</h2>
+
+<div>
+    <h4>Campanha</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UsuarioId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UsuarioId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MinParcela)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MinParcela)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MaxParcela)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MaxParcela)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MinInicioPag)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MinInicioPag)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MaxInicioPag)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MaxInicioPag)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MinParcelasPagas)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MinParcelasPagas)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MaxParcelasPagas)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MaxParcelasPagas)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MinDataNascimento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MinDataNascimento)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ApenasNaoExportados)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApenasNaoExportados)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MinCep)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MinCep)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MaxCep)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MaxCep)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CodigoBanco)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CodigoBanco)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Editar", new { usuarioId = ViewBag.UsuarioID, camId = Model.Id }) |
+    @Html.ActionLink("Retornar para listagem", "Index")
+</p>

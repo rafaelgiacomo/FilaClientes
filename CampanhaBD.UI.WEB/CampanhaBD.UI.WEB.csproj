@@ -238,6 +238,9 @@
     <Content Include="Views\Banco\Excluir.cshtml" />
     <Content Include="Views\Campanha\Index.cshtml" />
     <Content Include="Views\Campanha\Criar.cshtml" />
+    <Content Include="Views\Campanha\Editar.cshtml" />
+    <Content Include="Views\Campanha\Detalhes.cshtml" />
+    <Content Include="Views\Campanha\Excluir.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

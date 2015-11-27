@@ -1,0 +1,127 @@
+﻿@model CampanhaBD.Model.Campanha
+
+@{
+    ViewBag.Title = "Excluir";
+}
+
+<h2>Excluir campanha</h2>
+
+<h3>Deseja realmente remover a campanha "@Model.Nome"?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UsuarioId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UsuarioId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MinParcela)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MinParcela)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MaxParcela)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MaxParcela)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MinInicioPag)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MinInicioPag)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MaxInicioPag)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MaxInicioPag)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MinParcelasPagas)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MinParcelasPagas)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MaxParcelasPagas)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MaxParcelasPagas)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MinDataNascimento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MinDataNascimento)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ApenasNaoExportados)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApenasNaoExportados)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MinCep)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MinCep)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MaxCep)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MaxCep)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CodigoBanco)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CodigoBanco)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Remover" class="btn btn-default" /> |
+            @Html.ActionLink("Retornar para listagem", "Index")
+        </div>
+    }
+</div>
