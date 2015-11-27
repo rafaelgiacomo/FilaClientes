@@ -53,6 +53,12 @@ namespace CampanhaBD.RepositoryADO
             return TransformaReaderEmListaDeObjeto(retornoDataReader);
         }
 
+        public void Terminar(int id, int usuarioId)
+        {
+            string strQuery = " UPDATE Importacao SET terminado = 'true'";
+            _context.ExecutaComando(strQuery);
+        }
+
         public int NumeroImportacao(int usuarioId)
         {
             int num = 1;

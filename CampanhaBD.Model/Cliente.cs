@@ -57,6 +57,7 @@ namespace CampanhaBD.Model
         {
             Beneficio = new Beneficio();
             Emprestimos = new List<Emprestimo>();
+            Emprestimos.Add(new Emprestimo());
         }
 
         public void preencheCampo(int indiceCampo, String valor)
@@ -67,7 +68,10 @@ namespace CampanhaBD.Model
                     Nome = valor;
                     break;
                 case 1:
-                    DataNascimento = DateTime.Parse(valor);
+                    string ano = valor.Substring(0, 4);
+                    string mes = valor.Substring(4, 2);
+                    string dia = valor.Substring(6, 2);
+                    DataNascimento = DateTime.Parse(dia + "/" + mes + "/" + ano);
                     break;
                 case 2:
                     Cpf = valor + Cpf;
@@ -125,10 +129,10 @@ namespace CampanhaBD.Model
                     Emprestimos[0].BancoId = int.Parse(valor);
                     break;
                 case 13:
-                    Emprestimos[0].Saldo = float.Parse(valor.Replace(',', '.'));
+                    Emprestimos[0].Saldo = float.Parse(valor);
                     break;
                 case 14:
-                    Emprestimos[0].ValorParcela = float.Parse(valor.Replace(',', '.'));
+                    Emprestimos[0].ValorParcela = float.Parse(valor);
                     break;
                 case 15:
                     Emprestimos[0].ParcelasNoContrato = int.Parse(valor);

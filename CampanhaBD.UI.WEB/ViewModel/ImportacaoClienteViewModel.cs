@@ -13,6 +13,8 @@ namespace CampanhaBD.UI.WEB.ViewModel
         [Required]
         public int Cpf { get; set; }
 
+        public int DigitoCpf { get; set; }
+
         public int Uf { get; set; }
 
         public int Cidade { get; set; }
