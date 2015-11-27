@@ -89,6 +89,8 @@ namespace CampanhaBD.UI.WEB.Controllers
             {
                 Cliente cliente = new Cliente();
 
+                //cliente.preencheCampo();
+
                 cliente.ImportacaoId = model.ImpId; //Pegar Id da importação
                 cliente.Nome = linhaSeparada[model.Nome];
                 cliente.Classificacao = Cliente.CLIENTE;
@@ -101,10 +103,23 @@ namespace CampanhaBD.UI.WEB.Controllers
 
         public int[] criaVetorValores(ImportacaoClienteViewModel model)
         {
-            int[] vet = new int[11];
-
-            
-
+            int[] vet = new int[16];
+            vet[Cliente.INDICE_NOME] = model.Nome;
+            vet[Cliente.INDICE_DATA_NASCIMENTO] = model.DataNascimento;
+            vet[Cliente.INDICE_CPF] = model.Cpf;
+            vet[Cliente.INDICE_DDD] = model.Ddd;
+            vet[Cliente.INDICE_TELEFONE] = model.Telefone;
+            vet[Cliente.INDICE_UF] = model.Uf;
+            vet[Cliente.INDICE_CIDADE] = model.Cidade;
+            vet[Cliente.INDICE_BAIRRO] = model.Bairro;
+            vet[Cliente.INDICE_CEP] = model.Cep;
+            vet[Cliente.INDICE_DIGITO_CPF] = model.Nome;
+            vet[Cliente.INDICE_BANCO] = model.BancoId;
+            vet[Cliente.INDICE_SALDO] = model.Saldo;
+            vet[Cliente.INDICE_VALOR_PARCELA] = model.ValorParcela;
+            vet[Cliente.INDICE_PARCELAS_NO_CONTRATO] = model.ParcelasNoContrato;
+            vet[Cliente.INDICE_NOME] = model.Nome;
+            vet[Cliente.INDICE_NOME] = model.Nome;
             return vet;
         }
     }

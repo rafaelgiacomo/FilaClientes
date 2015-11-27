@@ -34,7 +34,7 @@ namespace CampanhaBD.UI.WEB.ViewModel
         public int Cep { get; set; }
 
         [Display(Name = "Valor de Parcela")]
-        public float ValorParcela { get; set; }
+        public int ValorParcela { get; set; }
 
         [Display(Name = "Parcelas no contrato")]
         public int ParcelasNoContrato { get; set; }
@@ -42,7 +42,7 @@ namespace CampanhaBD.UI.WEB.ViewModel
         [Display(Name = "Parcelas pagas")]
         public int ParcelasPagas { get; set; }
 
-        public float Saldo { get; set; }
+        public int Saldo { get; set; }
 
         [Display(Name = "Inicio de Pagamento")]
         public int InicioPagamento { get; set; }
