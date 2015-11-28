@@ -18,9 +18,10 @@ namespace CampanhaBD.RepositoryADO
         public void Inserir(Campanha entidade)
         {
             entidade.Id = NumeroCampanha(entidade.UsuarioId);
-            var strQuery = " INSERT INTO Campanha (cam_id, pessoa_id, nome, minParcela, maxParcela, minInicioPag, maxInicioPag, minParcelasPagas, maxParcelasPagas, minDataNascimento, apenasNaoExportados) ";
+            var strQuery = " INSERT INTO Campanha (cam_id, pessoa_id, nome, minParcela, maxParcela, minInicioPag," +  
+                "maxInicioPag, minParcelasPagas, maxParcelasPagas, minDataNascimento, apenasNaoExportados, ban_id) ";
 
-            strQuery += string.Format("VALUES ('{0}', {1}, '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', {10}) ",
+            strQuery += string.Format("VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}', '{11}') ",
                     entidade.Id,
                     entidade.UsuarioId,
                     entidade.Nome,
@@ -31,7 +32,8 @@ namespace CampanhaBD.RepositoryADO
                     entidade.MinParcelasPagas,
                     entidade.MaxParcelasPagas,
                     entidade.MinDataNascimento,
-                    Convert.ToByte(entidade.ApenasNaoExportados)
+                    Convert.ToByte(entidade.ApenasNaoExportados),
+                    entidade.CodigoBanco
                 );
 
             _context.ExecutaComando(strQuery);
@@ -48,7 +50,8 @@ namespace CampanhaBD.RepositoryADO
             strQuery += string.Format(" maxInicioPag = '{0}', ",                  entidade.MaxInicioPag);
             strQuery += string.Format(" maxParcelasPagas = '{0}', ",              entidade.MaxParcelasPagas);
             strQuery += string.Format(" minDataNascimento = '{0}', ",             entidade.MinDataNascimento == default(DateTime) ? null : entidade.MinDataNascimento.ToString("yyyy-MM-dd HH:mm:ss"));
-            strQuery += string.Format(" apenasNaoExportados = {0} ",              Convert.ToByte(entidade.ApenasNaoExportados));
+            strQuery += string.Format(" apenasNaoExportados = '{0}', ",           Convert.ToByte(entidade.ApenasNaoExportados));
+            strQuery += string.Format(" ban_id = '{0}', ",                        entidade.CodigoBanco);
 
             strQuery += string.Format(" WHERE cam_id = {0} AND pessoa_id = {1}", entidade.Id, entidade.UsuarioId);
             _context.ExecutaComando(strQuery);
@@ -103,6 +106,15 @@ namespace CampanhaBD.RepositoryADO
                     Id = int.Parse(reader["cam_id"].ToString()),
                     UsuarioId = int.Parse(reader["pessoa_id"].ToString()),
                     Nome = reader["nome"].ToString(),
+                    MinParcela = float.Parse(reader["minParcela"].ToString()),
+                    MaxParcela = float.Parse(reader["maxParcela"].ToString()),
+                    MinInicioPag = reader["minInicioPag"].ToString(),
+                    MaxInicioPag = reader["maxInicioPag"].ToString(),
+                    MinParcelasPagas = int.Parse(reader["minParcelasPagas"].ToString()),
+                    MaxParcelasPagas = int.Parse(reader["maxParcelasPagas"].ToString()),
+                    MinDataNascimento = DateTime.Parse(reader["minDataNascimento"].ToString()),
+                    ApenasNaoExportados = bool.Parse(reader["apenasNaoExportados"].ToString()),
+                    CodigoBanco = int.Parse(reader["codigoBanco"].ToString())
                 };
                 usuarios.Add(temObjeto);
             }
