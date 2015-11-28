@@ -19,10 +19,10 @@ namespace CampanhaBD.RepositoryADO
         {
             entidade.Id = NumeroImportacao(entidade.UsuarioId);
             var strQuery = "";
-            strQuery += " INSERT INTO Importacao (imp_id, pessoa_id, nome, data, terminado, numImportados, atualizados) ";
-            strQuery += string.Format(" VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}') ",
+            strQuery += " INSERT INTO Importacao (imp_id, pessoa_id, nome, data, terminado, numImportados, atualizados, caminhoArquivo) ";
+            strQuery += string.Format(" VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}') ",
                 entidade.Id, entidade.UsuarioId, entidade.Nome, entidade.Data, entidade.Terminado, entidade.NumImportados, 
-                entidade.NumAtualizados);
+                entidade.NumAtualizados, entidade.CaminhoArquivo);
             _context.ExecutaComando(strQuery);
         }
 
@@ -55,26 +55,21 @@ namespace CampanhaBD.RepositoryADO
 
         public int NumeroImportacao(int usuarioId)
         {
-            int num = 0;
+            int num = 1;
             var strQuery = string.Format(" SELECT COUNT(*) FROM Importacao WHERE pessoa_id = '{0}' ", usuarioId);
             var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             if (retornoDataReader.Read())
             {
-                num = int.Parse(retornoDataReader[0].ToString());
-            }
-
-            if (num == 0)
-            {
-                num = 1;
+                num = int.Parse(retornoDataReader[0].ToString()) + 1;
             }
 
             retornoDataReader.Close();
             return num;
         }
 
-        public Importacao ListarPorId(string id, string clienteId)
+        public Importacao ListarPorId(int id, int usuarioId)
         {
-            var strQuery = string.Format(" SELECT * FROM Importacao WHERE imp_id = '{0}' AND pessoa_id = '{1}' ", id, clienteId);
+            var strQuery = string.Format(" SELECT * FROM Importacao WHERE imp_id = '{0}' AND pessoa_id = '{1}' ", id, usuarioId);
             var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
         }
@@ -93,6 +88,7 @@ namespace CampanhaBD.RepositoryADO
                     Terminado = bool.Parse(reader["Terminado"].ToString()),
                     NumImportados = int.Parse(reader["numImportados"].ToString()),
                     NumAtualizados = int.Parse(reader["atualizados"].ToString()),
+                    CaminhoArquivo = reader["caminhoArquivo"].ToString()
                 };
                 usuarios.Add(temObjeto);
             }

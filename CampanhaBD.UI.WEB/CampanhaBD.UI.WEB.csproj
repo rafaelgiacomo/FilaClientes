@@ -231,7 +231,6 @@
     <Content Include="Views\Import\Importar.cshtml" />
     <Content Include="Views\Conta\Registrar.cshtml" />
     <Content Include="Views\Import\Index.cshtml" />
-    <Content Include="Views\Import\Associar.cshtml" />
     <Content Include="Views\Banco\Index.cshtml" />
     <Content Include="Views\Banco\Criar.cshtml" />
     <Content Include="Views\Banco\Editar.cshtml" />

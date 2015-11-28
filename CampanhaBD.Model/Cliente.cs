@@ -4,7 +4,7 @@ namespace CampanhaBD.Model
 {
     public class Cliente : Pessoa
     {
-        public string ImportacaoId { get; set; }
+        public int ImportacaoId { get; set; }
 
         public string Cpf { get; set; }
 

@@ -32,11 +32,12 @@ namespace CampanhaBD.UI.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
+                modelo.UsuarioId = _unityOfWork.Usuarios.ListarPorLogin(User.Identity.Name).Id;
                 _unityOfWork.Campanhas.Inserir(modelo.ParaCampanhaModel());
                 return RedirectToAction("Index");
             }
 
-            ViewBag.Mensagem = "Erro ao salvar usuario";
+            // ViewBag.Mensagem = "Erro ao salvar usuario";
             return View();
         }
 
