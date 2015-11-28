@@ -114,7 +114,7 @@ namespace CampanhaBD.RepositoryADO
                     MaxParcelasPagas = int.Parse(reader["maxParcelasPagas"].ToString()),
                     MinDataNascimento = DateTime.Parse(reader["minDataNascimento"].ToString()),
                     ApenasNaoExportados = bool.Parse(reader["apenasNaoExportados"].ToString()),
-                    CodigoBanco = int.Parse(reader["codigoBanco"].ToString())
+                    CodigoBanco = int.Parse(reader["ban_id"].ToString())
                 };
                 usuarios.Add(temObjeto);
             }

@@ -31,5 +31,7 @@ namespace CampanhaBD.Model
         public string MaxCep { get; set; }
 
         public int CodigoBanco { get; set; }
+
+        public Banco Banco { get; set; }
     }
 }
