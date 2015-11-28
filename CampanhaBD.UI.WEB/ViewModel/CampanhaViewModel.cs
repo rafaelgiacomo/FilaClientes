@@ -85,7 +85,7 @@ namespace CampanhaBD.UI.WEB.ViewModel
             ApenasNaoExportados = campanha.ApenasNaoExportados;
             MinCep = campanha.MinCep;
             MaxCep = campanha.MaxCep;
-            CodigoBanco = campanha.Banco.Codigo;
+            CodigoBanco = campanha.CodigoBanco;
         }
     }
 }

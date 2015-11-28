@@ -36,6 +36,9 @@ namespace CampanhaBD.RepositoryADO
                 entidade.Bairro, entidade.Ddd, entidade.Telefone, entidade.Logradouro, entidade.Cep, entidade.Trabalhado, 
                 entidade.Numero, entidade.Complemento, entidade.Cpf, entidade.ImportacaoId, entidade.UsuarioId);
             _context.ExecutaComando(strQuery);
+
+            _beneficioRepositorioADO.Inserir(entidade.Beneficio);
+            _emprestimoRepositorioADO.Inserir(entidade.Emprestimos[0]);
         }
 
         public void Alterar(Cliente entidade)
