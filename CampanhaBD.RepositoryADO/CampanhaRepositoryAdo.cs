@@ -18,7 +18,7 @@ namespace CampanhaBD.RepositoryADO
         public void Inserir(Campanha entidade)
         {
             entidade.Id = NumeroCampanha(entidade.UsuarioId);
-            var strQuery = " INSERT INTO Campanha (cam_id, pessoa_id, nome, minParcela, maxParcela, minInicioPag," +  
+            var strQuery = " INSERT INTO Campanha (cam_id, usuario_id, nome, minParcela, maxParcela, minInicioPag," +  
                 "maxInicioPag, minParcelasPagas, maxParcelasPagas, minDataNascimento, apenasNaoExportados, ban_id) ";
 
             strQuery += string.Format("VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}', '{11}') ",
@@ -53,13 +53,13 @@ namespace CampanhaBD.RepositoryADO
             strQuery += string.Format(" apenasNaoExportados = '{0}', ",           Convert.ToByte(entidade.ApenasNaoExportados));
             strQuery += string.Format(" ban_id = '{0}', ",                        entidade.CodigoBanco);
 
-            strQuery += string.Format(" WHERE cam_id = {0} AND pessoa_id = {1}", entidade.Id, entidade.UsuarioId);
+            strQuery += string.Format(" WHERE cam_id = {0} AND usuario_id = {1}", entidade.Id, entidade.UsuarioId);
             _context.ExecutaComando(strQuery);
         }
 
         public void Excluir(Campanha entidade)
         {
-            var strQuery = string.Format(" DELETE FROM Campanha WHERE cam_id = {0} AND pessoa_id = '{1}'", entidade.Id, entidade.UsuarioId);
+            var strQuery = string.Format(" DELETE FROM Campanha WHERE cam_id = {0} AND usuario_id = '{1}'", entidade.Id, entidade.UsuarioId);
             _context.ExecutaComando(strQuery);
         }
 
@@ -72,7 +72,7 @@ namespace CampanhaBD.RepositoryADO
 
         public Campanha ListarPorId(string id, string usuarioId)
         {
-            var strQuery = string.Format(" SELECT * FROM Campanha WHERE cam_id = {0} AND pessoa_id = {1} ", id, usuarioId);
+            var strQuery = string.Format(" SELECT * FROM Campanha WHERE cam_id = {0} AND usuario_id = {1} ", id, usuarioId);
             var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
         }
@@ -80,7 +80,7 @@ namespace CampanhaBD.RepositoryADO
         public int NumeroCampanha(int usuarioId)
         {
             int num = 0;
-            var strQuery = string.Format(" SELECT COUNT(*) FROM Campanha WHERE pessoa_id = '{0}' ", usuarioId);
+            var strQuery = string.Format(" SELECT COUNT(*) FROM Campanha WHERE usuario_id = '{0}' ", usuarioId);
             var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             if (retornoDataReader.Read())
             {
@@ -104,7 +104,7 @@ namespace CampanhaBD.RepositoryADO
                 var temObjeto = new Campanha()
                 {
                     Id = int.Parse(reader["cam_id"].ToString()),
-                    UsuarioId = int.Parse(reader["pessoa_id"].ToString()),
+                    UsuarioId = int.Parse(reader["usuario_id"].ToString()),
                     Nome = reader["nome"].ToString(),
                     MinParcela = float.Parse(reader["minParcela"].ToString()),
                     MaxParcela = float.Parse(reader["maxParcela"].ToString()),

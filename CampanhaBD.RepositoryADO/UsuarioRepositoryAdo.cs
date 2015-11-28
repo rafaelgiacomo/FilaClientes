@@ -18,12 +18,12 @@ namespace CampanhaBD.RepositoryADO
 
         public void Inserir(Usuario entidade)
         {
-            entidade.Classificacao = Pessoa.CLIENTE;
+            entidade.Classificacao = Pessoa.USUARIO;
             _pessoaRepositorioADO.Inserir((Pessoa) entidade);
             entidade.Id = _pessoaRepositorioADO.UltimoId;
 
             var strQuery = "";
-            strQuery += " INSERT INTO Usuario (pessoa_id, login, senha, empresa, email) ";
+            strQuery += " INSERT INTO Usuario (usuario_id, login, senha, empresa, email) ";
             strQuery += string.Format(" VALUES ('{0}', '{1}', '{2}', '{3}', '{4}') ",
                 entidade.Id, entidade.Login, entidade.Senha, entidade.Empresa, entidade.Email);
             _context.ExecutaComando(strQuery);
@@ -37,13 +37,13 @@ namespace CampanhaBD.RepositoryADO
             strQuery += string.Format(" senha = '{0}', ", entidade.Senha);
             strQuery += string.Format(" empresa = '{0}' ", entidade.Empresa);
             strQuery += string.Format(" email = '{0}', ", entidade.Email);
-            strQuery += string.Format(" WHERE pessoa_id = {0} ", entidade.Id);
+            strQuery += string.Format(" WHERE usuario_id = {0} ", entidade.Id);
             _context.ExecutaComando(strQuery);
         }
 
         public void Excluir(Usuario entidade)
         {
-            var strQuery = string.Format(" DELETE FROM Usuario WHERE pessoa_id = {0}", entidade.Id);
+            var strQuery = string.Format(" DELETE FROM Usuario WHERE usuario_id = {0}", entidade.Id);
             _context.ExecutaComando(strQuery);
         }
 
@@ -56,7 +56,7 @@ namespace CampanhaBD.RepositoryADO
 
         public Usuario ListarPorId(string id)
         {
-            var strQuery = string.Format(" SELECT * FROM Usuario WHERE pessoa_id = {0} ", id);
+            var strQuery = string.Format(" SELECT * FROM Usuario WHERE usuario_id = {0} ", id);
             var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
         }
@@ -75,7 +75,7 @@ namespace CampanhaBD.RepositoryADO
             {
                 var temObjeto = new Usuario()
                 {
-                    Id = int.Parse(reader["pessoa_id"].ToString()),
+                    Id = int.Parse(reader["usuario_id"].ToString()),
                     Login = reader["login"].ToString(),
                     Senha = reader["senha"].ToString(),
                     Empresa = reader["empresa"].ToString(),

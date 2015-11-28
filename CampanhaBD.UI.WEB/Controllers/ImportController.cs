@@ -32,16 +32,14 @@ namespace CampanhaBD.UI.WEB.Controllers
                 string caminho = Path.Combine(Server.MapPath("~/Content/Uploads"), viewModel.File.FileName);
                 viewModel.File.SaveAs(caminho);
 
-                Importacao imp = new Importacao()
-                {
-                    UsuarioId = _unityOfWork.Usuarios.ListarPorLogin(User.Identity.Name).Id,
-                    Nome = viewModel.Nome,
-                    Data = DateTime.Now,
-                    Terminado = false,
-                    NumImportados = 0,
-                    NumAtualizados = 0,
-                    CaminhoArquivo = caminho
-                };
+                Importacao imp = new Importacao();
+                imp.UsuarioId = _unityOfWork.Usuarios.ListarPorLogin(User.Identity.Name).Id;
+                imp.Nome = viewModel.Nome;
+                imp.Data = DateTime.Now;
+                imp.Terminado = false;
+                imp.NumImportados = 0;
+                imp.NumAtualizados = 0;
+                imp.CaminhoArquivo = caminho;
 
                 _unityOfWork.Importacoes.Inserir(imp);
 
@@ -83,7 +81,7 @@ namespace CampanhaBD.UI.WEB.Controllers
                 Logradouro = 20,
                 Bairro = 21,
                 Cidade = 22,
-                Uf = 23, 
+                Uf = 23,
                 Cep = 24
             };
 
@@ -106,6 +104,7 @@ namespace CampanhaBD.UI.WEB.Controllers
                 Cliente cliente = new Cliente();
 
                 cliente.ImportacaoId = model.ImpId; //Pegar Id da importação
+                cliente.UsuarioId = model.UsuarioId;
                 cliente.Classificacao = Cliente.CLIENTE;
 
                 for (int i = 0; i < valores.Length; i++)
@@ -116,8 +115,7 @@ namespace CampanhaBD.UI.WEB.Controllers
                     }
                 }
 
-                //_unityOfWork.Clients.Inserir(cliente);
-
+                _unityOfWork.Clients.Inserir(cliente);
             }
 
             stream.Close();

@@ -7,6 +7,8 @@ namespace CampanhaBD.Model
     {
         public int ImportacaoId { get; set; }
 
+        public int UsuarioId { get; set; }
+
         public string Cpf { get; set; }
 
         public string Uf { get; set; }

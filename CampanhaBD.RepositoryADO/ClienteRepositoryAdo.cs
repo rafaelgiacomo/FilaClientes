@@ -11,11 +11,15 @@ namespace CampanhaBD.RepositoryADO
     {
         private Context _context;
         private readonly PessoaRepositoryAdo _pessoaRepositorioADO;
+        private readonly EmprestimoRepositoryAdo _emprestimoRepositorioADO;
+        private readonly BeneficioRepositoryAdo _beneficioRepositorioADO;
 
         public ClienteRepositoryAdo(Context context)
         {
             _context = context;
             _pessoaRepositorioADO = new PessoaRepositoryAdo(context);
+            _emprestimoRepositorioADO = new EmprestimoRepositoryAdo(context);
+            _beneficioRepositorioADO = new BeneficioRepositoryAdo(context);
         }
 
         public void Inserir(Cliente entidade)
@@ -25,11 +29,12 @@ namespace CampanhaBD.RepositoryADO
             entidade.Id = _pessoaRepositorioADO.UltimoId;
 
             var strQuery = "";
-            strQuery += " INSERT INTO CLIENTE (dataNasc, estado, cidade, bairro, ddd, telefone, logradouro" +
-                        " cep, trabalhado, numero, complemento, CPF, imp_id) ";
+            strQuery += " INSERT INTO CLIENTE (pessoa_id, dataNasc, estado, cidade, bairro, ddd, telefone, logradouro, " +
+                        " cep, trabalhado, numero, complemento, CPF, imp_id, usuario_id) ";
             strQuery += string.Format(" VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', " +
-                " '{10}', '{11}', '{12}') ", entidade.DataNascimento, entidade.Uf, entidade.Cidade, entidade.Bairro, entidade.Ddd, 
-                entidade.Telefone, entidade.Logradouro, entidade.Cep, entidade.Trabalhado, entidade.Numero, entidade.Complemento, entidade.Cpf, entidade.ImportacaoId);
+                " '{10}', '{11}', '{12}', '{13}', '{14}') ", entidade.Id, entidade.DataNascimento, entidade.Uf, entidade.Cidade, 
+                entidade.Bairro, entidade.Ddd, entidade.Telefone, entidade.Logradouro, entidade.Cep, entidade.Trabalhado, 
+                entidade.Numero, entidade.Complemento, entidade.Cpf, entidade.ImportacaoId, entidade.UsuarioId);
             _context.ExecutaComando(strQuery);
         }
 
