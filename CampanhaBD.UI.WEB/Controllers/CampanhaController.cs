@@ -1,11 +1,7 @@
 ﻿using CampanhaBD.Model;
 using CampanhaBD.RepositoryADO;
 using CampanhaBD.UI.WEB.ViewModel;
-using Microsoft.AspNet.Identity;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace CampanhaBD.UI.WEB.Controllers
@@ -18,22 +14,6 @@ namespace CampanhaBD.UI.WEB.Controllers
         // GET: Banco
         public ActionResult Index()
         {
-            Campanha camp = new Campanha();
-            camp.ApenasNaoExportados = true;
-            camp.CodigoBanco = 707;
-            camp.Id = 12;
-            camp.MaxCep = "10000000";
-            camp.MaxInicioPag = null;
-            camp.MaxParcela = 180;
-            camp.MaxParcelasPagas = 40;
-            camp.MinCep = "99999999";
-            camp.MinDataNascimento = DateTime.Parse("01/01/1900");
-            camp.MinInicioPag = "01/01/1900";
-            camp.MinParcela = 10;
-            camp.MinParcelasPagas = 10;
-            camp.Nome = "Zé";
-            string teste = sqlString(camp);
-
             ViewBag.UsuarioID = _unityOfWork.Usuarios.ListarPorLogin(User.Identity.Name).Id;
             return View(_unityOfWork.Campanhas.ListarTodos());
         }
