@@ -33,7 +33,8 @@ namespace CampanhaBD.UI.WEB.Controllers
             camp.MinParcelasPagas = 10;
             camp.Nome = "Zé";
             string teste = sqlString(camp);
-           
+
+            ViewBag.UsuarioID = _unityOfWork.Usuarios.ListarPorLogin(User.Identity.Name).Id;
             return View(_unityOfWork.Campanhas.ListarTodos());
         }
 
