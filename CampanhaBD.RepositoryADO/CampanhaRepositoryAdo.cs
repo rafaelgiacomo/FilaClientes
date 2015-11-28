@@ -31,7 +31,7 @@ namespace CampanhaBD.RepositoryADO
                     entidade.MinParcelasPagas,
                     entidade.MaxParcelasPagas,
                     entidade.MinDataNascimento,
-                    Convert.ToByte(entidade.ApenasNaoExportados)
+                    entidade.ApenasNaoExportados
                 );
 
             _context.ExecutaComando(strQuery);
@@ -48,7 +48,7 @@ namespace CampanhaBD.RepositoryADO
             strQuery += string.Format(" maxInicioPag = '{0}', ",                  entidade.MaxInicioPag);
             strQuery += string.Format(" maxParcelasPagas = '{0}', ",              entidade.MaxParcelasPagas);
             strQuery += string.Format(" minDataNascimento = '{0}', ",             entidade.MinDataNascimento == default(DateTime) ? null : entidade.MinDataNascimento.ToString("yyyy-MM-dd HH:mm:ss"));
-            strQuery += string.Format(" apenasNaoExportados = {0} ",              Convert.ToByte(entidade.ApenasNaoExportados));
+            strQuery += string.Format(" apenasNaoExportados = {0} ",              entidade.ApenasNaoExportados);
 
             strQuery += string.Format(" WHERE cam_id = {0} AND pessoa_id = {1}", entidade.Id, entidade.UsuarioId);
             _context.ExecutaComando(strQuery);
