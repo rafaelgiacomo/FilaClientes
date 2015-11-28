@@ -39,7 +39,7 @@ namespace CampanhaBD.RepositoryADO
 
         public IEnumerable<Banco> ListarTodos()
         {
-            var strQuery = " SELECT * FROM Banco ";
+            var strQuery = " SELECT * FROM Banco ORDER BY nome";
             var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             return TransformaReaderEmListaDeObjeto(retornoDataReader);
         }

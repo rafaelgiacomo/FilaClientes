@@ -20,21 +20,22 @@
         <th>
             @Html.DisplayNameFor(model => model.CodigoBanco)
         </th>
-        <th></th>
+        <th>Funcionalidades</th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.UsuarioId)
+            @Html.DisplayFor(modelItem => item.Nome)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Nome)
+            @Html.DisplayFor(modelItem => item.UsuarioId)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.CodigoBanco)
         </td>
         <td>
+            @Html.ActionLink("Executar", "Editar", new { usuarioId = ViewBag.UsuarioID, camId = item.Id }) |
             @Html.ActionLink("Editar", "Editar", new { usuarioId = ViewBag.UsuarioID, camId = item.Id }) |
             @Html.ActionLink("Detalhes", "Detalhes", new { usuarioId = ViewBag.UsuarioID, camId = item.Id }) |
             @Html.ActionLink("Excluir", "Excluir", new { usuarioId = ViewBag.UsuarioID, camId = item.Id })
