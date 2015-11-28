@@ -33,7 +33,7 @@ namespace CampanhaBD.RepositoryADO
                     entidade.MaxParcelasPagas,
                     entidade.MinDataNascimento,
                     Convert.ToByte(entidade.ApenasNaoExportados),
-                    entidade.CodigoBanco
+                    entidade.Banco.Codigo
                 );
 
             _context.ExecutaComando(strQuery);
@@ -114,7 +114,9 @@ namespace CampanhaBD.RepositoryADO
                     MaxParcelasPagas = int.Parse(reader["maxParcelasPagas"].ToString()),
                     MinDataNascimento = DateTime.Parse(reader["minDataNascimento"].ToString()),
                     ApenasNaoExportados = bool.Parse(reader["apenasNaoExportados"].ToString()),
-                    CodigoBanco = int.Parse(reader["ban_id"].ToString())
+                    new Banco {
+                        Codigo = int.Parse(reader["ban_id"].ToString())
+                    }
                 };
                 usuarios.Add(temObjeto);
             }
