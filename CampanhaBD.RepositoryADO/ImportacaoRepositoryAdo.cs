@@ -55,7 +55,8 @@ namespace CampanhaBD.RepositoryADO
 
         public void Terminar(int id, int usuarioId)
         {
-            string strQuery = " UPDATE Importacao SET terminado = 'true'";
+            string strQuery = string.Format(" UPDATE Importacao SET terminado = 'true' WHERE imp_id = '{0}' and usuario_id = '{1}'",
+                id, usuarioId);
             _context.ExecutaComando(strQuery);
         }
 

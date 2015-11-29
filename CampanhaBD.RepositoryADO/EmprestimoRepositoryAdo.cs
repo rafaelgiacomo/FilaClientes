@@ -2,12 +2,14 @@
 using System.Data.SqlClient;
 using System.Linq;
 using CampanhaBD.Model;
+using System;
 
 namespace CampanhaBD.RepositoryADO
 {
     public class EmprestimoRepositoryAdo
     {
         private Context _context;
+        public int UltimoId { get; set; }
 
         public EmprestimoRepositoryAdo(Context context)
         {
@@ -17,11 +19,13 @@ namespace CampanhaBD.RepositoryADO
         public void Inserir(Emprestimo entidade)
         {
             var strQuery = "";
-            strQuery += " INSERT INTO Emprestimo (emp_id, numero, pessoa_id, parcelasContrato " +
+            entidade.NumEmprestimo = NumeroEmprestimo(entidade.NumBeneficio, entidade.ClienteId);
+            strQuery += " INSERT INTO Emprestimo (emp_id, numero, pessoa_id, parcelasContrato, " +
                         "parcelasPagas, saldo, inicioPag, ban_id, valorParcela) ";
             strQuery += string.Format(" VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}') ",
                 entidade.NumEmprestimo, entidade.NumBeneficio, entidade.ClienteId, entidade.ParcelasNoContrato, 
-                entidade.ParcelasPagas, entidade.Saldo, entidade.InicioPagamento, entidade.BancoId, entidade.ValorParcela);
+                entidade.ParcelasPagas, entidade.Saldo.ToString().Replace(",","."), entidade.InicioPagamento, entidade.BancoId, 
+                entidade.ValorParcela.ToString().Replace(",", "."));
             _context.ExecutaComando(strQuery);
         }
 
@@ -60,6 +64,21 @@ namespace CampanhaBD.RepositoryADO
             var strQuery = string.Format(" SELECT * FROM Emprestimo  WHERE emp_id = '{0}' AND  numero = '{1}' AND  pessoa_id = '{2}' ", id, numero, pessoa_id);
             var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
+        }
+
+        public int NumeroEmprestimo(int numBeneficio, int pessoaId)
+        {
+            int num = 1;
+            var strQuery = string.Format(" SELECT COUNT(*) QTD FROM Emprestimo WHERE pessoa_id = '{0}' and numero = '{1}'", 
+                pessoaId, numBeneficio);
+            var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
+            if (retornoDataReader.Read())
+            {
+                num = int.Parse(retornoDataReader["QTD"].ToString()) + 1;
+            }
+
+            retornoDataReader.Close();
+            return num;
         }
 
         private List<Emprestimo> TransformaReaderEmListaDeObjeto(SqlDataReader reader)

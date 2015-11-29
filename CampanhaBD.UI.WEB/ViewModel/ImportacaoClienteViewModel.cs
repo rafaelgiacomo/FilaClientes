@@ -8,6 +8,8 @@ namespace CampanhaBD.UI.WEB.ViewModel
         [Display(Name = "N° Benefício")]
         public int NumBeneficio { get; set; }
 
+        public int ValorBeneficio { get; set; }
+
         public int Nome { get; set; }
 
         [Required]

@@ -14,6 +14,8 @@ namespace CampanhaBD.RepositoryADO
         private BancoRepositoryAdo _bancoRepository;
         private ImportacaoRepositoryAdo _importacaoRepository;
         private CampanhaRepositoryAdo _campanhaRepository;
+        private BeneficioRepositoryAdo _beneficioRepository;
+        private EmprestimoRepositoryAdo _emprestimoRepository;
         #pragma warning restore 649
 
         public void Commit()
@@ -67,6 +69,16 @@ namespace CampanhaBD.RepositoryADO
         public CampanhaRepositoryAdo Campanhas
         {
             get { return (_campanhaRepository ?? new CampanhaRepositoryAdo(_context)); }
+        }
+
+        public BeneficioRepositoryAdo Beneficios
+        {
+            get { return (_beneficioRepository ?? new BeneficioRepositoryAdo(_context)); }
+        }
+
+        public EmprestimoRepositoryAdo Emprestimos
+        {
+            get { return (_emprestimoRepository ?? new EmprestimoRepositoryAdo(_context)); }
         }
     }
 }

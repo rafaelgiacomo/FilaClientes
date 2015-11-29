@@ -36,9 +36,6 @@ namespace CampanhaBD.RepositoryADO
                 entidade.Bairro, entidade.Ddd, entidade.Telefone, entidade.Logradouro, entidade.Cep, entidade.Trabalhado, 
                 entidade.Numero, entidade.Complemento, entidade.Cpf, entidade.ImportacaoId, entidade.UsuarioId);
             _context.ExecutaComando(strQuery);
-
-            _beneficioRepositorioADO.Inserir(entidade.Beneficio);
-            _emprestimoRepositorioADO.Inserir(entidade.Emprestimos[0]);
         }
 
         public void Alterar(Cliente entidade)
@@ -62,6 +59,15 @@ namespace CampanhaBD.RepositoryADO
             _context.ExecutaComando(strQuery);
         }
 
+        public void AlterarImportacao(Cliente entidade)
+        {
+            var strQuery = "";
+            strQuery += " UPDATE Cliente SET ";
+            strQuery += string.Format(" imp_id = '{0}' ", entidade.ImportacaoId);
+            strQuery += string.Format(" WHERE pessoa_id = {0} ", entidade.Id);
+            _context.ExecutaComando(strQuery);
+        }
+
         public void Excluir(Cliente entidade)
         {
             var strQuery = string.Format(" DELETE FROM Cliente WHERE pessoa_id = {0}", entidade.Id);
@@ -78,6 +84,13 @@ namespace CampanhaBD.RepositoryADO
         public Cliente ListarPorId(string id)
         {
             var strQuery = string.Format(" SELECT * FROM Cliente WHERE pessoa_id = {0} ", id);
+            var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
+            return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
+        }
+
+        public Cliente ListarPorCpf(string cpf)
+        {
+            var strQuery = string.Format(" SELECT * FROM Cliente WHERE CPF = '{0}' ", cpf);
             var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
         }

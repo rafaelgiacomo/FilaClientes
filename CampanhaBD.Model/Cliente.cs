@@ -53,7 +53,8 @@ namespace CampanhaBD.Model
         public static readonly int INDICE_SALDO = 13;
         public static readonly int INDICE_VALOR_PARCELA = 14;
         public static readonly int INDICE_PARCELAS_NO_CONTRATO = 15;
-        public static readonly int INDICE_INICIO_PAGAMENTO = 15;
+        public static readonly int INDICE_INICIO_PAGAMENTO = 16;
+        public static readonly int INDICE_VALOR_BENEFICIO = 17;
 
         public Cliente()
         {
@@ -126,6 +127,7 @@ namespace CampanhaBD.Model
                         valor = "0" + valor;
                     }
                     Beneficio.Numero = int.Parse(valor);
+                    Emprestimos[0].NumBeneficio = int.Parse(valor);
                     break;
                 case 12:
                     Emprestimos[0].BancoId = int.Parse(valor);
@@ -141,8 +143,13 @@ namespace CampanhaBD.Model
                     break;
                 case 16:
                     //10 é o dia de desconta na folha de pagamento
-                    valor = valor + "10";
-                    Emprestimos[0].InicioPagamento = DateTime.Parse(valor);
+                    string anoIni = valor.Substring(0, 4);
+                    string mesIni = valor.Substring(4, 2);
+                    string diaIni = "10";
+                    Emprestimos[0].InicioPagamento = DateTime.Parse(diaIni + "/" + mesIni + "/" + anoIni);
+                    break;
+                case 17:
+                    Beneficio.Salario = float.Parse(valor);
                     break;
             }
         }

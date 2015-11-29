@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using CampanhaBD.Model;
 using CampanhaBD.RepositoryADO;
 using System.IO;
+using System.Data.SqlClient;
 
 namespace CampanhaBD.UI.WEB.Controllers
 {
@@ -70,6 +71,7 @@ namespace CampanhaBD.UI.WEB.Controllers
                 ImpId = impId,
                 Colunas = linhaSeparada,
                 NumBeneficio = 1,
+                ValorBeneficio = 7,
                 Nome = 2,
                 DataNascimento = 3,
                 Cpf = 4,
@@ -115,18 +117,35 @@ namespace CampanhaBD.UI.WEB.Controllers
                     }
                 }
 
-                _unityOfWork.Clients.Inserir(cliente);
+                var cl = _unityOfWork.Clients.ListarPorCpf(cliente.Cpf);
+
+                if (cl == null)
+                {
+                    _unityOfWork.Clients.Inserir(cliente);
+                    cliente.Beneficio.IdCliente = cliente.Id;
+                    cliente.Beneficio.DataCompetencia = DateTime.Now;
+                    cliente.Emprestimos[0].ClienteId = cliente.Id;
+                    _unityOfWork.Beneficios.Inserir(cliente.Beneficio);
+                    _unityOfWork.Emprestimos.Inserir(cliente.Emprestimos[0]);
+                }
+                else
+                {
+                    _unityOfWork.Clients.AlterarImportacao(cliente);
+                    cliente.Emprestimos[0].ClienteId = cl.Id;
+                    _unityOfWork.Emprestimos.Inserir(cliente.Emprestimos[0]);
+                }
+                
             }
 
             stream.Close();
             _unityOfWork.Importacoes.Terminar(model.ImpId, model.UsuarioId);
 
-            return View("Associar", model);
+            return RedirectToAction("Index");
         }
 
         public int[] criaVetorValores(ImportacaoClienteViewModel model)
         {
-            int[] vet = new int[16];
+            int[] vet = new int[18];
             vet[Cliente.INDICE_NOME] = model.Nome - 1;
             vet[Cliente.INDICE_DATA_NASCIMENTO] = model.DataNascimento - 1;
             vet[Cliente.INDICE_CPF] = model.Cpf - 1;
@@ -143,6 +162,8 @@ namespace CampanhaBD.UI.WEB.Controllers
             vet[Cliente.INDICE_PARCELAS_NO_CONTRATO] = model.ParcelasNoContrato - 1;
             vet[Cliente.INDICE_INICIO_PAGAMENTO] = model.InicioPagamento - 1;
             vet[Cliente.INDICE_BENEFICIO] = model.NumBeneficio - 1;
+            vet[Cliente.INDICE_LOGRADOURO] = model.Logradouro - 1;
+            vet[Cliente.INDICE_VALOR_BENEFICIO] = model.ValorBeneficio - 1;
             return vet;
         }
     }

@@ -12,7 +12,6 @@ namespace CampanhaBD.RepositoryADO
         private Context _context;
         private Campanha_Importacao novo;
 
-
         public Campanha_ImportacaoRepositoryAdo(Context context, Campanha cam, Importacao imp)
         {
             _context = context;
