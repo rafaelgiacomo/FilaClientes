@@ -9,7 +9,7 @@ namespace CampanhaBD.Model
     public class Campanha_Importacao
     {
 
-        public int ClienteId { get; set; }
+        public int UsuarioId { get; set; }
 
         public int ImportacaoId { get; set; }
 

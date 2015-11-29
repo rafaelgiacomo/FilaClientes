@@ -1,6 +1,7 @@
 ﻿using CampanhaBD.Model;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace CampanhaBD.UI.WEB.ViewModel
 {
@@ -10,20 +11,22 @@ namespace CampanhaBD.UI.WEB.ViewModel
 
         public int UsuarioId { get; set; }
 
+        public int ImpId { get; set; }
+
         [Required]
         [Display(Name = "Nome da campanha")]
         public string Nome { get; set; }
 
-        [Display(Name="Mínimo de parcelas")]
+        [Display(Name="Mínimo valor de parcela")]
         public float MinParcela { get; set; }
 
-        [Display(Name = "Máximo de parcelas")]
+        [Display(Name = "Máximo valor de parcela")]
         public float MaxParcela { get; set; }
 
-        [Display(Name = "Data mínima de pagto")]
+        [Display(Name = "Data mínima de pagamento")]
         public string MinInicioPag { get; set; }
 
-        [Display(Name = "Data máxima de pgto")]
+        [Display(Name = "Data máxima de pagamento")]
         public string MaxInicioPag { get; set; }
 
         [Display(Name = "Mínimo de parcelas pagas")]
@@ -44,9 +47,8 @@ namespace CampanhaBD.UI.WEB.ViewModel
         [Display(Name = "CEP máximo")]
         public string MaxCep { get; set; }
 
-        [Display(Name = "Código banco")]
+        [Display(Name = "Código do Banco")]
         public int CodigoBanco { get; set; }
-
 
         public Campanha ParaCampanhaModel()
         {
@@ -87,5 +89,6 @@ namespace CampanhaBD.UI.WEB.ViewModel
             MaxCep = campanha.MaxCep;
             CodigoBanco = campanha.CodigoBanco;
         }
+
     }
 }

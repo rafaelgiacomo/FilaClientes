@@ -51,7 +51,7 @@ namespace CampanhaBD.RepositoryADO
 
         public Beneficio ListarPorId(string id)
         {
-            var strQuery = string.Format(" SELECT * FROM Usuario WHERE pessoa_id = {0} ", id);
+            var strQuery = string.Format(" SELECT * FROM Beneficio WHERE pessoa_id = {0} ", id);
             var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
         }

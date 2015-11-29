@@ -4,7 +4,6 @@ using System.Web.Mvc;
 using CampanhaBD.Model;
 using CampanhaBD.RepositoryADO;
 using System.IO;
-using System.Data.SqlClient;
 
 namespace CampanhaBD.UI.WEB.Controllers
 {
@@ -17,6 +16,7 @@ namespace CampanhaBD.UI.WEB.Controllers
         // GET: Import
         public ActionResult Index()
         {
+            ViewBag.UsuarioId = _unityOfWork.Usuarios.ListarPorLogin(User.Identity.Name).Id;
             return View(_unityOfWork.Importacoes.ListarTodos());
         }
 

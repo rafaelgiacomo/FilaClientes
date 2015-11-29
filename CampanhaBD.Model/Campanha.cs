@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CampanhaBD.Model
 {
@@ -31,5 +32,12 @@ namespace CampanhaBD.Model
         public string MaxCep { get; set; }
 
         public int CodigoBanco { get; set; }
+
+        public List<Importacao> Importacoes { get; set; }
+
+        public Campanha()
+        {
+            Importacoes = new List<Importacao>();
+        }
     }
 }

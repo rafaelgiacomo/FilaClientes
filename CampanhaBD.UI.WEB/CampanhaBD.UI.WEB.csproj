@@ -181,6 +181,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\ManipuladorCsv.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModel\BancoViewModel.cs" />
@@ -236,14 +237,16 @@
     <Content Include="Views\Banco\Editar.cshtml" />
     <Content Include="Views\Banco\Excluir.cshtml" />
     <Content Include="Views\Campanha\Index.cshtml" />
-    <Content Include="Views\Campanha\Criar.cshtml" />
     <Content Include="Views\Campanha\Editar.cshtml" />
     <Content Include="Views\Campanha\Detalhes.cshtml" />
     <Content Include="Views\Campanha\Excluir.cshtml" />
+    <Content Include="Views\Import\Associar.cshtml" />
+    <Content Include="Views\Campanha\Criar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\CreditSurvey\" />
+    <Folder Include="Content\Export\" />
     <Folder Include="Content\Uploads\" />
   </ItemGroup>
   <ItemGroup>

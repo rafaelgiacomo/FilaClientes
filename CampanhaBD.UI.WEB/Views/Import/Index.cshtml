@@ -47,9 +47,11 @@
             @Html.DisplayFor(modelItem => item.NumAtualizados)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @Html.ActionLink("Alterar Nome", "Editar", new { impId = item.Id, usuarioId = ViewBag.UsuarioId }) |
+            @if (!item.Terminado)
+            {
+                @Html.ActionLink("Importar", "Associar", new { impId = item.Id, usuarioId = ViewBag.UsuarioId })
+            }
         </td>
     </tr>
 }

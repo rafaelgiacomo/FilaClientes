@@ -9,15 +9,18 @@ namespace CampanhaBD.RepositoryADO
     public class CampanhaRepositoryAdo
     {
         private Context _context;
+        private readonly Campanha_ImportacaoRepositoryAdo _relacionamentoRepositorioADO;
 
         public CampanhaRepositoryAdo(Context context)
         {
             _context = context;
+            _relacionamentoRepositorioADO = new Campanha_ImportacaoRepositoryAdo(context);
         }
 
         public void Inserir(Campanha entidade)
         {
             entidade.Id = NumeroCampanha(entidade.UsuarioId);
+            
             var strQuery = " INSERT INTO Campanha (cam_id, usuario_id, nome, minParcela, maxParcela, minInicioPag," +  
                 "maxInicioPag, minParcelasPagas, maxParcelasPagas, minDataNascimento, apenasNaoExportados, ban_id) ";
 
@@ -37,6 +40,18 @@ namespace CampanhaBD.RepositoryADO
                 );
 
             _context.ExecutaComando(strQuery);
+
+            //Inserção na tabela de relacionamento entre campanha e importacao
+            foreach (Importacao imp in entidade.Importacoes)
+            {
+                Campanha_Importacao rel = new Campanha_Importacao()
+                {
+                    CampanhaId = entidade.Id,
+                    UsuarioId = entidade.UsuarioId,
+                    ImportacaoId = imp.Id
+                };
+                _relacionamentoRepositorioADO.Inserir(rel);
+            }
         }
 
         public void Alterar(Campanha entidade)
@@ -51,7 +66,7 @@ namespace CampanhaBD.RepositoryADO
             strQuery += string.Format(" maxParcelasPagas = '{0}', ",              entidade.MaxParcelasPagas);
             strQuery += string.Format(" minDataNascimento = '{0}', ",             entidade.MinDataNascimento == default(DateTime) ? null : entidade.MinDataNascimento.ToString("yyyy-MM-dd HH:mm:ss"));
             strQuery += string.Format(" apenasNaoExportados = '{0}', ",           Convert.ToByte(entidade.ApenasNaoExportados));
-            strQuery += string.Format(" ban_id = '{0}', ",                        entidade.CodigoBanco);
+            strQuery += string.Format(" ban_id = '{0}' ",                        entidade.CodigoBanco);
 
             strQuery += string.Format(" WHERE cam_id = {0} AND usuario_id = {1}", entidade.Id, entidade.UsuarioId);
             _context.ExecutaComando(strQuery);
@@ -79,17 +94,12 @@ namespace CampanhaBD.RepositoryADO
 
         public int NumeroCampanha(int usuarioId)
         {
-            int num = 0;
+            int num = 1;
             var strQuery = string.Format(" SELECT COUNT(*) FROM Campanha WHERE usuario_id = '{0}' ", usuarioId);
             var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             if (retornoDataReader.Read())
             {
-                num = int.Parse(retornoDataReader[0].ToString());
-            }
-
-            if(num == 0)
-            {
-                num = 1;
+                num = int.Parse(retornoDataReader[0].ToString()) + 1;
             }
 
             retornoDataReader.Close();

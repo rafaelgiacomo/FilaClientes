@@ -35,7 +35,7 @@
             @Html.DisplayFor(modelItem => item.CodigoBanco)
         </td>
         <td>
-            @Html.ActionLink("Executar", "Editar", new { usuarioId = ViewBag.UsuarioID, camId = item.Id }) |
+            @Html.ActionLink("Executar", "Executar", new { usuarioId = ViewBag.UsuarioID, camId = item.Id }) |
             @Html.ActionLink("Editar", "Editar", new { usuarioId = ViewBag.UsuarioID, camId = item.Id }) |
             @Html.ActionLink("Detalhes", "Detalhes", new { usuarioId = ViewBag.UsuarioID, camId = item.Id }) |
             @Html.ActionLink("Excluir", "Excluir", new { usuarioId = ViewBag.UsuarioID, camId = item.Id })
