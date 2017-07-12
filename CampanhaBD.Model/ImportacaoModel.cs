@@ -2,7 +2,7 @@
 
 namespace CampanhaBD.Model
 {
-    public class Importacao
+    public class ImportacaoModel
     {
         public int Id { get; set; }
 

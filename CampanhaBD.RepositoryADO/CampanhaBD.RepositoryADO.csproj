@@ -52,12 +52,11 @@
     <Compile Include="BancoRepositoryAdo.cs" />
     <Compile Include="BeneficioRepositoryAdo.cs" />
     <Compile Include="CampanhaRepositoryAdo.cs" />
-    <Compile Include="Campanha_ImportacaoRepositoryAdo.cs" />
+    <Compile Include="CampanhaImportacaoRepositoryAdo.cs" />
     <Compile Include="ClienteRepositoryAdo.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="EmprestimoRepositoryAdo.cs" />
     <Compile Include="ImportacaoRepositoryAdo.cs" />
-    <Compile Include="PessoaRepositoryAdo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnityOfWorkAdo.cs" />
     <Compile Include="UsuarioRepositoryAdo.cs" />

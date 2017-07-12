@@ -7,46 +7,127 @@ namespace CampanhaBD.RepositoryADO
 {   
     public class Context : IDisposable
     {
-        private readonly SqlConnection _mySqlConnection;
+        private readonly SqlConnection myConnection;
 
-        public Context()
+        public Context(string conString)
         {
-            _mySqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["CampanhaBD"].ConnectionString);
-            _mySqlConnection.Open();
-        }
-
-        public void ExecutaComando(string strQuery)
-        {
-            var cmdComando = new SqlCommand
+            try
             {
-                CommandText = strQuery,
-                CommandType = CommandType.Text,
-                Connection = _mySqlConnection
-            };
-            cmdComando.ExecuteNonQuery();
-        }
-
-        public String ExecutaScalar(string strQuery)
-        {
-            var cmdComando = new SqlCommand
+                myConnection = new SqlConnection(conString);
+            }
+            catch
             {
-                CommandText = strQuery,
-                CommandType = CommandType.Text,
-                Connection = _mySqlConnection
-            };
-            return cmdComando.ExecuteScalar().ToString();
+                throw;
+            }
         }
 
-        public SqlDataReader ExecutaComandoComRetorno(string strQuery)
+        public SqlDataReader ExecuteProcedureWithReturn(
+            string procedureName, string[] parameters, params object[] values)
         {
-            var cmdComando = new SqlCommand(strQuery, _mySqlConnection);
-            return cmdComando.ExecuteReader();
+            try
+            {
+                SqlDataReader reader = null;
+
+
+
+                var cmdComando = new SqlCommand
+                {
+                    CommandText = procedureName,
+                    CommandType = CommandType.StoredProcedure,
+                    Connection = myConnection,
+                };
+
+                for (int i = 0; i < parameters.Length; i++)
+                {
+                    cmdComando.Parameters.AddWithValue(parameters[i], values[i]);
+                }
+
+                reader = cmdComando.ExecuteReader();
+
+                return reader;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public void ExecuteProcedureNoReturn(string procedureName,
+            string[] parameters, params object[] values)
+        {
+            SqlTransaction tran = myConnection.BeginTransaction();
+
+            try
+            {
+                var cmdComando = new SqlCommand
+                {
+                    CommandText = procedureName,
+                    CommandType = CommandType.StoredProcedure,
+                    Connection = myConnection,
+                    Transaction = tran
+                };
+
+                for (int i = 0; i < parameters.Length; i++)
+                {
+                    cmdComando.Parameters.AddWithValue(parameters[i], values[i]);
+                }
+
+                cmdComando.ExecuteNonQuery();
+                tran.Commit();
+            }
+            catch
+            {
+                tran.Rollback();
+                throw;
+            }
+        }
+
+        public void ExecuteSqlCommandNoReturn(string command)
+        {
+            SqlTransaction tran = myConnection.BeginTransaction();
+
+            try
+            {
+                var cmdComando = new SqlCommand
+                {
+                    CommandText = command,
+                    CommandType = CommandType.Text,
+                    Connection = myConnection,
+                    Transaction = tran
+                };
+
+                cmdComando.ExecuteNonQuery();
+                tran.Commit();
+            }
+            catch
+            {
+                tran.Rollback();
+                throw;
+            }
+        }
+
+        public void AbrirConexao()
+        {
+            if (myConnection.State == ConnectionState.Closed)
+            {
+                myConnection.Open();
+            }
+        }
+
+        public void FecharConexao()
+        {
+            if (myConnection.State == ConnectionState.Open)
+            {
+                myConnection.Close();
+            }
         }
 
         public void Dispose()
         {
-            if (_mySqlConnection.State == ConnectionState.Open)
-                _mySqlConnection.Close();
+            if (myConnection.State == ConnectionState.Open)
+            {
+                myConnection.Close();
+            }
         }
     }
 }

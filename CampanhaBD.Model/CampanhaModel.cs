@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CampanhaBD.Model
 {
-    public class Campanha
+    public class CampanhaModel
     {
         public int Id { get; set; }
 
@@ -27,17 +27,21 @@ namespace CampanhaBD.Model
 
         public bool ApenasNaoExportados { get; set; }
 
+        public bool ApenasComTelefone { get; set; }
+
+        public bool ApenasNaoTrabalhados { get; set; }
+
         public string MinCep { get; set; }
 
         public string MaxCep { get; set; }
 
         public int CodigoBanco { get; set; }
 
-        public List<Importacao> Importacoes { get; set; }
+        public List<ImportacaoModel> Importacoes { get; set; }
 
-        public Campanha()
+        public CampanhaModel()
         {
-            Importacoes = new List<Importacao>();
+            Importacoes = new List<ImportacaoModel>();
         }
     }
 }

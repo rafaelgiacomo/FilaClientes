@@ -2,7 +2,7 @@
 
 namespace CampanhaBD.Model
 {
-    public class Emprestimo
+    public class EmprestimoModel
     {
         public int ClienteId { get; set; }
 

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using CampanhaBD.Model;
+using CampanhaBD.Interface;
 
 namespace CampanhaBD.RepositoryADO
 {
-    public class BeneficioRepositoryAdo
+    public class BeneficioRepositoryAdo : IRepository<BeneficioModel>
     {
         private Context _context;
 
@@ -15,53 +16,37 @@ namespace CampanhaBD.RepositoryADO
             _context = context;
         }
 
-        public void Inserir(Beneficio entidade)
+        public void Inserir(BeneficioModel entidade)
         {
-            var strQuery = "";
-            strQuery += " INSERT INTO Beneficio (numero, pessoa_id, salario, dataCompetencia) ";
-            strQuery += string.Format(" VALUES ('{0}','{1}', '{2}', '{3}') ",
-                entidade.Numero, entidade.IdCliente, entidade.Salario, entidade.DataCompetencia);
-            _context.ExecutaComando(strQuery);
+            
         }
 
-        public void Alterar(Beneficio entidade)
+        public void Alterar(BeneficioModel entidade)
         {
-            var strQuery = "";
-            strQuery += " UPDATE Beneficio SET ";
-            strQuery += string.Format(" salario = '{0}', ", entidade.Salario);
-            strQuery += string.Format(" dataCompetencia = '{0}' ", entidade.DataCompetencia);
-            strQuery += string.Format(" WHERE numero = '{0}' AND pessoa_id = '{1}' ", entidade.Numero, 
-                entidade.DataCompetencia);
-            _context.ExecutaComando(strQuery);
+            
         }
 
-        public void Excluir(Beneficio entidade)
+        public void Excluir(BeneficioModel entidade)
         {
-            var strQuery = string.Format(" DELETE FROM Usuario WHERE numero = '{0}' AND pessoa_id = '{1}' ", entidade.Numero,
-                entidade.DataCompetencia);
-            _context.ExecutaComando(strQuery);
+            
         }
 
-        public IEnumerable<Beneficio> ListarTodos()
+        public List<BeneficioModel> ListarTodos()
         {
-            var strQuery = " SELECT * FROM Beneficio ";
-            var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
-            return TransformaReaderEmListaDeObjeto(retornoDataReader);
+            return new List<BeneficioModel>();
         }
 
-        public Beneficio ListarPorId(string id)
+        public BeneficioModel ListarPorId(BeneficioModel entidade)
         {
-            var strQuery = string.Format(" SELECT * FROM Beneficio WHERE pessoa_id = {0} ", id);
-            var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
-            return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
+            return new BeneficioModel();
         }
 
-        private List<Beneficio> TransformaReaderEmListaDeObjeto(SqlDataReader reader)
+        private List<BeneficioModel> TransformaReaderEmListaDeObjeto(SqlDataReader reader)
         {
-            var usuarios = new List<Beneficio>();
+            var usuarios = new List<BeneficioModel>();
             while (reader.Read())
             {
-                var temObjeto = new Beneficio()
+                var temObjeto = new BeneficioModel()
                 {
                     Numero = int.Parse(reader["numero"].ToString()),
                     IdCliente = int.Parse(reader["pessoa_id"].ToString()),

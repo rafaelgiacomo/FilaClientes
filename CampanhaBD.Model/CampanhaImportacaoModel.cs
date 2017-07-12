@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CampanhaBD.Model
 {
-    public class Campanha_Importacao
+    public class CampanhaImportacaoModel
     {
 
         public int UsuarioId { get; set; }

@@ -2,7 +2,7 @@
 
 namespace CampanhaBD.Model
 {
-    public class Beneficio
+    public class BeneficioModel
     {
         public int Numero { get; set; }
 

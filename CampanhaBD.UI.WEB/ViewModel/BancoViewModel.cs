@@ -11,9 +11,9 @@ namespace CampanhaBD.UI.WEB.ViewModel
         [Required]
         public string Nome { get; set; }
 
-        public Banco ParaBancoModel()
+        public BancoModel ParaBancoModel()
         {
-            Banco banco = new Banco()
+            BancoModel banco = new BancoModel()
             {
                 Nome = this.Nome,
                 Codigo = this.Codigo
@@ -21,7 +21,7 @@ namespace CampanhaBD.UI.WEB.ViewModel
             return banco;
         }
 
-        public void ParaViewModel(Banco banco)
+        public void ParaViewModel(BancoModel banco)
         {
             Codigo = banco.Codigo;
             Nome = banco.Nome;

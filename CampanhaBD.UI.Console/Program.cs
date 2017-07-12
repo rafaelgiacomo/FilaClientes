@@ -53,7 +53,7 @@ namespace CampanhaBD.UI.Console
             System.Console.ReadKey();
         }
 
-        private static void ListClients(string titulo, List<Cliente> list)
+        private static void ListClients(string titulo, List<ClienteModel> list)
         {
             System.Console.WriteLine();
             System.Console.WriteLine(titulo);
@@ -66,32 +66,32 @@ namespace CampanhaBD.UI.Console
         }
 
         //Preenchendo uma lista com diversos Clientes
-        private static List<Cliente> GenerateClientsList()
+        private static List<ClienteModel> GenerateClientsList()
         {
-            var clientsList = new List<Cliente>()
+            var clientsList = new List<ClienteModel>()
             {
-                new Cliente()
+                new ClienteModel()
                 {
                     Nome = "Bruno Feiteiro",
                     Cpf = "37646598700",
                     Ddd = "11",
                     Telefone = "9937350237"
                 },
-                new Cliente()
+                new ClienteModel()
                 {
                     Nome = "Rafael Rodrigues Giacomo",
                     Cpf = "42422443800",
                     Ddd = "11",
                     Telefone = "981002906"
                 },
-                new Cliente()
+                new ClienteModel()
                 {
                     Nome = "Thiago Mayllart",
                     Cpf = "93475649476",
                     Ddd = "11",
                     Telefone = "3085464203"
                 },
-                new Cliente()
+                new ClienteModel()
                 {
                     Nome = "Rubens",
                     Cpf = "20446544763",

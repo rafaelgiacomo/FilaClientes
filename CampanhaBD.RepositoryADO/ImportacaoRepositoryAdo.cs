@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using CampanhaBD.Model;
+using CampanhaBD.Interface;
 
 namespace CampanhaBD.RepositoryADO
 {
-    public class ImportacaoRepositoryAdo
+    public class ImportacaoRepositoryAdo : IRepository<ImportacaoModel>
     {
         private Context _context;
 
@@ -15,78 +16,81 @@ namespace CampanhaBD.RepositoryADO
             _context = context;
         }
 
-        public void Inserir(Importacao entidade)
+        public void Inserir(ImportacaoModel entidade)
         {
-            entidade.Id = NumeroImportacao(entidade.UsuarioId);
-            var strQuery = "";
-            strQuery += " INSERT INTO Importacao (imp_id, usuario_id, nome, data, terminado, numImportados, atualizados, caminhoArquivo) ";
-            strQuery += string.Format(" VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}') ",
-                entidade.Id, entidade.UsuarioId, entidade.Nome, entidade.Data, entidade.Terminado, entidade.NumImportados, 
-                entidade.NumAtualizados, entidade.CaminhoArquivo);
-            _context.ExecutaComando(strQuery);
+            //entidade.Id = NumeroImportacao(entidade.UsuarioId);
+            //var strQuery = "";
+            //strQuery += " INSERT INTO Importacao (imp_id, usuario_id, nome, data, terminado, numImportados, atualizados, caminhoArquivo) ";
+            //strQuery += string.Format(" VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}') ",
+            //    entidade.Id, entidade.UsuarioId, entidade.Nome, entidade.Data, entidade.Terminado, entidade.NumImportados, 
+            //    entidade.NumAtualizados, entidade.CaminhoArquivo);
+            //_context.ExecutaComando(strQuery);
         }
 
-        public void Alterar(Importacao entidade)
+        public void Alterar(ImportacaoModel entidade)
         {
-            var strQuery = "";
-            strQuery += " UPDATE Importacao SET ";
-            strQuery += string.Format(" nome = '{0}', ", entidade.Nome);
-            strQuery += string.Format(" data = '{0}', ", entidade.Data);
-            strQuery += string.Format(" terminado = '{0}', ", entidade.Terminado);
-            strQuery += string.Format(" numImportados = '{0}', ", entidade.NumImportados);
-            strQuery += string.Format(" atualizados = '{0}' ", entidade.NumAtualizados);
-            strQuery += string.Format(" WHERE imp_id = '{0}' AND usuario_id = '{1}' ", entidade.Id, entidade.UsuarioId);
-            _context.ExecutaComando(strQuery);
+            //var strQuery = "";
+            //strQuery += " UPDATE Importacao SET ";
+            //strQuery += string.Format(" nome = '{0}', ", entidade.Nome);
+            //strQuery += string.Format(" data = '{0}', ", entidade.Data);
+            //strQuery += string.Format(" terminado = '{0}', ", entidade.Terminado);
+            //strQuery += string.Format(" numImportados = '{0}', ", entidade.NumImportados);
+            //strQuery += string.Format(" atualizados = '{0}' ", entidade.NumAtualizados);
+            //strQuery += string.Format(" WHERE imp_id = '{0}' AND usuario_id = '{1}' ", entidade.Id, entidade.UsuarioId);
+            //_context.ExecutaComando(strQuery);
         }
 
-        public void Excluir(Importacao entidade)
+        public void Excluir(ImportacaoModel entidade)
         {
-            var strQuery = string.Format(" DELETE FROM Importacao WHERE imp_id = '{0}' AND usuario_id = '{1}' ", entidade.Id, entidade.UsuarioId
-                );
-            _context.ExecutaComando(strQuery);
+            //var strQuery = string.Format(" DELETE FROM Importacao WHERE imp_id = '{0}' AND usuario_id = '{1}' ", entidade.Id, entidade.UsuarioId
+            //    );
+            //_context.ExecutaComando(strQuery);
         }
 
-        public IEnumerable<Importacao> ListarTodos()
+        public List<ImportacaoModel> ListarTodos()
         {
-            var strQuery = " SELECT * FROM Importacao ";
-            var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
-            return TransformaReaderEmListaDeObjeto(retornoDataReader);
+            return new List<ImportacaoModel>();
+            //var strQuery = " SELECT * FROM Importacao ";
+            //var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
+            //return TransformaReaderEmListaDeObjeto(retornoDataReader);
         }
 
         public void Terminar(int id, int usuarioId)
         {
-            string strQuery = string.Format(" UPDATE Importacao SET terminado = 'true' WHERE imp_id = '{0}' and usuario_id = '{1}'",
-                id, usuarioId);
-            _context.ExecutaComando(strQuery);
+            //string strQuery = string.Format(" UPDATE Importacao SET terminado = 'true' WHERE imp_id = '{0}' and usuario_id = '{1}'",
+            //    id, usuarioId);
+            //_context.ExecutaComando(strQuery);
         }
 
         public int NumeroImportacao(int usuarioId)
         {
-            int num = 1;
-            var strQuery = string.Format(" SELECT COUNT(*) FROM Importacao WHERE usuario_id = '{0}' ", usuarioId);
-            var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
-            if (retornoDataReader.Read())
-            {
-                num = int.Parse(retornoDataReader[0].ToString()) + 1;
-            }
+            return 0;
+            //int num = 1;
+            //var strQuery = string.Format(" SELECT COUNT(*) FROM Importacao WHERE usuario_id = '{0}' ", usuarioId);
+            //var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
+            //if (retornoDataReader.Read())
+            //{
+            //    num = int.Parse(retornoDataReader[0].ToString()) + 1;
+            //}
 
-            retornoDataReader.Close();
-            return num;
+            //retornoDataReader.Close();
+            //return num;
         }
 
-        public Importacao ListarPorId(int id, int usuarioId)
+        public ImportacaoModel ListarPorId(ImportacaoModel entidade)
         {
-            var strQuery = string.Format(" SELECT * FROM Importacao WHERE imp_id = '{0}' AND usuario_id = '{1}' ", id, usuarioId);
-            var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
-            return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
+            return new ImportacaoModel();
+            //var strQuery = string.Format(" SELECT * FROM Importacao WHERE imp_id = '{0}' AND usuario_id = '{1}' ", id, usuarioId);
+            //var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
+            //return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
         }
 
-        private List<Importacao> TransformaReaderEmListaDeObjeto(SqlDataReader reader)
+        private List<ImportacaoModel> TransformaReaderEmListaDeObjeto(SqlDataReader reader)
         {
-            var usuarios = new List<Importacao>();
+            var usuarios = new List<ImportacaoModel>();
             while (reader.Read())
             {
-                var temObjeto = new Importacao()
+                var temObjeto = new ImportacaoModel()
                 {
                     Id = int.Parse(reader["imp_id"].ToString()),
                     UsuarioId = int.Parse(reader["usuario_id"].ToString()),

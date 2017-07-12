@@ -1,0 +1,170 @@
+﻿using CampanhaBD.UI.WEB.ViewModel;
+using System;
+using System.Web.Mvc;
+using CampanhaBD.Model;
+using CampanhaBD.RepositoryADO;
+using System.IO;
+
+namespace CampanhaBD.UI.WEB.Controllers
+{
+
+    [Authorize]
+    public class ImportacaoController : Controller
+    {
+
+        // GET: Import
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        public ActionResult Importar()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Importar(ImportarViewModel viewModel)
+        {
+            if (viewModel.File != null)
+            {
+                //string caminho = Path.Combine(Server.MapPath("~/Content/Uploads"), viewModel.File.FileName);
+                //viewModel.File.SaveAs(caminho);
+
+                //Importacao imp = new Importacao();
+                //imp.UsuarioId = _unityOfWork.Usuarios.ListarPorLogin(User.Identity.Name).Id;
+                //imp.Nome = viewModel.Nome;
+                //imp.Data = DateTime.Now;
+                //imp.Terminado = false;
+                //imp.NumImportados = 0;
+                //imp.NumAtualizados = 0;
+                //imp.CaminhoArquivo = caminho;
+
+                //_unityOfWork.Importacoes.Inserir(imp);
+
+                //return RedirectToAction("Associar", new { impId = imp.Id, usuarioId = imp.UsuarioId });
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ViewBag.Mensagem = "Adicione uma planilha para importação";
+            }
+            return View();
+        }
+
+        public ActionResult Associar(int impId, int usuarioId)
+        {
+            ImportacaoModel imp = new ImportacaoModel();
+            StreamReader stream = new StreamReader(imp.CaminhoArquivo);
+            string[] linhaSeparada = null;
+
+            string linha = null;
+            if ((linha = stream.ReadLine()) != null)
+            {
+                linhaSeparada = linha.Split(';');
+            }
+
+            ImportacaoClienteViewModel viewModel = new ImportacaoClienteViewModel()
+            {
+                UsuarioId = usuarioId,
+                ImpId = impId,
+                Colunas = linhaSeparada,
+                NumBeneficio = 1,
+                ValorBeneficio = 7,
+                Nome = 2,
+                DataNascimento = 3,
+                Cpf = 4,
+                BancoId = 13,
+                Saldo = 15,
+                InicioPagamento = 16,
+                ParcelasNoContrato = 17,
+                ValorParcela = 18,
+                Logradouro = 20,
+                Bairro = 21,
+                Cidade = 22,
+                Uf = 23,
+                Cep = 24
+            };
+
+            stream.Close();
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public ActionResult Associar(ImportacaoClienteViewModel model)
+        {
+            //Importacao imp = _unityOfWork.Importacoes.ListarPorId(model.ImpId, model.UsuarioId);
+            //StreamReader stream = new StreamReader(imp.CaminhoArquivo);
+            //int[] valores = criaVetorValores(model);
+            //string[] linhaSeparada = null;
+
+            //string linha = stream.ReadLine(); //Le o cabeçalho
+            //while ((linha = stream.ReadLine()) != null)
+            //{
+            //    linhaSeparada = linha.Split(';');
+            //    Cliente cliente = new Cliente();
+
+            //    cliente.ImportacaoId = model.ImpId; //Pegar Id da importação
+            //    cliente.UsuarioId = model.UsuarioId;
+            //    cliente.Classificacao = Cliente.CLIENTE;
+
+            //    for (int i = 0; i < valores.Length; i++)
+            //    {
+            //        if (valores[i] > -1)
+            //        {
+            //            cliente.preencheCampo(i, linhaSeparada[valores[i]]);
+            //        }
+            //    }
+
+            //    var cl = _unityOfWork.Clients.ListarPorCpf(cliente.Cpf);
+
+            //    if (cl == null)
+            //    {
+            //        _unityOfWork.Clients.Inserir(cliente);
+            //        cliente.Beneficio.IdCliente = cliente.Id;
+            //        cliente.Beneficio.DataCompetencia = DateTime.Now;
+            //        cliente.Emprestimos[0].ClienteId = cliente.Id;
+            //        _unityOfWork.Beneficios.Inserir(cliente.Beneficio);
+            //        _unityOfWork.Emprestimos.Inserir(cliente.Emprestimos[0]);
+            //    }
+            //    else
+            //    {
+            //        _unityOfWork.Clients.AlterarImportacao(cliente);
+            //        cliente.Emprestimos[0].ClienteId = cl.Id;
+            //        _unityOfWork.Emprestimos.Inserir(cliente.Emprestimos[0]);
+            //    }
+                
+            //}
+
+            //stream.Close();
+            //_unityOfWork.Importacoes.Terminar(model.ImpId, model.UsuarioId);
+
+            return RedirectToAction("Index");
+        }
+
+        public int[] criaVetorValores(ImportacaoClienteViewModel model)
+        {
+            int[] vet = new int[18];
+            vet[ClienteModel.INDICE_NOME] = model.Nome - 1;
+            vet[ClienteModel.INDICE_DATA_NASCIMENTO] = model.DataNascimento - 1;
+            vet[ClienteModel.INDICE_CPF] = model.Cpf - 1;
+            vet[ClienteModel.INDICE_DDD] = model.Ddd - 1;
+            vet[ClienteModel.INDICE_TELEFONE] = model.Telefone - 1;
+            vet[ClienteModel.INDICE_UF] = model.Uf - 1;
+            vet[ClienteModel.INDICE_CIDADE] = model.Cidade - 1;
+            vet[ClienteModel.INDICE_BAIRRO] = model.Bairro - 1;
+            vet[ClienteModel.INDICE_CEP] = model.Cep - 1;
+            vet[ClienteModel.INDICE_DIGITO_CPF] = model.DigitoCpf - 1;
+            vet[ClienteModel.INDICE_BANCO] = model.BancoId - 1;
+            vet[ClienteModel.INDICE_SALDO] = model.Saldo - 1;
+            vet[ClienteModel.INDICE_VALOR_PARCELA] = model.ValorParcela - 1;
+            vet[ClienteModel.INDICE_PARCELAS_NO_CONTRATO] = model.ParcelasNoContrato - 1;
+            vet[ClienteModel.INDICE_INICIO_PAGAMENTO] = model.InicioPagamento - 1;
+            vet[ClienteModel.INDICE_BENEFICIO] = model.NumBeneficio - 1;
+            vet[ClienteModel.INDICE_LOGRADOURO] = model.Logradouro - 1;
+            vet[ClienteModel.INDICE_VALOR_BENEFICIO] = model.ValorBeneficio - 1;
+            return vet;
+        }
+    }
+}

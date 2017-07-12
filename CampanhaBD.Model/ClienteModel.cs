@@ -3,8 +3,12 @@ using System.Collections.Generic;
 
 namespace CampanhaBD.Model
 {
-    public class Cliente : Pessoa
+    public class ClienteModel
     {
+        public int Id { get; set; }
+
+        public string Nome { get; set; }
+
         public int ImportacaoId { get; set; }
 
         public int UsuarioId { get; set; }
@@ -33,9 +37,9 @@ namespace CampanhaBD.Model
 
         public bool Trabalhado { get; set; }
 
-        public Beneficio Beneficio { get; set; }
+        public BeneficioModel Beneficio { get; set; }
 
-        public List<Emprestimo> Emprestimos { get; set; }
+        public List<EmprestimoModel> Emprestimos { get; set; }
 
         public static readonly int INDICE_NOME = 0;
         public static readonly int INDICE_DATA_NASCIMENTO = 1;
@@ -56,11 +60,11 @@ namespace CampanhaBD.Model
         public static readonly int INDICE_INICIO_PAGAMENTO = 16;
         public static readonly int INDICE_VALOR_BENEFICIO = 17;
 
-        public Cliente()
+        public ClienteModel()
         {
-            Beneficio = new Beneficio();
-            Emprestimos = new List<Emprestimo>();
-            Emprestimos.Add(new Emprestimo());
+            Beneficio = new BeneficioModel();
+            Emprestimos = new List<EmprestimoModel>();
+            Emprestimos.Add(new EmprestimoModel());
         }
 
         public void preencheCampo(int indiceCampo, String valor)

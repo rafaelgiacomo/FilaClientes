@@ -5,8 +5,9 @@ namespace CampanhaBD.RepositoryADO
 {
     public class UnityOfWorkAdo : IUnityOfWork, IDisposable
     {
-        private readonly Context _context = new Context();
-        private bool _disposed;
+        private readonly string _connectionString;
+        private readonly Context _context;
+        private static UnityOfWorkAdo _unit;
 
         #pragma warning disable 649
         private ClienteRepositoryAdo _clientRepository;
@@ -18,6 +19,20 @@ namespace CampanhaBD.RepositoryADO
         private EmprestimoRepositoryAdo _emprestimoRepository;
         #pragma warning restore 649
 
+        private UnityOfWorkAdo(string connectionString)
+        {
+            _connectionString = connectionString;
+            _context = new Context(connectionString);
+        }
+
+        public static UnityOfWorkAdo getInstance(string connectionString)
+        {
+            if (_unit == null)
+                _unit = new UnityOfWorkAdo(connectionString);
+
+            return _unit;
+        }
+
         public void Commit()
         {
             
@@ -28,22 +43,18 @@ namespace CampanhaBD.RepositoryADO
             
         }
 
-        protected virtual void Dispose(bool disposing)
+        public void AbrirConexao()
         {
-            if (!_disposed)
-            {
-                if (disposing)
-                {
-                    _context.Dispose();
-                }
-            }
-            _disposed = true;
+            _context.AbrirConexao();
+        }
+
+        public void FecharConexao()
+        {
+            _context.FecharConexao();
         }
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
 
         public ClienteRepositoryAdo Clients

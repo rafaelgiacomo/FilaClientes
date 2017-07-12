@@ -14,9 +14,9 @@ namespace CampanhaBD.Interface
 
         void Excluir(T entidade);
 
-        IEnumerable<T> ListarTodos();
+        List<T> ListarTodos();
 
-        T ListarPorId(string id);
+        T ListarPorId(T entidade);
     }
 }
 

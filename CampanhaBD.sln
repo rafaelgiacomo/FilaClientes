@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampanhaBD.Model", "CampanhaBD.Model\CampanhaBD.Model.csproj", "{7B038D68-28DB-44AE-8913-D60DB5AE1302}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampanhaBD.UI.WEB", "CampanhaBD.UI.WEB\CampanhaBD.UI.WEB.csproj", "{AEB9C003-7ED0-4662-8150-874DA999359E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampanhaBD.RepositoryADO", "CampanhaBD.RepositoryADO\CampanhaBD.RepositoryADO.csproj", "{D6BD3FE6-7C73-4629-AC88-0CAECD9DC16F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampanhaBD.Bussiness", "CampanhaBD.Bussiness\CampanhaBD.Bussiness.csproj", "{BB5A0A54-486F-4FAA-A613-F71EF5DAFFE5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{D6BD3FE6-7C73-4629-AC88-0CAECD9DC16F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6BD3FE6-7C73-4629-AC88-0CAECD9DC16F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6BD3FE6-7C73-4629-AC88-0CAECD9DC16F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB5A0A54-486F-4FAA-A613-F71EF5DAFFE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB5A0A54-486F-4FAA-A613-F71EF5DAFFE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB5A0A54-486F-4FAA-A613-F71EF5DAFFE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB5A0A54-486F-4FAA-A613-F71EF5DAFFE5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
