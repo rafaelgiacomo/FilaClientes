@@ -31,10 +31,15 @@ namespace CampanhaBD.Model
         public const string PROCEDURE_SELECT_ALL = "SP_LISTAR_TODOS_EMPRESTIMOS";
         public const string PROCEDURE_SELECT_BY_ID = "SP_SELECIONAR_EMPRESTIMO_ID";
         public const string PROCEDURE_SELECT_BY_CLIENTE_ID = "SP_SELECIONAR_EMPRESTIMOS_CLIENTE_ID";
-        public const string COLUMN_NUMERO = "Codigo";
-        public const string COLUMN_CLIENTE_ID = "Nome";
-        public const string COLUMN_SALARIO = "Salario";
-        public const string COLUMN_DATA_COMPETENCIA = "DataCompetencia";
+        public const string COLUMN_BANCO_ID = "BancoId";
+        public const string COLUMN_CLIENTE_ID = "ClienteId";
+        public const string COLUMN_NUM_BENEFICIO = "NumBeneficio";
+        public const string COLUMN_NUM_EMPRESTIMO = "NumEmprestimo";
+        public const string COLUMN_VALOR_PARCELA = "ValorParcela";
+        public const string COLUMN_PARCELAS_NO_CONTRATO = "ParcelasNoContrato";
+        public const string COLUMN_PARCELAS_PAGAS = "ParcelasPagas";
+        public const string COLUMN_SALDO = "Saldo";
+        public const string COLUMN_INICIO_PAGAMENTO = "InicioPagamento";
         #endregion
     }
 }

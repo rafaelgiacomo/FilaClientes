@@ -19,15 +19,28 @@ namespace CampanhaBD.RepositoryADO
 
         public void Inserir(EmprestimoModel entidade)
         {
-            //var strQuery = "";
-            //entidade.NumEmprestimo = NumeroEmprestimo(entidade.NumBeneficio, entidade.ClienteId);
-            //strQuery += " INSERT INTO Emprestimo (emp_id, numero, pessoa_id, parcelasContrato, " +
-            //            "parcelasPagas, saldo, inicioPag, ban_id, valorParcela) ";
-            //strQuery += string.Format(" VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}') ",
-            //    entidade.NumEmprestimo, entidade.NumBeneficio, entidade.ClienteId, entidade.ParcelasNoContrato, 
-            //    entidade.ParcelasPagas, entidade.Saldo.ToString().Replace(",","."), entidade.InicioPagamento, entidade.BancoId, 
-            //    entidade.ValorParcela.ToString().Replace(",", "."));
-            //_context.ExecutaComando(strQuery);
+            try
+            {
+                string[] parameters =
+                {
+                    EmprestimoModel.COLUMN_BANCO_ID, EmprestimoModel.COLUMN_CLIENTE_ID, EmprestimoModel.COLUMN_NUM_BENEFICIO,
+                    EmprestimoModel.COLUMN_VALOR_PARCELA, EmprestimoModel.COLUMN_PARCELAS_NO_CONTRATO,
+                    EmprestimoModel.COLUMN_PARCELAS_PAGAS, EmprestimoModel.COLUMN_SALDO, EmprestimoModel.COLUMN_INICIO_PAGAMENTO
+                };
+
+                object[] values = 
+                {
+                    entidade.BancoId, entidade.ClienteId, entidade.NumBeneficio, entidade.ValorParcela,
+                    entidade.ParcelasNoContrato, entidade.ParcelasPagas, entidade.Saldo, entidade.InicioPagamento
+                };
+
+                _context.ExecuteProcedureNoReturn(
+                    EmprestimoModel.PROCEDURE_INSERT, parameters, values);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public void Alterar(EmprestimoModel entidade)
@@ -67,22 +80,6 @@ namespace CampanhaBD.RepositoryADO
             //var strQuery = string.Format(" SELECT * FROM Emprestimo  WHERE emp_id = '{0}' AND  numero = '{1}' AND  pessoa_id = '{2}' ", id, numero, pessoa_id);
             //var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             //return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
-        }
-
-        public int NumeroEmprestimo(int numBeneficio, int pessoaId)
-        {
-            return 0;
-            //int num = 1;
-            //var strQuery = string.Format(" SELECT COUNT(*) QTD FROM Emprestimo WHERE pessoa_id = '{0}' and numero = '{1}'", 
-            //    pessoaId, numBeneficio);
-            //var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
-            //if (retornoDataReader.Read())
-            //{
-            //    num = int.Parse(retornoDataReader["QTD"].ToString()) + 1;
-            //}
-
-            //retornoDataReader.Close();
-            //return num;
         }
 
         private List<EmprestimoModel> TransformaReaderEmListaDeObjeto(SqlDataReader reader)

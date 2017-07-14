@@ -102,6 +102,7 @@ namespace CampanhaBD.Model
         public static readonly int INDICE_PARCELAS_NO_CONTRATO = 15;
         public static readonly int INDICE_INICIO_PAGAMENTO = 16;
         public static readonly int INDICE_VALOR_BENEFICIO = 17;
+        public static readonly int INDICE_COMPLEMENTO = 18;
 
         public ClienteModel()
         {
@@ -199,6 +200,9 @@ namespace CampanhaBD.Model
                         break;
                     case 17:
                         Beneficio.Salario = float.Parse(valor);
+                        break;
+                    case 18:
+                        Complemento = valor;
                         break;
                 }
             }

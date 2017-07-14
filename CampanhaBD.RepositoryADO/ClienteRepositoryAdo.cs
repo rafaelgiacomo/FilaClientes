@@ -36,8 +36,18 @@ namespace CampanhaBD.RepositoryADO
                     entidade.Complemento, entidade.Cep, entidade.TelAtualizado, entidade.EmpAtualizado, entidade.Trabalhado
                 };
 
-                _context.ExecuteProcedureNoReturn(
+                var reader = _context.ExecuteProcedureWithReturn(
                     ClienteModel.PROCEDURE_INSERT, parameters, values);
+
+                if (reader.Read())
+                {
+                    var ultimoId = reader[0].ToString();
+
+                    if (!String.IsNullOrEmpty(ultimoId))
+                        entidade.Id = Convert.ToInt32(ultimoId);
+                }
+
+                reader.Close();
             }
             catch
             {
@@ -129,8 +139,6 @@ namespace CampanhaBD.RepositoryADO
         {
             try
             {
-                var entidade = new ClienteModel();
-
                 var temObjeto = new ClienteModel();
                 temObjeto.Id = long.Parse(reader["Id"].ToString());
                 temObjeto.DataNascimento = DateTime.Parse(reader["DataNascimento"].ToString());
@@ -147,7 +155,7 @@ namespace CampanhaBD.RepositoryADO
                 temObjeto.Cpf = reader["Cpf"].ToString();
                 temObjeto.ImportacaoId = int.Parse(reader["ImportacaoId"].ToString());
 
-                return entidade;
+                return temObjeto;
             }
             catch (Exception)
             {

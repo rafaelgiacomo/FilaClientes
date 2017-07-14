@@ -8,21 +8,26 @@ namespace CampanhaBD.UI.WEB.ViewModel
         [Display(Name = "N° Benefício")]
         public int NumBeneficio { get; set; }
 
+        [Display(Name = "Valor Beneficio")]
         public int ValorBeneficio { get; set; }
 
         public int Nome { get; set; }
 
         [Required]
+        [Display(Name = "CPF")]
         public int Cpf { get; set; }
 
+        [Display(Name = "Digito CPF")]
         public int DigitoCpf { get; set; }
 
+        [Display(Name = "UF")]
         public int Uf { get; set; }
 
         public int Cidade { get; set; }
 
         public int Bairro { get; set; }
 
+        [Display(Name = "DDD")]
         public int Ddd { get; set; }
 
         public int Telefone { get; set; }
@@ -30,9 +35,14 @@ namespace CampanhaBD.UI.WEB.ViewModel
         [Display(Name = "Data de Nascimento")]
         public int DataNascimento { get; set; }
 
+        [Display(Name = "Endereço")]
         public int Logradouro { get; set; }
 
+        [Display(Name = "N°")]
         public int Numero { get; set; }
+
+        [Display(Name = "Complemento")]
+        public int Complemento { get; set; }
 
         [Display(Name = "CEP")]
         public int Cep { get; set; }
@@ -46,9 +56,10 @@ namespace CampanhaBD.UI.WEB.ViewModel
         [Display(Name = "Parcelas pagas")]
         public int ParcelasPagas { get; set; }
 
+        [Display(Name = "Saldo")]
         public int Saldo { get; set; }
 
-        [Display(Name = "Inicio de Pagamento")]
+        [Display(Name = "Data Inicio Pagamento")]
         public int InicioPagamento { get; set; }
 
         [Display(Name = "Código do Banco")]

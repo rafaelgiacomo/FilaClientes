@@ -69,17 +69,19 @@ namespace CampanhaBD.Business
                     if (cl == null)
                     {
                         _core.UnityOfWorkAdo.Clientes.Inserir(cliente);
-                        //cliente.Beneficio.IdCliente = cliente.Id;
-                        //cliente.Beneficio.DataCompetencia = DateTime.Now;
-                        //cliente.Emprestimos[0].ClienteId = cliente.Id;
-                        //_core.UnityOfWorkAdo.Beneficios.Inserir(cliente.Beneficio);
-                        //_core.UnityOfWorkAdo.Emprestimos.Inserir(cliente.Emprestimos[0]);
+
+                        cliente.Beneficio.IdCliente = cliente.Id;
+                        cliente.Beneficio.DataCompetencia = DateTime.Now;
+                        cliente.Emprestimos[0].ClienteId = cliente.Id;
+
+                        _core.UnityOfWorkAdo.Beneficios.Inserir(cliente.Beneficio);
+                        _core.UnityOfWorkAdo.Emprestimos.Inserir(cliente.Emprestimos[0]);
                     }
                     else
                     {
-                        //_core.UnityOfWorkAdo.Clientes.AlterarImportacao(cliente);
-                        //cliente.Emprestimos[0].ClienteId = cl.Id;
-                        //_core.UnityOfWorkAdo.Emprestimos.Inserir(cliente.Emprestimos[0]);
+                        _core.UnityOfWorkAdo.Clientes.AlterarImportacao(cliente);
+                        cliente.Emprestimos[0].ClienteId = cl.Id;
+                        _core.UnityOfWorkAdo.Emprestimos.Inserir(cliente.Emprestimos[0]);
                     }
                 }
             }

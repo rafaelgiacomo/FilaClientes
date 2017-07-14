@@ -136,7 +136,7 @@ namespace CampanhaBD.UI.WEB.Controllers
         {
             try
             {
-                int[] vet = new int[18];
+                int[] vet = new int[19];
                 vet[ClienteModel.INDICE_NOME] = model.Nome - 1;
                 vet[ClienteModel.INDICE_DATA_NASCIMENTO] = model.DataNascimento - 1;
                 vet[ClienteModel.INDICE_CPF] = model.Cpf - 1;
@@ -155,6 +155,7 @@ namespace CampanhaBD.UI.WEB.Controllers
                 vet[ClienteModel.INDICE_BENEFICIO] = model.NumBeneficio - 1;
                 vet[ClienteModel.INDICE_LOGRADOURO] = model.Logradouro - 1;
                 vet[ClienteModel.INDICE_VALOR_BENEFICIO] = model.ValorBeneficio - 1;
+                vet[ClienteModel.INDICE_COMPLEMENTO] = model.Complemento - 1;
                 return vet;
             }
             catch (Exception ex)
