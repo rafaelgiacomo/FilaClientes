@@ -14,7 +14,7 @@
         public const string PROCEDURE_DELETE = "SP_EXCLUIR_BANCO";
         public const string PROCEDURE_SELECT_ALL = "SP_LISTAR_TODOS_BANCOS";
         public const string PROCEDURE_SELECT_BY_ID = "SP_SELECIONAR_BANCO_ID";
-        public const string COLUMN_CODIGO = "Id";
+        public const string COLUMN_CODIGO = "Codigo";
         public const string COLUMN_NOME = "Nome";
         #endregion
     }

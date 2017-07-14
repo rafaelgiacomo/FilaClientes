@@ -57,7 +57,7 @@ namespace CampanhaBD.RepositoryADO
         {
         }
 
-        public ClienteRepositoryAdo Clients
+        public ClienteRepositoryAdo Clientes
         {
             get { return (_clientRepository ?? new ClienteRepositoryAdo(_context)); }
         }

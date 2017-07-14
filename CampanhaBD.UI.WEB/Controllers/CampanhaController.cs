@@ -1,5 +1,4 @@
 ﻿using CampanhaBD.Model;
-using CampanhaBD.RepositoryADO;
 using CampanhaBD.UI.WEB.ViewModel;
 using System;
 using CampanhaBD.UI.WEB.Models;

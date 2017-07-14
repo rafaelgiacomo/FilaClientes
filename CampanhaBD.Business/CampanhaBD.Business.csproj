@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BB5A0A54-486F-4FAA-A613-F71EF5DAFFE5}</ProjectGuid>
+    <ProjectGuid>{0A2FEDCB-83B8-46BD-9CD1-22305BED344F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CampanhaBD.Bussiness</RootNamespace>
-    <AssemblyName>CampanhaBD.Bussiness</AssemblyName>
+    <RootNamespace>CampanhaBD.Business</RootNamespace>
+    <AssemblyName>CampanhaBD.Business</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,10 +40,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClienteBussiness.cs" />
-    <Compile Include="CampanhaBussiness.cs" />
-    <Compile Include="BancoBussiness.cs" />
+    <Compile Include="ImportacaoBusiness.cs" />
+    <Compile Include="ClienteBusiness.cs" />
+    <Compile Include="BancoBusiness.cs" />
+    <Compile Include="CoreBusiness.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CampanhaBD.Model\CampanhaBD.Model.csproj">
+      <Project>{7b038d68-28db-44ae-8913-d60db5ae1302}</Project>
+      <Name>CampanhaBD.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CampanhaBD.RepositoryADO\CampanhaBD.RepositoryADO.csproj">
+      <Project>{d6bd3fe6-7c73-4629-ac88-0caecd9dc16f}</Project>
+      <Name>CampanhaBD.RepositoryADO</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

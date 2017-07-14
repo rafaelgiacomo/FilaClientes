@@ -26,9 +26,9 @@ namespace CampanhaBD.UI.WEB.ViewModel
 
         public string Empresa { get; set; }
 
-        public Usuario ParaUsuarioModel()
+        public UsuarioModel ParaUsuarioModel()
         {
-            Usuario usuario = new Usuario()
+            UsuarioModel usuario = new UsuarioModel()
             {
                 Nome = this.Nome,
                 Email = this.Email,

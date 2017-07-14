@@ -1,7 +1,7 @@
-﻿@model IEnumerable<CampanhaBD.Model.Banco>
+﻿@model List<CampanhaBD.Model.BancoModel>
 
 @{
-    ViewBag.Title = "View";
+    ViewBag.Title = "Bancos";
 }
 
 <h2>Bancos</h2>
@@ -12,10 +12,10 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Codigo)
+            Codigo
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Nome)
+            Nome
         </th>
         <th></th>
     </tr>

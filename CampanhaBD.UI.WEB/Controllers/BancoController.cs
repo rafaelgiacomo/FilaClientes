@@ -1,5 +1,5 @@
-﻿using CampanhaBD.Model;
-using CampanhaBD.RepositoryADO;
+﻿using CampanhaBD.Business;
+using CampanhaBD.Model;
 using CampanhaBD.UI.WEB.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -10,13 +10,29 @@ using System.Web.Mvc;
 namespace CampanhaBD.UI.WEB.Controllers
 {
     [Authorize]
-    public class BancoController : Controller
+    public class BancoController : BaseController
     {
+        private readonly BancoBusiness _bancoBus;
+
+        public BancoController()
+        {
+            _bancoBus = new BancoBusiness(_core);
+        }
 
         // GET: Banco
         public ActionResult Index()
         {
-            return View();
+            try
+            {
+                var listaBancos = _bancoBus.ListarTodos();
+
+                return View(listaBancos);
+            }
+            catch(Exception ex)
+            {
+                TempData["mensagem"] = ex.Message;
+                return RedirectToAction("Erro");
+            }
         }
 
         public ActionResult Criar()
@@ -27,57 +43,112 @@ namespace CampanhaBD.UI.WEB.Controllers
         [HttpPost]
         public ActionResult Criar(BancoViewModel modelo)
         {
-            if (ModelState.IsValid)
+            try
             {
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    BancoModel entidade = modelo.ParaBancoModel();
+
+                    _bancoBus.AdicionarBanco(entidade);
+
+                    return RedirectToAction("Index");
+                }
+                ViewBag.Mensagem = "Erro ao salvar banco";
+                return View();
             }
-            ViewBag.Mensagem = "Erro ao salvar usuario";
-            return View();
+            catch (Exception ex)
+            {
+                TempData["mensagem"] = ex.Message;
+                return RedirectToAction("Erro");
+            }
         }
 
         public ActionResult Editar(int codigo)
         {
-            var banco = new BancoModel();
-
-            if (banco == null)
+            try
             {
-                return HttpNotFound();
+                var banco = _bancoBus.ListarPorCodigo(codigo);
+
+                if (banco == null)
+                {
+                    return HttpNotFound();
+                }
+
+                BancoViewModel bvm = new BancoViewModel();
+                bvm.ParaViewModel(banco);
+
+                return View(bvm);
             }
-
-            BancoViewModel bvm = new BancoViewModel();
-            bvm.ParaViewModel(banco);
-
-            return View(bvm);
+            catch (Exception ex)
+            {
+                TempData["mensagem"] = ex.Message;
+                return RedirectToAction("Erro");
+            }
         }
 
         [HttpPost]
         public ActionResult Editar(BancoViewModel modelo)
         {
-            if (ModelState.IsValid)
+            try
             {
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    _bancoBus.AlterarBanco(modelo.ParaBancoModel());
+                    return RedirectToAction("Index");
+                }
+                ViewBag.Mensagem = "Erro ao salvar dados";
+                return View(modelo);
             }
-            ViewBag.Mensagem = "Erro ao salvar dados";
-            return View(modelo);
+            catch (Exception ex)
+            {
+                TempData["mensagem"] = ex.Message;
+                return RedirectToAction("Erro");
+            }
         }
 
         public ActionResult Excluir(int codigo)
         {
-            var banco = new BancoModel();
-
-            if (banco == null)
+            try
             {
-                return HttpNotFound();
-            }
+                var banco = _bancoBus.ListarPorCodigo(codigo);
 
-            return View(banco);
+                if (banco == null)
+                {
+                    return HttpNotFound();
+                }
+
+                return View(banco);
+            }
+            catch (Exception ex)
+            {
+                TempData["mensagem"] = ex.Message;
+                return RedirectToAction("Erro");
+            }
+            
         }
 
         [HttpPost, ActionName("Excluir")]
         [ValidateAntiForgeryToken]
         public ActionResult ExcluirConfirmado(int codigo)
         {
-            return RedirectToAction("Index");
+            try
+            {
+                var banco = _bancoBus.ListarPorCodigo(codigo);
+
+                if (banco == null)
+                {
+                    return HttpNotFound();
+                }
+
+                _bancoBus.ExcluirBanco(codigo);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                TempData["mensagem"] = ex.Message;
+                return RedirectToAction("Erro");
+            }
         }
+
     }
 }

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CampanhaBD.Model.Importacao>
+﻿@model List<CampanhaBD.Model.ImportacaoModel>
 
 @{
     ViewBag.Title = "Index";
@@ -12,19 +12,19 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Nome)
+            Nome
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Data)
+            Data
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Terminado)
+            Terminado
         </th>
         <th>
-            N° Importados
+            N° Imp
         </th>
         <th>
-            N° Atualizados
+            N° Atu
         </th>
         <th></th>
     </tr>
@@ -35,10 +35,17 @@
             @Html.DisplayFor(modelItem => item.Nome)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Data)
+            @String.Format("{0:dd/MM/yyyy}", item.Data)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Terminado)
+            @if (item.Terminado)
+            {
+                <p>Sim</p>
+            }
+            else
+            {
+                <p>Não</p>
+            }
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.NumImportados)
@@ -47,10 +54,10 @@
             @Html.DisplayFor(modelItem => item.NumAtualizados)
         </td>
         <td>
-            @Html.ActionLink("Alterar Nome", "Editar", new { impId = item.Id, usuarioId = ViewBag.UsuarioId }) |
+            @Html.ActionLink("Editar", "Editar", new { impId = item.Id, usuarioId = ViewBag.UsuarioId }) <b>|</b>
             @if (!item.Terminado)
             {
-                @Html.ActionLink("Importar", "Associar", new { impId = item.Id, usuarioId = ViewBag.UsuarioId })
+                @Html.ActionLink("Importar Novamente", "Associar", new { impId = item.Id, usuarioId = ViewBag.UsuarioId })
             }
         </td>
     </tr>

@@ -18,7 +18,23 @@ namespace CampanhaBD.RepositoryADO
 
         public void Inserir(BeneficioModel entidade)
         {
-            
+            try
+            {
+                string[] parameters = 
+                {
+                    BeneficioModel.COLUMN_NUMERO, BeneficioModel.COLUMN_CLIENTE_ID, BeneficioModel.COLUMN_SALARIO,
+                    BeneficioModel.COLUMN_DATA_COMPETENCIA
+                };
+
+                object[] values = { entidade.Numero, entidade.IdCliente, entidade.Salario, entidade.DataCompetencia };
+
+                _context.ExecuteProcedureNoReturn(
+                    BeneficioModel.PROCEDURE_INSERT, parameters, values);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public void Alterar(BeneficioModel entidade)

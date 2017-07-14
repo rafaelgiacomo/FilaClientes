@@ -1,0 +1,114 @@
+﻿@model CampanhaBD.UI.WEB.ViewModel.ExportacaoViewModel
+
+@{
+    ViewBag.Title = "Exportação";
+}
+
+<h3>Exportação</h3><hr/>
+<br />
+
+<div class="form-horizontal">
+
+    <div class="row">
+
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.CodigoBanco, htmlAttributes: new { @class = "control-label" })<br/>
+            @Html.EditorFor(model => model.CodigoBanco, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.MinDataTrabalhado, htmlAttributes: new { @class = "control-label" })<br />
+            @Html.EditorFor(model => model.MinDataTrabalhado, new { htmlAttributes = new { @class = "form-control" } })            
+        </div>
+
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.MaxDataTrabalhado, htmlAttributes: new { @class = "control-label" })<br />
+            @Html.EditorFor(model => model.MaxDataTrabalhado, new { htmlAttributes = new { @class = "form-control" } })            
+        </div>
+
+    </div>
+
+    <br /><br />
+
+    <div class="row">
+
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.MinDataNascimento, htmlAttributes: new { @class = "control-label" })<br/>
+            @Html.EditorFor(model => model.MinDataNascimento, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.MaxDataNascimento, htmlAttributes: new { @class = "control-label" })<br/>
+            @Html.EditorFor(model => model.MaxDataNascimento, new { htmlAttributes = new { @class = "form-control" } })            
+        </div>
+
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.MinCep, htmlAttributes: new { @class = "control-label" })<br />
+            @Html.EditorFor(model => model.MinCep, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.MaxCep, htmlAttributes: new { @class = "control-label" })<br />
+            @Html.EditorFor(model => model.MaxCep, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+
+    </div>
+
+    <br /><br />
+
+    <div class="row">
+
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.MinParcela, htmlAttributes: new { @class = "control-label" })<br/>
+            @Html.EditorFor(model => model.MinParcela, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.MaxParcela, htmlAttributes: new { @class = "control-label" })<br />
+            @Html.EditorFor(model => model.MaxParcela, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.MinParcelasPagas, htmlAttributes: new { @class = "control-label" })<br />
+            @Html.EditorFor(model => model.MinParcelasPagas, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.MaxParcelasPagas, htmlAttributes: new { @class = "control-label" })<br />
+            @Html.EditorFor(model => model.MaxParcelasPagas, new { htmlAttributes = new { @class = "form-control" } })            
+        </div>
+
+    </div>
+
+    <br /><br />
+
+    <div class="row">
+
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.MinDataAtualEmp, htmlAttributes: new { @class = "control-label" }) <br/>
+            @Html.EditorFor(model => model.MinDataAtualEmp, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.MaxDataAtualTel, htmlAttributes: new { @class = "control-label" }) <br />
+            @Html.EditorFor(model => model.MaxDataAtualTel, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.MinDataAtualTel, htmlAttributes: new { @class = "control-label" }) <br />
+            @Html.EditorFor(model => model.MinDataAtualTel, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.MaxDataAtualTel, htmlAttributes: new { @class = "control-label" }) <br />
+            @Html.EditorFor(model => model.MaxDataAtualTel, new { htmlAttributes = new { @class = "form-control" } }) 
+        </div>
+
+    </div>
+
+    <br /><br />
+
+    <input type="submit" value="Exportar" class="btn btn-success" />
+    <input type="reset" value="Limpar" class="btn btn-warning" />
+
+</div>

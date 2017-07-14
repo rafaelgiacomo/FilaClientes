@@ -10,30 +10,39 @@ namespace CampanhaBD.RepositoryADO
     public class ClienteRepositoryAdo : IRepository<ClienteModel>
     {
         private Context _context;
-        private readonly EmprestimoRepositoryAdo _emprestimoRepositorioADO;
-        private readonly BeneficioRepositoryAdo _beneficioRepositorioADO;
 
         public ClienteRepositoryAdo(Context context)
         {
             _context = context;
-            _emprestimoRepositorioADO = new EmprestimoRepositoryAdo(context);
-            _beneficioRepositorioADO = new BeneficioRepositoryAdo(context);
         }
 
         public void Inserir(ClienteModel entidade)
         {
-            //entidade.Classificacao = Pessoa.CLIENTE;
-            //_pessoaRepositorioADO.Inserir((Pessoa)entidade);
-            //entidade.Id = _pessoaRepositorioADO.UltimoId;
+            try
+            {
+                string[] parameters =
+                {
+                    ClienteModel.COLUMN_IMPORTACAO_ID, ClienteModel.COLUMN_NOME, ClienteModel.COLUMN_CPF,
+                    ClienteModel.COLUMN_UF, ClienteModel.COLUMN_CIDADE, ClienteModel.COLUMN_BAIRRO, ClienteModel.COLUMN_DDD,
+                    ClienteModel.COLUMN_TELEFONE, ClienteModel.COLUMN_DATANASCIMENTO, ClienteModel.COLUMN_LOGRADOURO,
+                    ClienteModel.COLUMN_NUMERO, ClienteModel.COLUMN_COMPLEMENTO, ClienteModel.COLUMN_CEP,
+                    ClienteModel.COLUMN_TEL_ATUALIZADO, ClienteModel.COLUMN_EMP_ATUALIZADO, ClienteModel.COLUMN_TRABALHADO
+                };
 
-            //var strQuery = "";
-            //strQuery += " INSERT INTO CLIENTE (pessoa_id, dataNasc, estado, cidade, bairro, ddd, telefone, logradouro, " +
-            //            " cep, trabalhado, numero, complemento, CPF, imp_id, usuario_id) ";
-            //strQuery += string.Format(" VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', " +
-            //    " '{10}', '{11}', '{12}', '{13}', '{14}') ", entidade.Id, entidade.DataNascimento, entidade.Uf, entidade.Cidade, 
-            //    entidade.Bairro, entidade.Ddd, entidade.Telefone, entidade.Logradouro, entidade.Cep, entidade.Trabalhado, 
-            //    entidade.Numero, entidade.Complemento, entidade.Cpf, entidade.ImportacaoId, entidade.UsuarioId);
-            //_context.ExecutaComando(strQuery);
+                object[] values =
+                {
+                    entidade.ImportacaoId, entidade.Nome, entidade.Cpf, entidade.Uf, entidade.Cidade, entidade.Bairro,
+                    entidade.Ddd, entidade.Telefone, entidade.DataNascimento, entidade.Logradouro, entidade.Numero,
+                    entidade.Complemento, entidade.Cep, entidade.TelAtualizado, entidade.EmpAtualizado, entidade.Trabalhado
+                };
+
+                _context.ExecuteProcedureNoReturn(
+                    ClienteModel.PROCEDURE_INSERT, parameters, values);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public void Alterar(ClienteModel entidade)
@@ -90,38 +99,60 @@ namespace CampanhaBD.RepositoryADO
 
         public ClienteModel ListarPorCpf(ClienteModel entidade)
         {
-            return new ClienteModel();
-            //var strQuery = string.Format(" SELECT * FROM Cliente WHERE CPF = '{0}' ", cpf);
-            //var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
-            //return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
+            try
+            {
+                ClienteModel retorno = null;
+
+                string[] parameters = { ClienteModel.COLUMN_CPF };
+
+                object[] values = { entidade.Cpf };
+
+                var reader = _context.ExecuteProcedureWithReturn(
+                    ClienteModel.PROCEDURE_SELECT_BY_CPF, parameters, values);
+
+                if (reader.Read())
+                {
+                    retorno = TransformaReaderEmObjeto(reader);
+                }
+
+                reader.Close();
+
+                return retorno;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        private List<ClienteModel> TransformaReaderEmListaDeObjeto(SqlDataReader reader)
+        private ClienteModel TransformaReaderEmObjeto(SqlDataReader reader)
         {
-            var usuarios = new List<ClienteModel>();
-            while (reader.Read())
+            try
             {
-                var temObjeto = new ClienteModel()
-                {
-                    Id = int.Parse(reader["pessoa_id"].ToString()),
-                    DataNascimento = DateTime.Parse(reader["dataNasc"].ToString()),
-                    Uf = reader["estado"].ToString(),
-                    Cidade = reader["cidade"].ToString(),
-                    Bairro = reader["bairro"].ToString(),
-                    Ddd = reader["ddd"].ToString(),
-                    Telefone = reader["telefone"].ToString(),
-                    Logradouro = reader["logradouro"].ToString(),
-                    Cep = reader["cep"].ToString(),
-                    Numero = reader["numero"].ToString(),
-                    Trabalhado = bool.Parse(reader["trabalhado"].ToString()),
-                    Complemento = reader["complemento"].ToString(),
-                    Cpf = reader["CPF"].ToString(),
-                    ImportacaoId = int.Parse(reader["imp_id"].ToString())
-                };
-                usuarios.Add(temObjeto);
+                var entidade = new ClienteModel();
+
+                var temObjeto = new ClienteModel();
+                temObjeto.Id = long.Parse(reader["Id"].ToString());
+                temObjeto.DataNascimento = DateTime.Parse(reader["DataNascimento"].ToString());
+                temObjeto.Uf = reader["Uf"].ToString();
+                temObjeto.Cidade = reader["Cidade"].ToString();
+                temObjeto.Bairro = reader["Bairro"].ToString();
+                temObjeto.Ddd = reader["Ddd"].ToString();
+                temObjeto.Telefone = reader["Telefone"].ToString();
+                temObjeto.Logradouro = reader["Logradouro"].ToString();
+                temObjeto.Cep = reader["Cep"].ToString();
+                temObjeto.Numero = reader["Numero"].ToString();
+                temObjeto.Trabalhado = bool.Parse(reader["Trabalhado"].ToString());
+                temObjeto.Complemento = reader["Complemento"].ToString();
+                temObjeto.Cpf = reader["Cpf"].ToString();
+                temObjeto.ImportacaoId = int.Parse(reader["ImportacaoId"].ToString());
+
+                return entidade;
             }
-            reader.Close();
-            return usuarios;
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
     }

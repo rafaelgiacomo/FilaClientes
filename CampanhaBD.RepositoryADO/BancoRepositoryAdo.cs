@@ -20,9 +20,9 @@ namespace CampanhaBD.RepositoryADO
         {
             try
             {
-                string[] parameters = { BancoModel.COLUMN_NOME };
+                string[] parameters = { BancoModel.COLUMN_CODIGO, BancoModel.COLUMN_NOME };
 
-                object[] values = { entidade.Nome };
+                object[] values = { entidade.Codigo, entidade.Nome };
 
                 _context.ExecuteProcedureNoReturn(
                     BancoModel.PROCEDURE_INSERT, parameters, values);
@@ -106,7 +106,7 @@ namespace CampanhaBD.RepositoryADO
                 var retorno = new BancoModel();
 
                 string[] parameters = { BancoModel.COLUMN_CODIGO };
-                object[] values = { BancoModel.COLUMN_CODIGO };
+                object[] values = { entidade.Codigo };
 
                 reader = _context.ExecuteProcedureWithReturn(
                     BancoModel.PROCEDURE_SELECT_BY_ID, parameters, values);
@@ -129,18 +129,25 @@ namespace CampanhaBD.RepositoryADO
 
         private List<BancoModel> TransformaReaderEmListaDeObjeto(SqlDataReader reader)
         {
-            var lista = new List<BancoModel>();
-            while (reader.Read())
+            try
             {
-                var temObjeto = new BancoModel()
+                var lista = new List<BancoModel>();
+                while (reader.Read())
                 {
-                    Codigo = int.Parse(reader["Codigo"].ToString()),
-                    Nome = reader["Nome"].ToString()
-                };
-                lista.Add(temObjeto);
+                    var temObjeto = new BancoModel()
+                    {
+                        Codigo = int.Parse(reader["Codigo"].ToString()),
+                        Nome = reader["Nome"].ToString()
+                    };
+                    lista.Add(temObjeto);
+                }
+                reader.Close();
+                return lista;
             }
-            reader.Close();
-            return lista;
+            catch
+            {
+                throw;
+            }
         }
     
     }

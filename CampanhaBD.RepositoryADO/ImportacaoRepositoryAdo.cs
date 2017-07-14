@@ -18,13 +18,38 @@ namespace CampanhaBD.RepositoryADO
 
         public void Inserir(ImportacaoModel entidade)
         {
-            //entidade.Id = NumeroImportacao(entidade.UsuarioId);
-            //var strQuery = "";
-            //strQuery += " INSERT INTO Importacao (imp_id, usuario_id, nome, data, terminado, numImportados, atualizados, caminhoArquivo) ";
-            //strQuery += string.Format(" VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}') ",
-            //    entidade.Id, entidade.UsuarioId, entidade.Nome, entidade.Data, entidade.Terminado, entidade.NumImportados, 
-            //    entidade.NumAtualizados, entidade.CaminhoArquivo);
-            //_context.ExecutaComando(strQuery);
+            try
+            {
+                string[] parameters =
+                {
+                    ImportacaoModel.COLUMN_USUARIO_ID, ImportacaoModel.COLUMN_NOME,ImportacaoModel.COLUMN_DATA,
+                    ImportacaoModel.COLUMN_TERMINADO, ImportacaoModel.COLUMN_NUM_IMPORTADOS,
+                    ImportacaoModel.COLUMN_NUM_ATUALIZADOS, ImportacaoModel.COLUMN_CAMINHO_ARQUIVO
+                };
+
+                object[] values =
+                {
+                    entidade.UsuarioId, entidade.Nome, entidade.Data, entidade.Terminado, entidade.NumImportados,
+                    entidade.NumAtualizados, entidade.CaminhoArquivo
+                };
+
+                var reader = _context.ExecuteProcedureWithReturn(
+                    ImportacaoModel.PROCEDURE_INSERT, parameters, values);
+
+                if (reader.Read())
+                {
+                    var ultimoId = reader[0].ToString();
+
+                    if (!String.IsNullOrEmpty(ultimoId))
+                        entidade.Id = Convert.ToInt32(ultimoId);
+                }
+
+                reader.Close();
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public void Alterar(ImportacaoModel entidade)
@@ -49,10 +74,32 @@ namespace CampanhaBD.RepositoryADO
 
         public List<ImportacaoModel> ListarTodos()
         {
-            return new List<ImportacaoModel>();
-            //var strQuery = " SELECT * FROM Importacao ";
-            //var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
-            //return TransformaReaderEmListaDeObjeto(retornoDataReader);
+            try
+            {
+                List<ImportacaoModel> lista = new List<ImportacaoModel>();
+                SqlDataReader reader = null;
+
+                string[] parameters = { };
+                object[] values = { };
+
+                reader = _context.ExecuteProcedureWithReturn(
+                    ImportacaoModel.PROCEDURE_SELECT_ALL, parameters, values);
+
+                while (reader.Read())
+                {
+                    var entidade = TransformaReaderEmObjeto(reader);
+
+                    lista.Add(entidade);
+                }
+
+                reader.Close();
+
+                return lista;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public void Terminar(int id, int usuarioId)
@@ -62,49 +109,54 @@ namespace CampanhaBD.RepositoryADO
             //_context.ExecutaComando(strQuery);
         }
 
-        public int NumeroImportacao(int usuarioId)
-        {
-            return 0;
-            //int num = 1;
-            //var strQuery = string.Format(" SELECT COUNT(*) FROM Importacao WHERE usuario_id = '{0}' ", usuarioId);
-            //var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
-            //if (retornoDataReader.Read())
-            //{
-            //    num = int.Parse(retornoDataReader[0].ToString()) + 1;
-            //}
-
-            //retornoDataReader.Close();
-            //return num;
-        }
-
         public ImportacaoModel ListarPorId(ImportacaoModel entidade)
         {
-            return new ImportacaoModel();
-            //var strQuery = string.Format(" SELECT * FROM Importacao WHERE imp_id = '{0}' AND usuario_id = '{1}' ", id, usuarioId);
-            //var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
-            //return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
+            try
+            {
+                SqlDataReader reader = null;
+                var retorno = new ImportacaoModel();
+
+                string[] parameters = { ImportacaoModel.COLUMN_ID };
+                object[] values = { entidade.Id };
+
+                reader = _context.ExecuteProcedureWithReturn(
+                    ImportacaoModel.PROCEDURE_SELECT_BY_ID, parameters, values);
+
+                if(reader.Read())
+                {
+                    retorno = TransformaReaderEmObjeto(reader);
+                }
+
+                reader.Close();
+
+                return retorno;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
-        private List<ImportacaoModel> TransformaReaderEmListaDeObjeto(SqlDataReader reader)
+        private ImportacaoModel TransformaReaderEmObjeto(SqlDataReader reader)
         {
-            var usuarios = new List<ImportacaoModel>();
-            while (reader.Read())
+            try
             {
-                var temObjeto = new ImportacaoModel()
-                {
-                    Id = int.Parse(reader["imp_id"].ToString()),
-                    UsuarioId = int.Parse(reader["usuario_id"].ToString()),
-                    Nome = reader["nome"].ToString(),
-                    Data = DateTime.Parse(reader["data"].ToString()),
-                    Terminado = bool.Parse(reader["Terminado"].ToString()),
-                    NumImportados = int.Parse(reader["numImportados"].ToString()),
-                    NumAtualizados = int.Parse(reader["atualizados"].ToString()),
-                    CaminhoArquivo = reader["caminhoArquivo"].ToString()
-                };
-                usuarios.Add(temObjeto);
+                var temObjeto = new ImportacaoModel();
+                temObjeto.Id = Convert.ToInt32(reader[ImportacaoModel.COLUMN_ID].ToString());
+                temObjeto.UsuarioId = Convert.ToInt32(reader[ImportacaoModel.COLUMN_USUARIO_ID].ToString());
+                temObjeto.Nome = reader[ImportacaoModel.COLUMN_NOME].ToString();
+                temObjeto.Data = Convert.ToDateTime(reader[ImportacaoModel.COLUMN_DATA].ToString());
+                temObjeto.NumImportados = Convert.ToInt32(reader[ImportacaoModel.COLUMN_NUM_IMPORTADOS].ToString());
+                temObjeto.NumAtualizados = Convert.ToInt32(reader[ImportacaoModel.COLUMN_NUM_ATUALIZADOS].ToString());
+                temObjeto.Terminado = Convert.ToBoolean(reader[ImportacaoModel.COLUMN_TERMINADO].ToString());
+                temObjeto.CaminhoArquivo = reader[ImportacaoModel.COLUMN_CAMINHO_ARQUIVO].ToString();
+
+                return temObjeto;
             }
-            reader.Close();
-            return usuarios;
+            catch
+            {
+                throw;
+            }
         }
     }
 }

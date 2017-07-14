@@ -1,5 +1,4 @@
 ﻿using CampanhaBD.UI.WEB.ViewModel;
-using CampanhaBD.RepositoryADO;
 using CampanhaBD.Model;
 using System;
 using System.Linq;
@@ -12,7 +11,6 @@ namespace CampanhaBD.UI.WEB.Controllers
 {
     public class ContaController : Controller
     {
-        private readonly UnityOfWorkAdo _unityOfWork = new UnityOfWorkAdo();
         
         public ActionResult Index()
         {
@@ -27,19 +25,19 @@ namespace CampanhaBD.UI.WEB.Controllers
         [HttpPost]
         public ActionResult LogIn(LoginViewModel model)
         {
-            Hash hash = new Hash(SHA512.Create());
-            Usuario usuario = _unityOfWork.Usuarios.ListarTodos().Where(x => x.Login == model.Login).FirstOrDefault();
+            //Hash hash = new Hash(SHA512.Create());
+            //UsuarioModel usuario = _unityOfWork.Usuarios.ListarTodos().Where(x => x.Login == model.Login).FirstOrDefault();
 
-            if (usuario != null)
-            {
-                if (hash.VerificarSenha(model.Senha, usuario.Senha))
-                {
-                    FormsAuthentication.SetAuthCookie(usuario.Login, false);
+            //if (usuario != null)
+            //{
+            //    if (hash.VerificarSenha(model.Senha, usuario.Senha))
+            //    {
+                    FormsAuthentication.SetAuthCookie(model.Login, false);
                     return RedirectToAction("Index", "Home");
-                }
-            }
-            ViewBag.Mensagem = "Login ou Senha inválido";
-            return View();
+            //    }
+            //}
+            //ViewBag.Mensagem = "Login ou Senha inválido";
+            //return View();
         }
 
         public ActionResult Registrar()
@@ -50,18 +48,18 @@ namespace CampanhaBD.UI.WEB.Controllers
         [HttpPost]
         public ActionResult Registrar(UsuarioViewModel usuario)
         {
-            Hash hash = new Hash(SHA512.Create());
-            if (ModelState.IsValid)
-            {
-                usuario.Senha = hash.CriptografarSenha(usuario.Senha);
-                _unityOfWork.Usuarios.Inserir(usuario.ParaUsuarioModel());
-                ViewBag.Mensagem = "Usuario registrado com sucesso!";
-                return RedirectToAction("LogIn");
-            }
-            else
-            {
-                ViewBag.Mensagem = "Erro ao salvar usuario";
-            }
+            //Hash hash = new Hash(SHA512.Create());
+            //if (ModelState.IsValid)
+            //{
+            //    usuario.Senha = hash.CriptografarSenha(usuario.Senha);
+            //    _unityOfWork.Usuarios.Inserir(usuario.ParaUsuarioModel());
+            //    ViewBag.Mensagem = "Usuario registrado com sucesso!";
+            //    return RedirectToAction("LogIn");
+            //}
+            //else
+            //{
+            //    ViewBag.Mensagem = "Erro ao salvar usuario";
+            //}
             
             return View();
         }

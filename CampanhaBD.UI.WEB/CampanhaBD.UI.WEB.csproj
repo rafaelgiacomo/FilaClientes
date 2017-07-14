@@ -170,6 +170,9 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\AtualizacaoController.cs" />
+    <Compile Include="Controllers\ExportacaoController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BancoController.cs" />
     <Compile Include="Controllers\CampanhaController.cs" />
     <Compile Include="Controllers\ContaController.cs" />
@@ -184,6 +187,7 @@
     <Compile Include="Models\ManipuladorCsv.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModel\ExportacaoViewModel.cs" />
     <Compile Include="ViewModel\BancoViewModel.cs" />
     <Compile Include="ViewModel\CampanhaViewModel.cs" />
     <Compile Include="ViewModel\ImportacaoClienteViewModel.cs" />
@@ -229,9 +233,9 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Conta\LogIn.cshtml" />
-    <Content Include="Views\Import\Importar.cshtml" />
+    <Content Include="Views\Importacao\Importar.cshtml" />
     <Content Include="Views\Conta\Registrar.cshtml" />
-    <Content Include="Views\Import\Index.cshtml" />
+    <Content Include="Views\Importacao\Index.cshtml" />
     <Content Include="Views\Banco\Index.cshtml" />
     <Content Include="Views\Banco\Criar.cshtml" />
     <Content Include="Views\Banco\Editar.cshtml" />
@@ -240,8 +244,15 @@
     <Content Include="Views\Campanha\Editar.cshtml" />
     <Content Include="Views\Campanha\Detalhes.cshtml" />
     <Content Include="Views\Campanha\Excluir.cshtml" />
-    <Content Include="Views\Import\Associar.cshtml" />
+    <Content Include="Views\Importacao\Associar.cshtml" />
     <Content Include="Views\Campanha\Criar.cshtml" />
+    <Content Include="Views\Banco\Erro.cshtml" />
+    <Content Include="Views\Shared\_Erro.cshtml" />
+    <Content Include="Views\Importacao\Erro.cshtml" />
+    <Content Include="Views\Exportacao\Index.cshtml" />
+    <Content Include="Views\Atualizacao\Erro.cshtml" />
+    <Content Include="Views\Atualizacao\Index.cshtml" />
+    <Content Include="Views\Exportacao\Erro.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -258,13 +269,13 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CampanhaBD.Business\CampanhaBD.Business.csproj">
+      <Project>{0A2FEDCB-83B8-46BD-9CD1-22305BED344F}</Project>
+      <Name>CampanhaBD.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CampanhaBD.Model\CampanhaBD.Model.csproj">
       <Project>{7b038d68-28db-44ae-8913-d60db5ae1302}</Project>
       <Name>CampanhaBD.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CampanhaBD.RepositoryADO\CampanhaBD.RepositoryADO.csproj">
-      <Project>{d6bd3fe6-7c73-4629-ac88-0caecd9dc16f}</Project>
-      <Name>CampanhaBD.RepositoryADO</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

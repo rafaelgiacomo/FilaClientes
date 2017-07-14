@@ -50,9 +50,9 @@ namespace CampanhaBD.UI.WEB.ViewModel
         [Display(Name = "Código do Banco")]
         public int CodigoBanco { get; set; }
 
-        public Campanha ParaCampanhaModel()
+        public CampanhaModel ParaCampanhaModel()
         {
-            Campanha campanha = new Campanha()
+            CampanhaModel campanha = new CampanhaModel()
             {
                 Id = this.Id,
                 UsuarioId = this.UsuarioId,
@@ -72,7 +72,7 @@ namespace CampanhaBD.UI.WEB.ViewModel
             return campanha;
         }
 
-        public void ParaViewModel(Campanha campanha)
+        public void ParaViewModel(CampanhaModel campanha)
         {
             Id = campanha.Id;
             UsuarioId = campanha.UsuarioId;
