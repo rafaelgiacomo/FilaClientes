@@ -54,6 +54,7 @@
     <Compile Include="CampanhaRepositoryAdo.cs" />
     <Compile Include="CampanhaImportacaoRepositoryAdo.cs" />
     <Compile Include="ClienteRepositoryAdo.cs" />
+    <Compile Include="ConsultaRepositoryAdo.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="EmprestimoRepositoryAdo.cs" />
     <Compile Include="ImportacaoRepositoryAdo.cs" />
@@ -73,6 +74,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\Procedures Consulta.sql" />
+    <Content Include="Scripts\Procedures.sql" />
+    <Content Include="Scripts\SQLCred9.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -48,6 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsultaProcessa.cs" />
+    <Compile Include="LayoutArquivoModel.cs" />
     <Compile Include="BancoModel.cs" />
     <Compile Include="BeneficioModel.cs" />
     <Compile Include="CampanhaModel.cs" />

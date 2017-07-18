@@ -55,16 +55,16 @@ namespace CampanhaBD.UI.WEB.ViewModel
             CampanhaModel campanha = new CampanhaModel()
             {
                 Id = this.Id,
-                UsuarioId = this.UsuarioId,
+                //UsuarioId = this.UsuarioId,
                 Nome = this.Nome,
                 MinParcela = this.MinParcela,
                 MaxParcela = this.MaxParcela,
-                MinInicioPag = this.MinInicioPag,
-                MaxInicioPag = this.MaxInicioPag,
+                //MinInicioPag = this.MinInicioPag,
+                //MaxInicioPag = this.MaxInicioPag,
                 MinParcelasPagas = this.MinParcelasPagas,
                 MaxParcelasPagas = this.MaxParcelasPagas,
-                MinDataNascimento = this.MinDataNascimento,
-                ApenasNaoExportados = this.ApenasNaoExportados,
+                //MinDataNascimento = this.MinDataNascimento,
+                //ApenasNaoExportados = this.ApenasNaoExportados,
                 MinCep = this.MinCep,
                 MaxCep = this.MaxCep,
                 CodigoBanco = this.CodigoBanco
@@ -75,16 +75,16 @@ namespace CampanhaBD.UI.WEB.ViewModel
         public void ParaViewModel(CampanhaModel campanha)
         {
             Id = campanha.Id;
-            UsuarioId = campanha.UsuarioId;
+            //UsuarioId = campanha.UsuarioId;
             Nome = campanha.Nome;
             MinParcela = campanha.MinParcela;
             MaxParcela = campanha.MaxParcela;
-            MinInicioPag = campanha.MinInicioPag;
-            MaxInicioPag = campanha.MaxInicioPag;
+            //MinInicioPag = campanha.MinInicioPag;
+            //MaxInicioPag = campanha.MaxInicioPag;
             MinParcelasPagas = campanha.MinParcelasPagas;
             MaxParcelasPagas = campanha.MaxParcelasPagas;
-            MinDataNascimento = campanha.MinDataNascimento;
-            ApenasNaoExportados = campanha.ApenasNaoExportados;
+            //MinDataNascimento = campanha.MinDataNascimento;
+            //ApenasNaoExportados = campanha.ApenasNaoExportados;
             MinCep = campanha.MinCep;
             MaxCep = campanha.MaxCep;
             CodigoBanco = campanha.CodigoBanco;

@@ -25,17 +25,43 @@ namespace CampanhaBD.RepositoryADO
                 {
                     EmprestimoModel.COLUMN_BANCO_ID, EmprestimoModel.COLUMN_CLIENTE_ID, EmprestimoModel.COLUMN_NUM_BENEFICIO,
                     EmprestimoModel.COLUMN_VALOR_PARCELA, EmprestimoModel.COLUMN_PARCELAS_NO_CONTRATO,
-                    EmprestimoModel.COLUMN_PARCELAS_PAGAS, EmprestimoModel.COLUMN_SALDO, EmprestimoModel.COLUMN_INICIO_PAGAMENTO
+                    EmprestimoModel.COLUMN_PARCELAS_EM_ABERTO, EmprestimoModel.COLUMN_SALDO, EmprestimoModel.COLUMN_INICIO_PAGAMENTO
                 };
 
                 object[] values = 
                 {
                     entidade.BancoId, entidade.ClienteId, entidade.NumBeneficio, entidade.ValorParcela,
-                    entidade.ParcelasNoContrato, entidade.ParcelasPagas, entidade.Saldo, entidade.InicioPagamento
+                    entidade.ParcelasNoContrato, entidade.ParcelasEmAberto, entidade.Saldo, entidade.InicioPagamento
                 };
 
                 _context.ExecuteProcedureNoReturn(
                     EmprestimoModel.PROCEDURE_INSERT, parameters, values);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public void InserirProcessa(EmprestimoModel entidade)
+        {
+            try
+            {
+                string[] parameters =
+                {
+                    EmprestimoModel.COLUMN_BANCO_ID,EmprestimoModel.COLUMN_NUM_BENEFICIO,
+                    EmprestimoModel.COLUMN_VALOR_PARCELA, EmprestimoModel.COLUMN_PARCELAS_NO_CONTRATO,
+                    EmprestimoModel.COLUMN_PARCELAS_EM_ABERTO, EmprestimoModel.COLUMN_SALDO, EmprestimoModel.COLUMN_INICIO_PAGAMENTO
+                };
+
+                object[] values =
+                {
+                    entidade.BancoId, entidade.NumBeneficio, entidade.ValorParcela,
+                    entidade.ParcelasNoContrato, entidade.ParcelasEmAberto, entidade.Saldo, entidade.InicioPagamento
+                };
+
+                _context.ExecuteProcedureNoReturn(
+                    EmprestimoModel.PROCEDURE_INSERT_PROCESSA, parameters, values);
             }
             catch
             {
@@ -66,6 +92,52 @@ namespace CampanhaBD.RepositoryADO
             //_context.ExecutaComando(strQuery);
         }
 
+        public void ExcluirPorBeneficio(EmprestimoModel entidade)
+        {
+            try
+            {
+                string[] parameters =
+                {
+                    EmprestimoModel.COLUMN_BANCO_ID, EmprestimoModel.COLUMN_NUM_BENEFICIO
+                };
+
+                object[] values =
+                {
+                    entidade.BancoId, entidade.NumBeneficio
+                };
+
+                _context.ExecuteProcedureNoReturn(
+                    EmprestimoModel.PROCEDURE_DELETE_BENEFICIO, parameters, values);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public void ExcluirPorClienteId(EmprestimoModel entidade)
+        {
+            try
+            {
+                string[] parameters =
+                {
+                    EmprestimoModel.COLUMN_BANCO_ID, EmprestimoModel.COLUMN_CLIENTE_ID
+                };
+
+                object[] values =
+                {
+                    entidade.BancoId, entidade.ClienteId
+                };
+
+                _context.ExecuteProcedureNoReturn(
+                    EmprestimoModel.PROCEDURE_DELETE_BENEFICIO, parameters, values);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public List<EmprestimoModel> ListarTodos()
         {
             return new List<EmprestimoModel>();
@@ -93,7 +165,7 @@ namespace CampanhaBD.RepositoryADO
                     NumBeneficio = int.Parse(reader["numero"].ToString()),
                     ClienteId = int.Parse(reader["pessoa_id"].ToString()),
                     ParcelasNoContrato = int.Parse(reader["parcelasContrato"].ToString()),
-                    ParcelasPagas = int.Parse(reader["parcelasPagas"].ToString()),
+                    ParcelasEmAberto = int.Parse(reader["parcelasPagas"].ToString()),
                 };
                 usuarios.Add(temObjeto);
             }

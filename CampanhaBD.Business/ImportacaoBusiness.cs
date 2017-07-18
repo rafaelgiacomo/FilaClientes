@@ -52,9 +52,7 @@ namespace CampanhaBD.Business
 
                     cliente.ImportacaoId = imp.Id;
                     cliente.UsuarioId = imp.UsuarioId;
-                    cliente.TelAtualizado = false;
-                    cliente.EmpAtualizado = false;
-                    cliente.Trabalhado = false;
+                    cliente.DataImportado = DateTime.Now.ToString();
 
                     for (int i = 0; i < valores.Length; i++)
                     {
@@ -70,15 +68,24 @@ namespace CampanhaBD.Business
                     {
                         _core.UnityOfWorkAdo.Clientes.Inserir(cliente);
 
-                        cliente.Beneficio.IdCliente = cliente.Id;
-                        cliente.Beneficio.DataCompetencia = DateTime.Now;
+                        cliente.Beneficios[0].IdCliente = cliente.Id;
+                        cliente.Beneficios[0].DataCompetencia = DateTime.Now;
                         cliente.Emprestimos[0].ClienteId = cliente.Id;
 
-                        _core.UnityOfWorkAdo.Beneficios.Inserir(cliente.Beneficio);
+                        _core.UnityOfWorkAdo.Beneficios.Inserir(cliente.Beneficios[0]);
                         _core.UnityOfWorkAdo.Emprestimos.Inserir(cliente.Emprestimos[0]);
                     }
                     else
                     {
+                        var ben = _core.UnityOfWorkAdo.Beneficios.ListarPorId(cliente.Beneficios[0]);
+
+                        if (ben == null)
+                        {
+                            cliente.Beneficios[0].IdCliente = cl.Id;
+                            cliente.Beneficios[0].DataCompetencia = DateTime.Now;
+                            _core.UnityOfWorkAdo.Beneficios.Inserir(cliente.Beneficios[0]);
+                        }
+
                         _core.UnityOfWorkAdo.Clientes.AlterarImportacao(cliente);
                         cliente.Emprestimos[0].ClienteId = cl.Id;
                         _core.UnityOfWorkAdo.Emprestimos.Inserir(cliente.Emprestimos[0]);

@@ -28,8 +28,6 @@ namespace CampanhaBD.RepositoryADO
             {
                 SqlDataReader reader = null;
 
-
-
                 var cmdComando = new SqlCommand
                 {
                     CommandText = procedureName,
@@ -102,6 +100,29 @@ namespace CampanhaBD.RepositoryADO
             catch
             {
                 tran.Rollback();
+                throw;
+            }
+        }
+
+        public SqlDataReader ExecuteSqlCommandWithReturn(string commmand)
+        {
+            try
+            {
+                SqlDataReader reader = null;
+
+                var cmdComando = new SqlCommand
+                {
+                    CommandText = commmand,
+                    CommandType = CommandType.Text,
+                    Connection = myConnection,
+                };
+
+                reader = cmdComando.ExecuteReader();
+
+                return reader;
+            }
+            catch
+            {
                 throw;
             }
         }

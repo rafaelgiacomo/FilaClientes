@@ -33,7 +33,7 @@ namespace CampanhaBD.UI.WEB.Controllers
             //    if (hash.VerificarSenha(model.Senha, usuario.Senha))
             //    {
                     FormsAuthentication.SetAuthCookie(model.Login, false);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Importacao");
             //    }
             //}
             //ViewBag.Mensagem = "Login ou Senha inválido";

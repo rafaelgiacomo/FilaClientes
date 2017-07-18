@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampanhaBD.RepositoryADO", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampanhaBD.Business", "CampanhaBD.Business\CampanhaBD.Business.csproj", "{0A2FEDCB-83B8-46BD-9CD1-22305BED344F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampanhaBD.Util", "CampanhaBD.Util\CampanhaBD.Util.csproj", "{4D166322-E2A4-4DCF-AF65-EE7CB8B2A45F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{0A2FEDCB-83B8-46BD-9CD1-22305BED344F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A2FEDCB-83B8-46BD-9CD1-22305BED344F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A2FEDCB-83B8-46BD-9CD1-22305BED344F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D166322-E2A4-4DCF-AF65-EE7CB8B2A45F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D166322-E2A4-4DCF-AF65-EE7CB8B2A45F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D166322-E2A4-4DCF-AF65-EE7CB8B2A45F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D166322-E2A4-4DCF-AF65-EE7CB8B2A45F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -20,7 +20,7 @@ namespace CampanhaBD.RepositoryADO
         {
             try
             {
-                string[] parameters = 
+                string[] parameters =
                 {
                     BeneficioModel.COLUMN_NUMERO, BeneficioModel.COLUMN_CLIENTE_ID, BeneficioModel.COLUMN_SALARIO,
                     BeneficioModel.COLUMN_DATA_COMPETENCIA
@@ -39,12 +39,12 @@ namespace CampanhaBD.RepositoryADO
 
         public void Alterar(BeneficioModel entidade)
         {
-            
+
         }
 
         public void Excluir(BeneficioModel entidade)
         {
-            
+
         }
 
         public List<BeneficioModel> ListarTodos()
@@ -54,25 +54,77 @@ namespace CampanhaBD.RepositoryADO
 
         public BeneficioModel ListarPorId(BeneficioModel entidade)
         {
-            return new BeneficioModel();
+            try
+            {
+                SqlDataReader reader = null;
+                BeneficioModel retorno = null;
+
+                string[] parameters = { BeneficioModel.COLUMN_NUMERO };
+                object[] values = { entidade.Numero };
+
+                reader = _context.ExecuteProcedureWithReturn(
+                    BeneficioModel.PROCEDURE_SELECT_BY_ID, parameters, values);
+
+                if (reader.Read())
+                {
+                    retorno = TransformaReaderEmListaDeObjeto(reader);
+                }
+
+                reader.Close();
+
+                return retorno;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
-        private List<BeneficioModel> TransformaReaderEmListaDeObjeto(SqlDataReader reader)
+        public List<BeneficioModel> ListarPorClienteId(BeneficioModel entidade)
         {
-            var usuarios = new List<BeneficioModel>();
-            while (reader.Read())
+            try
             {
-                var temObjeto = new BeneficioModel()
+                SqlDataReader reader = null;
+                var retorno = new List<BeneficioModel>();
+
+                string[] parameters = { ClienteModel.COLUMN_ID };
+                object[] values = { entidade.IdCliente };
+
+                reader = _context.ExecuteProcedureWithReturn(
+                    BeneficioModel.PROCEDURE_SELECT_BY_CLIENTE_ID, parameters, values);
+
+                while (reader.Read())
                 {
-                    Numero = int.Parse(reader["numero"].ToString()),
-                    IdCliente = int.Parse(reader["pessoa_id"].ToString()),
-                    Salario = float.Parse(reader["salario"].ToString()),
-                    DataCompetencia = DateTime.Parse(reader["dataCompetencia"].ToString())
-                };
-                usuarios.Add(temObjeto);
+                    var ben = TransformaReaderEmListaDeObjeto(reader);
+                    retorno.Add(ben);
+                }
+
+                reader.Close();
+
+                return retorno;
             }
-            reader.Close();
-            return usuarios;
+            catch
+            {
+                throw;
+            }
+        }
+
+        private BeneficioModel TransformaReaderEmListaDeObjeto(SqlDataReader reader)
+        {
+            try
+            {
+                var temObjeto = new BeneficioModel();
+                temObjeto.Numero = long.Parse(reader["Numero"].ToString());
+                temObjeto.IdCliente = long.Parse(reader["ClienteId"].ToString());
+                temObjeto.Salario = float.Parse(reader["Salario"].ToString());
+                temObjeto.DataCompetencia = DateTime.Parse(reader["DataCompetencia"].ToString());
+
+                return temObjeto;
+            }
+            catch
+            {
+                throw;
+            }    
         }
 
     }

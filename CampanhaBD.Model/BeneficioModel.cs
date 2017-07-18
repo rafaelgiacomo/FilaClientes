@@ -20,7 +20,7 @@ namespace CampanhaBD.Model
         public const string PROCEDURE_DELETE = "SP_EXCLUIR_BENEFICIO";
         public const string PROCEDURE_SELECT_ALL = "SP_LISTAR_TODOS_BENEFICIOS";
         public const string PROCEDURE_SELECT_BY_ID = "SP_SELECIONAR_BENEFICIO_ID";
-        public const string PROCEDURE_SELECT_BY_CLIENTE_ID = "SP_SELECIONAR_BENEFICIO_CLIENTE_ID";
+        public const string PROCEDURE_SELECT_BY_CLIENTE_ID = "SP_LISTAR_BENEFICIO_CLIENTE_ID";
         public const string COLUMN_NUMERO = "Numero";
         public const string COLUMN_CLIENTE_ID = "ClienteId";
         public const string COLUMN_SALARIO = "Salario";

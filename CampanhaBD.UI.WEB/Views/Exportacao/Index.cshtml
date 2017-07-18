@@ -1,115 +1,240 @@
-﻿@model CampanhaBD.UI.WEB.ViewModel.ExportacaoViewModel
+﻿@using CampanhaBD.UI.WEB.ViewModel
+
+@model CampanhaBD.UI.WEB.ViewModel.ExportacaoViewModel
 
 @{
     ViewBag.Title = "Exportação";
 }
 
-<h3>Exportação</h3><hr/>
+<h3>Exportação</h3><hr />
 
-<div class="form-horizontal">
+@using (Html.BeginForm("Index", "Exportacao", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
 
-    <div class="row">
+    <div class="form-horizontal">
 
-        <div class="col-md-3">
-            @Html.LabelFor(model => model.CodigoBanco, htmlAttributes: new { @class = "control-label" })<br/>
-            @Html.EditorFor(model => model.CodigoBanco, new { htmlAttributes = new { @class = "form-control" } })
+        <div class="row">
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.LayoutArquivo, htmlAttributes: new { @class = "control-label" })<br />
+                @Html.DropDownListFor(model => model.LayoutArquivo, Model.ListaLayout, null, new { @class = "form-control" })
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.CodigoBanco, htmlAttributes: new { @class = "control-label" })<br />
+                @Html.DropDownListFor(model => model.CodigoBanco, Model.ListaBanco, null, new { @class = "form-control" })
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.MinDataTrabalhado, htmlAttributes: new { @class = "control-label" })<br />
+                @Html.EditorFor(model => model.MinDataTrabalhado, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.MaxDataTrabalhado, htmlAttributes: new { @class = "control-label" })<br />
+                @Html.EditorFor(model => model.MaxDataTrabalhado, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
         </div>
 
-        <div class="col-md-3">
-            @Html.LabelFor(model => model.MinDataTrabalhado, htmlAttributes: new { @class = "control-label" })<br />
-            @Html.EditorFor(model => model.MinDataTrabalhado, new { htmlAttributes = new { @class = "form-control" } })            
+        <div class="row">
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.MinDataNascimento, htmlAttributes: new { @class = "control-label" })<br />
+                @Html.EditorFor(model => model.MinDataNascimento, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.MaxDataNascimento, htmlAttributes: new { @class = "control-label" })<br />
+                @Html.EditorFor(model => model.MaxDataNascimento, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.MinCep, htmlAttributes: new { @class = "control-label" })<br />
+                @Html.EditorFor(model => model.MinCep, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.MaxCep, htmlAttributes: new { @class = "control-label" })<br />
+                @Html.EditorFor(model => model.MaxCep, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
         </div>
 
-        <div class="col-md-3">
-            @Html.LabelFor(model => model.MaxDataTrabalhado, htmlAttributes: new { @class = "control-label" })<br />
-            @Html.EditorFor(model => model.MaxDataTrabalhado, new { htmlAttributes = new { @class = "form-control" } })            
+        <div class="row">
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.MinParcela, htmlAttributes: new { @class = "control-label" })<br />
+                @Html.EditorFor(model => model.MinParcela, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.MaxParcela, htmlAttributes: new { @class = "control-label" })<br />
+                @Html.EditorFor(model => model.MaxParcela, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.MinParcelasPagas, htmlAttributes: new { @class = "control-label" })<br />
+                @Html.EditorFor(model => model.MinParcelasPagas, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.MaxParcelasPagas, htmlAttributes: new { @class = "control-label" })<br />
+                @Html.EditorFor(model => model.MaxParcelasPagas, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
         </div>
+
+        <div class="row">
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.MinDataAtualEmp, htmlAttributes: new { @class = "control-label" }) <br />
+                @Html.EditorFor(model => model.MinDataAtualEmp, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.MaxDataAtualEmp, htmlAttributes: new { @class = "control-label" }) <br />
+                @Html.EditorFor(model => model.MaxDataAtualEmp, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.MinDataAtualTel, htmlAttributes: new { @class = "control-label" }) <br />
+                @Html.EditorFor(model => model.MinDataAtualTel, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.MaxDataAtualTel, htmlAttributes: new { @class = "control-label" }) <br />
+                @Html.EditorFor(model => model.MaxDataAtualTel, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.MinDataInicioPag, htmlAttributes: new { @class = "control-label" }) <br />
+                @Html.EditorFor(model => model.MinDataInicioPag, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.MaxDataInicioPag, htmlAttributes: new { @class = "control-label" }) <br />
+                @Html.EditorFor(model => model.MaxDataInicioPag, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.MinBruto, htmlAttributes: new { @class = "control-label" }) <br />
+                @Html.EditorFor(model => model.MinBruto, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.MaxBruto, htmlAttributes: new { @class = "control-label" }) <br />
+                @Html.EditorFor(model => model.MaxBruto, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.MinLiquido, htmlAttributes: new { @class = "control-label" }) <br />
+                @Html.EditorFor(model => model.MinLiquido, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.MaxLiquido, htmlAttributes: new { @class = "control-label" }) <br />
+                @Html.EditorFor(model => model.MaxLiquido, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Coeficiente, htmlAttributes: new { @class = "control-label" }) <br />
+                @Html.EditorFor(model => model.Coeficiente, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
+        </div>
+
+        <hr /><br />
+
+        <input type="submit" name="submit" value="@BotoesExportacaoViewModel.ExportarPlanilha" class="btn btn-success" />
+        <input type="submit" name="submit" value="@BotoesExportacaoViewModel.ExportarProcessa" class="btn btn-primary" />
+        <input type="reset" value="Limpar" class="btn btn-default" />
 
     </div>
+}
 
-    <br />
+@section Scripts {
+    <link href="~/Scripts/datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/datepicker/js/bootstrap-datepicker.min.js"></script>
 
-    <div class="row">
+    <script>
+        $(document).ready(function () {
+            $('#MinDataTrabalhado').datepicker({
+                format: "dd/mm/yyyy",
+                language: "pt-BR"
+            });
+        });
 
-        <div class="col-md-3">
-            @Html.LabelFor(model => model.MinDataNascimento, htmlAttributes: new { @class = "control-label" })<br/>
-            @Html.EditorFor(model => model.MinDataNascimento, new { htmlAttributes = new { @class = "form-control" } })
-        </div>
+        $(document).ready(function () {
+            $('#MaxDataTrabalhado').datepicker({
+                format: "dd/mm/yyyy",
+                language: "pt-BR"
+            });
+        });
 
-        <div class="col-md-3">
-            @Html.LabelFor(model => model.MaxDataNascimento, htmlAttributes: new { @class = "control-label" })<br/>
-            @Html.EditorFor(model => model.MaxDataNascimento, new { htmlAttributes = new { @class = "form-control" } })            
-        </div>
+        $(document).ready(function () {
+            $('#MinDataNascimento').datepicker({
+                format: "dd/mm/yyyy",
+                language: "pt-BR"
+            });
+        });
 
-        <div class="col-md-3">
-            @Html.LabelFor(model => model.MinCep, htmlAttributes: new { @class = "control-label" })<br />
-            @Html.EditorFor(model => model.MinCep, new { htmlAttributes = new { @class = "form-control" } })
-        </div>
+        $(document).ready(function () {
+            $('#MaxDataNascimento').datepicker({
+                format: "dd/mm/yyyy",
+                language: "pt-BR"
+            });
+        });
 
-        <div class="col-md-3">
-            @Html.LabelFor(model => model.MaxCep, htmlAttributes: new { @class = "control-label" })<br />
-            @Html.EditorFor(model => model.MaxCep, new { htmlAttributes = new { @class = "form-control" } })
-        </div>
+        $(document).ready(function () {
+            $('#MinDataAtualEmp').datepicker({
+                format: "dd/mm/yyyy",
+                language: "pt-BR"
+            });
+        });
 
-    </div>
+        $(document).ready(function () {
+            $('#MaxDataAtualEmp').datepicker({
+                format: "dd/mm/yyyy",
+                language: "pt-BR"
+            });
+        });
 
-    <br />
+        $(document).ready(function () {
+            $('#MinDataAtualTel').datepicker({
+                format: "dd/mm/yyyy",
+                language: "pt-BR"
+            });
+        });
 
-    <div class="row">
+        $(document).ready(function () {
+            $('#MaxDataAtualTel').datepicker({
+                format: "dd/mm/yyyy",
+                language: "pt-BR"
+            });
+        });
 
-        <div class="col-md-3">
-            @Html.LabelFor(model => model.MinParcela, htmlAttributes: new { @class = "control-label" })<br/>
-            @Html.EditorFor(model => model.MinParcela, new { htmlAttributes = new { @class = "form-control" } })
-        </div>
+        $(document).ready(function () {
+            $('#MinDataInicioPag').datepicker({
+                format: "dd/mm/yyyy",
+                language: "pt-BR"
+            });
+        });
 
-        <div class="col-md-3">
-            @Html.LabelFor(model => model.MaxParcela, htmlAttributes: new { @class = "control-label" })<br />
-            @Html.EditorFor(model => model.MaxParcela, new { htmlAttributes = new { @class = "form-control" } })
-        </div>
+        $(document).ready(function () {
+            $('#MaxDataInicioPag').datepicker({
+                format: "dd/mm/yyyy",
+                language: "pt-BR"
+            });
+        });
 
-        <div class="col-md-3">
-            @Html.LabelFor(model => model.MinParcelasPagas, htmlAttributes: new { @class = "control-label" })<br />
-            @Html.EditorFor(model => model.MinParcelasPagas, new { htmlAttributes = new { @class = "form-control" } })
-        </div>
-
-        <div class="col-md-3">
-            @Html.LabelFor(model => model.MaxParcelasPagas, htmlAttributes: new { @class = "control-label" })<br />
-            @Html.EditorFor(model => model.MaxParcelasPagas, new { htmlAttributes = new { @class = "form-control" } })            
-        </div>
-
-    </div>
-
-    <br />
-
-    <div class="row">
-
-        <div class="col-md-3">
-            @Html.LabelFor(model => model.MinDataAtualEmp, htmlAttributes: new { @class = "control-label" }) <br/>
-            @Html.EditorFor(model => model.MinDataAtualEmp, new { htmlAttributes = new { @class = "form-control" } })
-        </div>
-
-        <div class="col-md-3">
-            @Html.LabelFor(model => model.MaxDataAtualTel, htmlAttributes: new { @class = "control-label" }) <br />
-            @Html.EditorFor(model => model.MaxDataAtualTel, new { htmlAttributes = new { @class = "form-control" } })
-        </div>
-
-        <div class="col-md-3">
-            @Html.LabelFor(model => model.MinDataAtualTel, htmlAttributes: new { @class = "control-label" }) <br />
-            @Html.EditorFor(model => model.MinDataAtualTel, new { htmlAttributes = new { @class = "form-control" } })
-        </div>
-
-        <div class="col-md-3">
-            @Html.LabelFor(model => model.MaxDataAtualTel, htmlAttributes: new { @class = "control-label" }) <br />
-            @Html.EditorFor(model => model.MaxDataAtualTel, new { htmlAttributes = new { @class = "form-control" } }) 
-        </div>
-
-    </div>
-
-    <hr/><br />
-
-    <input type="submit" value="Exportar Processa" class="btn btn-primary" />
-    <input type="submit" value="Exportar Telefone" class="btn btn-warning" />
-    <input type="submit" value="Exportar Panorama" class="btn btn-success" />
-    <input type="reset" value="Limpar" class="btn btn-default" />
-
-</div>
+    </script>
+}

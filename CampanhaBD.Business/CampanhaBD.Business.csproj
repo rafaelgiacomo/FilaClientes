@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExportacaoBusiness.cs" />
+    <Compile Include="AtualizacaoBusiness.cs" />
     <Compile Include="ImportacaoBusiness.cs" />
     <Compile Include="ClienteBusiness.cs" />
     <Compile Include="BancoBusiness.cs" />
@@ -57,6 +59,10 @@
     <ProjectReference Include="..\CampanhaBD.RepositoryADO\CampanhaBD.RepositoryADO.csproj">
       <Project>{d6bd3fe6-7c73-4629-ac88-0caecd9dc16f}</Project>
       <Name>CampanhaBD.RepositoryADO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CampanhaBD.Util\CampanhaBD.Util.csproj">
+      <Project>{4d166322-e2a4-4dcf-af65-ee7cb8b2a45f}</Project>
+      <Name>CampanhaBD.Util</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

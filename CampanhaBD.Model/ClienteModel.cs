@@ -27,7 +27,7 @@ namespace CampanhaBD.Model
 
         public string Telefone { get; set; }
 
-        public DateTime DataNascimento { get; set; }
+        public string DataNascimento { get; set; }
 
         public string Logradouro { get; set; }
 
@@ -37,19 +37,15 @@ namespace CampanhaBD.Model
 
         public string Cep { get; set; }
 
-        public bool TelAtualizado { get; set; }
+        public string DataTelAtualizado { get; set; }
 
-        public bool EmpAtualizado { get; set; }
+        public string DataEmpAtualizado { get; set; }
 
-        public bool Trabalhado { get; set; }
+        public string DataTrabalhado { get; set; }
 
-        public DateTime DataTelAtualizado { get; set; }
+        public string DataImportado { get; set; }
 
-        public DateTime DataEmpAtualizado { get; set; }
-
-        public DateTime DataTrabalhado { get; set; }
-
-        public BeneficioModel Beneficio { get; set; }
+        public List<BeneficioModel> Beneficios { get; set; }
 
         public List<EmprestimoModel> Emprestimos { get; set; }
         #endregion
@@ -62,6 +58,9 @@ namespace CampanhaBD.Model
         public const string PROCEDURE_SELECT_BY_IMPORTACAO = "SP_SELECIONAR_CLIENTES_IMPORTACAO";
         public const string PROCEDURE_SELECT_BY_ID = "SP_SELECIONAR_CLIENTE_ID";
         public const string PROCEDURE_SELECT_BY_CPF = "SP_SELECIONAR_CLIENTE_CPF";
+        public const string PROCEDURE_UPDATE_DATA_TRABALHADO = "SP_ATUALIZAR_DATA_TRABALHADO";
+        public const string PROCEDURE_UPDATE_DATA_EMPRESTIMO = "SP_ATUALIZAR_DATA_EMP_ATUALIZADO";
+        public const string PROCEDURE_UPDATE_DATA_TELEFONE = "SP_ATUALIZAR_DATA_TEL_ATUALIZADO";
         public const string COLUMN_ID = "Id";
         public const string COLUMN_IMPORTACAO_ID = "ImportacaoId";
         public const string COLUMN_NOME = "Nome";
@@ -76,9 +75,7 @@ namespace CampanhaBD.Model
         public const string COLUMN_NUMERO = "Numero";
         public const string COLUMN_COMPLEMENTO = "Complemento";
         public const string COLUMN_CEP = "Cep";
-        public const string COLUMN_TEL_ATUALIZADO = "TelAtualizado";
-        public const string COLUMN_EMP_ATUALIZADO = "EmpAtualizados";
-        public const string COLUMN_TRABALHADO = "Trabalhado";
+        public const string COLUMN_DATA_IMPORTADO = "DataImportado";
         public const string COLUMN_DATA_TEL_ATUALIZADO = "DataTelAtualizado";
         public const string COLUMN_DATA_EMP_ATUALIZADOS = "DataEmpAtualizados";
         public const string COLUMN_DATA_TRABALHADO = "DataTrabalhado";
@@ -106,8 +103,9 @@ namespace CampanhaBD.Model
 
         public ClienteModel()
         {
-            Beneficio = new BeneficioModel();
+            Beneficios = new List<BeneficioModel>();
             Emprestimos = new List<EmprestimoModel>();
+            Beneficios.Add(new BeneficioModel());
             Emprestimos.Add(new EmprestimoModel());
         }
 
@@ -124,7 +122,7 @@ namespace CampanhaBD.Model
                         string ano = valor.Substring(0, 4);
                         string mes = valor.Substring(4, 2);
                         string dia = valor.Substring(6, 2);
-                        DataNascimento = DateTime.Parse(dia + "/" + mes + "/" + ano);
+                        DataNascimento = (dia + "/" + mes + "/" + ano);
                         break;
                     case 2:
                         Cpf = valor + Cpf;
@@ -172,11 +170,11 @@ namespace CampanhaBD.Model
                         Cep = valor;
                         break;
                     case 11:
-                        while (valor.Length < 10)
-                        {
-                            valor = "0" + valor;
-                        }
-                        Beneficio.Numero = long.Parse(valor);
+                        //while (valor.Length < 10)
+                        //{
+                        //    valor = "0" + valor;
+                        //}
+                        Beneficios[0].Numero = long.Parse(valor);
                         Emprestimos[0].NumBeneficio = long.Parse(valor);
                         break;
                     case 12:
@@ -199,14 +197,14 @@ namespace CampanhaBD.Model
                         Emprestimos[0].InicioPagamento = DateTime.Parse(diaIni + "/" + mesIni + "/" + anoIni);
                         break;
                     case 17:
-                        Beneficio.Salario = float.Parse(valor);
+                        Beneficios[0].Salario = float.Parse(valor);
                         break;
                     case 18:
                         Complemento = valor;
                         break;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

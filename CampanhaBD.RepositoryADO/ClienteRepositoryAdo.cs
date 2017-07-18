@@ -26,14 +26,14 @@ namespace CampanhaBD.RepositoryADO
                     ClienteModel.COLUMN_UF, ClienteModel.COLUMN_CIDADE, ClienteModel.COLUMN_BAIRRO, ClienteModel.COLUMN_DDD,
                     ClienteModel.COLUMN_TELEFONE, ClienteModel.COLUMN_DATANASCIMENTO, ClienteModel.COLUMN_LOGRADOURO,
                     ClienteModel.COLUMN_NUMERO, ClienteModel.COLUMN_COMPLEMENTO, ClienteModel.COLUMN_CEP,
-                    ClienteModel.COLUMN_TEL_ATUALIZADO, ClienteModel.COLUMN_EMP_ATUALIZADO, ClienteModel.COLUMN_TRABALHADO
+                    ClienteModel.COLUMN_DATA_IMPORTADO
                 };
 
                 object[] values =
                 {
                     entidade.ImportacaoId, entidade.Nome, entidade.Cpf, entidade.Uf, entidade.Cidade, entidade.Bairro,
                     entidade.Ddd, entidade.Telefone, entidade.DataNascimento, entidade.Logradouro, entidade.Numero,
-                    entidade.Complemento, entidade.Cep, entidade.TelAtualizado, entidade.EmpAtualizado, entidade.Trabalhado
+                    entidade.Complemento, entidade.Cep, entidade.DataImportado
                 };
 
                 var reader = _context.ExecuteProcedureWithReturn(
@@ -74,6 +74,75 @@ namespace CampanhaBD.RepositoryADO
             //strQuery += string.Format(" imp_id = '{0}', ", entidade.ImportacaoId);
             //strQuery += string.Format(" WHERE pessoa_id = {0} ", entidade.Id);
             //_context.ExecutaComando(strQuery);
+        }
+
+        public void AtualizarDataTelefone(ClienteModel entidade)
+        {
+            try
+            {
+                string[] parameters =
+                {
+                    ClienteModel.COLUMN_IMPORTACAO_ID, ClienteModel.COLUMN_DATA_TEL_ATUALIZADO
+                };
+
+                object[] values =
+                {
+                    entidade.ImportacaoId, entidade.DataTelAtualizado
+                };
+
+                _context.ExecuteProcedureNoReturn(
+                    ClienteModel.PROCEDURE_UPDATE_DATA_TELEFONE, parameters, values);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public void AtualizarDataEmprestimo(ClienteModel entidade)
+        {
+            try
+            {
+                string[] parameters =
+                {
+                    ClienteModel.COLUMN_IMPORTACAO_ID, ClienteModel.COLUMN_DATA_EMP_ATUALIZADOS
+                };
+
+                object[] values =
+                {
+                    entidade.ImportacaoId, entidade.DataEmpAtualizado
+                };
+
+                _context.ExecuteProcedureNoReturn(
+                    ClienteModel.PROCEDURE_UPDATE_DATA_EMPRESTIMO, parameters, values);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public void AtualizarDataTrabalhado(ClienteModel entidade)
+        {
+            try
+            {
+                string[] parameters =
+                {
+                    ClienteModel.COLUMN_IMPORTACAO_ID, ClienteModel.COLUMN_DATA_TRABALHADO
+                };
+
+                object[] values =
+                {
+                    entidade.ImportacaoId, entidade.DataTrabalhado
+                };
+
+                _context.ExecuteProcedureNoReturn(
+                    ClienteModel.PROCEDURE_UPDATE_DATA_TRABALHADO, parameters, values);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public void AlterarImportacao(ClienteModel entidade)
@@ -135,13 +204,13 @@ namespace CampanhaBD.RepositoryADO
             }
         }
 
-        private ClienteModel TransformaReaderEmObjeto(SqlDataReader reader)
+        public static ClienteModel TransformaReaderEmObjeto(SqlDataReader reader)
         {
             try
             {
                 var temObjeto = new ClienteModel();
                 temObjeto.Id = long.Parse(reader["Id"].ToString());
-                temObjeto.DataNascimento = DateTime.Parse(reader["DataNascimento"].ToString());
+                temObjeto.DataNascimento = reader["DataNascimento"].ToString();
                 temObjeto.Uf = reader["Uf"].ToString();
                 temObjeto.Cidade = reader["Cidade"].ToString();
                 temObjeto.Bairro = reader["Bairro"].ToString();
@@ -150,10 +219,13 @@ namespace CampanhaBD.RepositoryADO
                 temObjeto.Logradouro = reader["Logradouro"].ToString();
                 temObjeto.Cep = reader["Cep"].ToString();
                 temObjeto.Numero = reader["Numero"].ToString();
-                temObjeto.Trabalhado = bool.Parse(reader["Trabalhado"].ToString());
                 temObjeto.Complemento = reader["Complemento"].ToString();
                 temObjeto.Cpf = reader["Cpf"].ToString();
                 temObjeto.ImportacaoId = int.Parse(reader["ImportacaoId"].ToString());
+                temObjeto.DataTrabalhado = reader["DataTrabalhado"].ToString();
+                temObjeto.DataEmpAtualizado = reader["DataEmpAtualizados"].ToString();
+                temObjeto.DataTelAtualizado = reader["DataTelAtualizado"].ToString();
+                temObjeto.DataImportado = reader["DataImportado"].ToString();
 
                 return temObjeto;
             }

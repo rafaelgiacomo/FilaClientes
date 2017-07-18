@@ -45,7 +45,7 @@ namespace CampanhaBD.UI.WEB.Controllers
             {
                 if (viewModel.File != null)
                 {
-                    string caminho = Path.Combine(Server.MapPath("~/Content/Uploads"), viewModel.File.FileName);
+                    string caminho = Path.Combine(Server.MapPath("~/Content/Importados"), viewModel.File.FileName);
                     viewModel.File.SaveAs(caminho);
 
                     ImportacaoModel imp = new ImportacaoModel();
@@ -158,10 +158,11 @@ namespace CampanhaBD.UI.WEB.Controllers
                 vet[ClienteModel.INDICE_COMPLEMENTO] = model.Complemento - 1;
                 return vet;
             }
-            catch (Exception ex)
+            catch
             {
                 throw;
             }
         }
+
     }
 }
