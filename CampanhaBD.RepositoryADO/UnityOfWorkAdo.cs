@@ -17,6 +17,9 @@ namespace CampanhaBD.RepositoryADO
         private CampanhaRepositoryAdo _campanhaRepository;
         private BeneficioRepositoryAdo _beneficioRepository;
         private EmprestimoRepositoryAdo _emprestimoRepository;
+        private ConsultaProcessaRepositoryAdo _consultaRepository;
+        private ConsultaDadosProcessaRepositoryAdo _consultaDadosRepository;
+        private SaldoRefinProcessaRepositoryAdo _saldoRefinRepository;
         #pragma warning restore 649
 
         private UnityOfWorkAdo(string connectionString)
@@ -91,5 +94,21 @@ namespace CampanhaBD.RepositoryADO
         {
             get { return (_emprestimoRepository ?? new EmprestimoRepositoryAdo(_context)); }
         }
+
+        public ConsultaProcessaRepositoryAdo ConsultasProcessa
+        {
+            get { return (_consultaRepository ?? new ConsultaProcessaRepositoryAdo(_context)); }
+        }
+
+        public ConsultaDadosProcessaRepositoryAdo ConsultasDadosProcessa
+        {
+            get { return (_consultaDadosRepository ?? new ConsultaDadosProcessaRepositoryAdo(_context)); }
+        }
+
+        public SaldoRefinProcessaRepositoryAdo SaldosRefinProcessa
+        {
+            get { return (_saldoRefinRepository ?? new SaldoRefinProcessaRepositoryAdo(_context)); }
+        }
+
     }
 }

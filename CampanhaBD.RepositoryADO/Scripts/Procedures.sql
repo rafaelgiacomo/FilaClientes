@@ -420,12 +420,7 @@ AS
 BEGIN
 	DECLARE @NumEmprestimo INT 
 
-	SET @NumEmprestimo = (SELECT COUNT(*) FROM [Emprestimo] WHERE [ClienteId] = @ClienteId AND [NumBeneficio] = @NumBeneficio)
-
-	IF(@NumEmprestimo IS NULL)
-		SET @NumEmprestimo = 1
-	ELSE
-		SET @NumEmprestimo = @NumEmprestimo + 1
+	SET @NumEmprestimo = (SELECT (COUNT(*) + 1) FROM [Emprestimo] WHERE [ClienteId] = @ClienteId AND [NumBeneficio] = @NumBeneficio)
 
 	INSERT INTO [Emprestimo] ([ClienteId], [NumBeneficio], [NumEmprestimo], [ValorParcela], [ParcelasNoContrato], [ParcelasEmAberto], [Saldo], [InicioPagamento], [BancoId])
 	VALUES (@ClienteId, @NumBeneficio, @NumEmprestimo, @ValorParcela, @ParcelasNoContrato, @ParcelasEmAberto, @Saldo, @InicioPagamento, @BancoId)

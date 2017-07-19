@@ -3,10 +3,10 @@ GO
 
 create table Usuario(
 	[Id] [int] identity(1,1),
-	[Nome] [text],
-	[Email] [text],
-	[Login] [text],
-	[Senha] [text],
+	[Nome] [varchar](max),
+	[Email] [varchar](max),
+	[Login] [varchar](max),
+	[Senha] [varchar](max),
 	CONSTRAINT [PK_dbo.Usuario] PRIMARY KEY CLUSTERED
 	(
 		[Id] ASC
@@ -16,7 +16,7 @@ GO
 
 create table Banco(
 	[Codigo] [int],
-	[Nome] [text],
+	[Nome] [varchar](max),
 	CONSTRAINT [PK_dbo.Banco] PRIMARY KEY CLUSTERED
 	(
 		[Codigo] ASC
@@ -27,12 +27,12 @@ GO
 create table Importacao(
 	[Id] [int] identity(1,1),
 	[UsuarioId] [int],
-	[Nome] [text],
+	[Nome] [varchar](max),
 	[Data] [date],
 	[Terminado] [bit],
 	[NumImportados] [int],
 	[NumAtualizados] [int],
-	[CaminhoArquivo] [text],
+	[CaminhoArquivo] [varchar](max),
 	CONSTRAINT [PK_dbo.Importacao] PRIMARY KEY CLUSTERED
 	(
 		[Id] ASC
@@ -43,17 +43,17 @@ GO
 create table Cliente(
 	[Id] [bigint] identity(1,1),
 	[ImportacaoId] [int],
-	[Nome] [text],
+	[Nome] [varchar](max),
 	[Cpf] [nvarchar](15) UNIQUE NONCLUSTERED,
 	[Uf] [varchar](3),
-	[Cidade] [text],
-	[Bairro] [text],
+	[Cidade] [varchar](max),
+	[Bairro] [varchar](max),
 	[Ddd] [varchar](3),
 	[Telefone] [nvarchar](16),
 	[DataNascimento] [date],
-	[Logradouro] [text],
+	[Logradouro] [varchar](max),
 	[Numero] [varchar](7),
-	[Complemento] [text],
+	[Complemento] [varchar](max),
 	[Cep] [varchar](11),
 	[DataImportado] [datetime],
 	[DataTelAtualizado] [datetime],
@@ -100,7 +100,7 @@ GO
 create table Campanha(
 	[Id] [int] identity(1,1),
 	[UsuarioId] [int],
-	[Nome] [text],
+	[Nome] [varchar](max),
 	[MinParcela] [float],
 	[MaxParcela] [float],
 	[MinInicioPag] [varchar](10),

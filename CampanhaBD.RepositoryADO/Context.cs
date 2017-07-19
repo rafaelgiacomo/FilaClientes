@@ -143,6 +143,19 @@ namespace CampanhaBD.RepositoryADO
             }
         }
 
+        public void MudarBase(string nomeBase)
+        {
+            try
+            {
+                myConnection.ChangeDatabase(nomeBase);
+            }
+            catch
+            {
+                throw;
+            }
+            
+        }
+
         public void Dispose()
         {
             if (myConnection.State == ConnectionState.Open)

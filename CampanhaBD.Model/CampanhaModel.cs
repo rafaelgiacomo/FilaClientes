@@ -36,9 +36,9 @@ namespace CampanhaBD.Model
 
         public string MaxDataTrabalhado { get; set; }
 
-        public int MinParcelasPagas { get; set; }
+        public int MinParcelasEmAberto { get; set; }
 
-        public int MaxParcelasPagas { get; set; }
+        public int MaxParcelasEmAberto { get; set; }
 
         public string MinDataInicioPag { get; set; }
 

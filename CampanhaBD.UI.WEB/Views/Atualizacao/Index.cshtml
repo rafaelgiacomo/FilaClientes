@@ -10,19 +10,30 @@
 
 @using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    <div class="form-group">
-            @Html.LabelFor(model => model.LayoutArquivo, htmlAttributes: new { @class = "control-label" })<br />
-            @Html.DropDownListFor(model => model.LayoutArquivo, Model.ListaLayout, null, new { @class = "form-control" })
-    </div>
+    <div class="form-horizontal">
 
-    <div class="form-group">
-        <input type="file" class="btn btn-file" name="File" id="File" />
-    </div>
+        <div class="row">
 
-    <p class="text-red">@ViewBag.Mensagem</p>
+            <div class="form-group">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.LayoutArquivo, htmlAttributes: new { @class = "control-label" })<br />
+                    @Html.DropDownListFor(model => model.LayoutArquivo, Model.ListaLayout, null, new { @class = "form-control" })
+                </div>
 
-    <div class="box-footer">
-        <input type="submit" class="btn btn-primary" name="submit" value="Salvar" />
-        @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-info pull-right" })
+                <div class="col-md-3">
+                    <input type="file" class="btn btn-file" name="File" id="File" />
+                </div>
+
+            </div>
+
+        </div>
+
+        <p class="text-red">@ViewBag.Mensagem</p>
+
+        <div class="box-footer">
+            <input type="submit" class="btn btn-primary" name="submit" value="Salvar" />
+            @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-info pull-right" })
+        </div>
+
     </div>
 }

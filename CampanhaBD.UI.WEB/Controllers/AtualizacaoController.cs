@@ -47,7 +47,7 @@ namespace CampanhaBD.UI.WEB.Controllers
 
                     if (viewModel.LayoutArquivo == LayoutArquivoModel.CODIGO_PROCESSA)
                     {
-                        _atuBus.AtualizarEmprestimos(caminho);
+                        _atuBus.AtualizarEmprestimosProcessaPlanilha(caminho);
                     }
 
                     return View();

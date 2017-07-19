@@ -17,6 +17,16 @@
         <div class="row">
 
             <div class="col-md-3">
+                @Html.LabelFor(model => model.Nome, htmlAttributes: new { @class = "control-label" })<br />
+                @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Nome)
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-3">
                 @Html.LabelFor(model => model.LayoutArquivo, htmlAttributes: new { @class = "control-label" })<br />
                 @Html.DropDownListFor(model => model.LayoutArquivo, Model.ListaLayout, null, new { @class = "form-control" })
             </div>
@@ -24,6 +34,7 @@
             <div class="col-md-3">
                 @Html.LabelFor(model => model.CodigoBanco, htmlAttributes: new { @class = "control-label" })<br />
                 @Html.DropDownListFor(model => model.CodigoBanco, Model.ListaBanco, null, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CodigoBanco)
             </div>
 
             <div class="col-md-3">
@@ -75,13 +86,13 @@
             </div>
 
             <div class="col-md-3">
-                @Html.LabelFor(model => model.MinParcelasPagas, htmlAttributes: new { @class = "control-label" })<br />
-                @Html.EditorFor(model => model.MinParcelasPagas, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.LabelFor(model => model.MinParcelasEmAberto, htmlAttributes: new { @class = "control-label" })<br />
+                @Html.EditorFor(model => model.MinParcelasEmAberto, new { htmlAttributes = new { @class = "form-control" } })
             </div>
 
             <div class="col-md-3">
-                @Html.LabelFor(model => model.MaxParcelasPagas, htmlAttributes: new { @class = "control-label" })<br />
-                @Html.EditorFor(model => model.MaxParcelasPagas, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.LabelFor(model => model.MaxParcelasEmAberto, htmlAttributes: new { @class = "control-label" })<br />
+                @Html.EditorFor(model => model.MaxParcelasEmAberto, new { htmlAttributes = new { @class = "form-control" } })
             </div>
 
         </div>
@@ -162,6 +173,7 @@
 }
 
 @section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
     <link href="~/Scripts/datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
     <script src="~/Scripts/datepicker/js/bootstrap-datepicker.min.js"></script>
 

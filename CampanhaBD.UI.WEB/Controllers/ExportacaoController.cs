@@ -42,12 +42,12 @@ namespace CampanhaBD.UI.WEB.Controllers
         {
             try
             {
-                //Botão exportar planilha
+                CampanhaModel campanha = viewModel.ViewModelParaCampanha();
+
+                #region Exportar Planilha
                 if (BotoesExportacaoViewModel.ExportarPlanilha.Equals(viewModel.Submit))
                 {
                     string caminho = Path.Combine(Server.MapPath("~/Content/Exportados"), "Exportacao" + ".csv");
-
-                    CampanhaModel campanha = viewModel.ViewModelParaCampanha();
 
                     if (viewModel.LayoutArquivo == LayoutArquivoModel.CODIGO_PROCESSA)
                     {
@@ -55,13 +55,15 @@ namespace CampanhaBD.UI.WEB.Controllers
                     }
                     return File(caminho, "text/CSV", "Teste.csv");
                 }
+                #endregion
 
-                //Botão exportar Processa
+                #region Exportar Processa
                 if (BotoesExportacaoViewModel.ExportarProcessa.Equals(viewModel.Submit))
                 {
-                    _expBus.ExportarProcessa();
-                    return View();
+                    _expBus.ExportarProcessa(campanha);
+                    return View(viewModel);
                 }
+                #endregion
 
                 return RedirectToAction("Erro");                
             }
@@ -70,11 +72,6 @@ namespace CampanhaBD.UI.WEB.Controllers
                 TempData["mensagem"] = ex.Message;
                 return RedirectToAction("Erro");
             }
-        }
-
-        public void ExportarProcessa()
-        {
-
         }
 
     }

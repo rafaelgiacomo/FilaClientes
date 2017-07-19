@@ -9,7 +9,11 @@ namespace CampanhaBD.UI.WEB.ViewModel
     public class ExportacaoViewModel
     {
         #region Propriedades
-        [Required]
+        [Required(ErrorMessage = "Digite um nome para a exportação")]
+        [Display(Name = "Nome da Exportação")]
+        public string Nome { get; set; }
+
+        [Required(ErrorMessage = "Escolha um banco para a exportação")]
         [Display(Name = "Banco")]
         public int CodigoBanco { get; set; }
 
@@ -49,11 +53,11 @@ namespace CampanhaBD.UI.WEB.ViewModel
         [Display(Name = "Max Data Trabalhado")]
         public string MaxDataTrabalhado { get; set; }
 
-        [Display(Name = "Min Qtd Parcelas Pagas")]
-        public int MinParcelasPagas { get; set; }
+        [Display(Name = "Min Qtd Parcelas Aberto")]
+        public int MinParcelasEmAberto { get; set; }
 
-        [Display(Name = "Max Qtd Parcelas Pagas")]
-        public int MaxParcelasPagas { get; set; }
+        [Display(Name = "Max Qtd Parcelas Aberto")]
+        public int MaxParcelasEmAberto { get; set; }
 
         [Display(Name = "Min Data Inicio Pagamento")]
         public string MinDataInicioPag { get; set; }
@@ -79,7 +83,7 @@ namespace CampanhaBD.UI.WEB.ViewModel
         [Display(Name = "Coeficiente")]
         public float Coeficiente { get; set; }
 
-        public int Submit { get; set; }
+        public string Submit { get; set; }
 
         [Display(Name = "Banco")]
         public SelectList ListaBanco { get; set; }
@@ -112,6 +116,7 @@ namespace CampanhaBD.UI.WEB.ViewModel
             {
                 CampanhaModel campanha = new CampanhaModel();
 
+                campanha.Nome = Nome;
                 campanha.CodigoBanco = CodigoBanco;
                 campanha.MinDataNascimento = MinDataNascimento;
                 campanha.MaxDataNascimento = MaxDataNascimento;
@@ -125,8 +130,8 @@ namespace CampanhaBD.UI.WEB.ViewModel
                 campanha.MaxDataAtualTel = MaxDataAtualTel;
                 campanha.MinDataTrabalhado = MinDataTrabalhado;
                 campanha.MaxDataTrabalhado = MaxDataTrabalhado;
-                campanha.MinParcelasPagas = MinParcelasPagas;
-                campanha.MaxParcelasPagas = MaxParcelasPagas;
+                campanha.MinParcelasEmAberto = MinParcelasEmAberto;
+                campanha.MaxParcelasEmAberto = MaxParcelasEmAberto;
                 campanha.MinDataInicioPag = MinDataInicioPag;
                 campanha.MaxDataInicioPag = MaxDataInicioPag;
                 campanha.MinBruto = MinBruto;

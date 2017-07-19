@@ -61,8 +61,8 @@ namespace CampanhaBD.UI.WEB.ViewModel
                 MaxParcela = this.MaxParcela,
                 //MinInicioPag = this.MinInicioPag,
                 //MaxInicioPag = this.MaxInicioPag,
-                MinParcelasPagas = this.MinParcelasPagas,
-                MaxParcelasPagas = this.MaxParcelasPagas,
+                MinParcelasEmAberto = this.MinParcelasPagas,
+                MaxParcelasEmAberto = this.MaxParcelasPagas,
                 //MinDataNascimento = this.MinDataNascimento,
                 //ApenasNaoExportados = this.ApenasNaoExportados,
                 MinCep = this.MinCep,
@@ -81,8 +81,8 @@ namespace CampanhaBD.UI.WEB.ViewModel
             MaxParcela = campanha.MaxParcela;
             //MinInicioPag = campanha.MinInicioPag;
             //MaxInicioPag = campanha.MaxInicioPag;
-            MinParcelasPagas = campanha.MinParcelasPagas;
-            MaxParcelasPagas = campanha.MaxParcelasPagas;
+            MinParcelasPagas = campanha.MinParcelasEmAberto;
+            MaxParcelasPagas = campanha.MaxParcelasEmAberto;
             //MinDataNascimento = campanha.MinDataNascimento;
             //ApenasNaoExportados = campanha.ApenasNaoExportados;
             MinCep = campanha.MinCep;

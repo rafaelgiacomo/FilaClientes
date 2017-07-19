@@ -32,7 +32,7 @@ namespace CampanhaBD.Business
             }
         }
 
-        public void AtualizarEmprestimos(string caminho)
+        public void AtualizarEmprestimosProcessaPlanilha(string caminho)
         {
             StreamReader stream = new StreamReader(caminho);
             try
@@ -94,6 +94,18 @@ namespace CampanhaBD.Business
             {
                 stream.Close();
             }            
+        }
+
+        public void AtualizarEmprestimosProcessa(int consulta)
+        {
+            try
+            {
+
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public int[] criaVetorValores()

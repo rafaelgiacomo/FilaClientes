@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CampanhaBD.Model
 {
-    public class ConsultaProcessa
+    public class ConsultaProcessaModel
     {
         #region Propriedades
         public int Consulta { get; set; }

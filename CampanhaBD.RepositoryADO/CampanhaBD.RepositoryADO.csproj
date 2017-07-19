@@ -54,7 +54,9 @@
     <Compile Include="CampanhaRepositoryAdo.cs" />
     <Compile Include="CampanhaImportacaoRepositoryAdo.cs" />
     <Compile Include="ClienteRepositoryAdo.cs" />
-    <Compile Include="ConsultaRepositoryAdo.cs" />
+    <Compile Include="Processa\SaldoRefinProcessaRepositoryAdo.cs" />
+    <Compile Include="Processa\ConsultaDadosProcessaRepositoryAdo.cs" />
+    <Compile Include="Processa\ConsultaProcessaRepositoryAdo.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="EmprestimoRepositoryAdo.cs" />
     <Compile Include="ImportacaoRepositoryAdo.cs" />

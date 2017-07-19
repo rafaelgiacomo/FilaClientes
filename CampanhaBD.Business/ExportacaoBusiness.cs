@@ -28,7 +28,7 @@ namespace CampanhaBD.Business
         {
             try
             {
-                List<ClienteModel> lista = _core.UnityOfWorkAdo.Campanhas.ExportarFiltro(campanha);
+                List<ClienteModel> lista = _core.UnityOfWorkAdo.Campanhas.ExportarProcessaFiltro(campanha);
                 string[] cabecalho = { "BENEFICIO", "DATA_NASCIMENTO", "CPF", "NOME", "ESPECIE", "UF", "IDENTFICACAO_CLIENTE",
                 "STATUS", "OK" };
 
@@ -71,9 +71,25 @@ namespace CampanhaBD.Business
         {
             try
             {
-                List<ClienteModel> lista = _core.UnityOfWorkAdo.Campanhas.ExportarFiltro(campanha);
+                List<ClienteModel> listaClientes = _core.UnityOfWorkAdo.Campanhas.ExportarProcessaFiltro(campanha);
 
+                ConsultaProcessaModel consultaProcessa = new ConsultaProcessaModel();
+                consultaProcessa.Descricao = campanha.Nome;
 
+                _core.UnityOfWorkAdo.ConsultasProcessa.InserirConsulta(consultaProcessa);
+
+                foreach (ClienteModel cl in listaClientes)
+                {
+                    ConsultaDadosProcessaModel dados = new ConsultaDadosProcessaModel();
+
+                    dados.Consulta = consultaProcessa.Consulta;
+                    dados.Beneficio = cl.Beneficios[0].Numero.ToString();
+                    dados.DataNascimento = cl.DataNascimento;
+                    dados.Cpf = cl.Cpf;
+                    dados.Nome = cl.Nome;
+
+                    _core.UnityOfWorkAdo.ConsultasDadosProcessa.InserirConsultaDados(dados);
+                }
             }
             catch
             {

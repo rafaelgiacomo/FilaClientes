@@ -95,12 +95,12 @@ namespace CampanhaBD.RepositoryADO
             return new CampanhaModel();
         }
 
-        public List<ClienteModel> ExportarFiltro(CampanhaModel campanha)
+        public List<ClienteModel> ExportarProcessaFiltro(CampanhaModel campanha)
         {
             try
             {
                 List<ClienteModel> lista = new List<ClienteModel>();
-                string sql = GerarSqlFiltro(campanha);
+                string sql = GerarSqlFiltroProcessa(campanha);
 
                 var reader = _context.ExecuteSqlCommandWithReturn(sql);
 
@@ -108,25 +108,15 @@ namespace CampanhaBD.RepositoryADO
                 {
                     ClienteModel cl = new ClienteModel();
 
-                    cl.Beneficios[0].Numero = long.Parse(reader[BeneficioModel.COLUMN_NUMERO].ToString());
+                    cl.Beneficios[0].Numero = long.Parse(reader[EmprestimoModel.COLUMN_NUM_BENEFICIO].ToString());
                     cl.Cpf = reader[ClienteModel.COLUMN_CPF].ToString();
                     cl.Nome = reader[ClienteModel.COLUMN_NOME].ToString();
                     cl.DataNascimento = Convert.ToDateTime(reader[ClienteModel.COLUMN_DATANASCIMENTO].ToString()).ToString("dd/MM/yyyy");
-                    cl.Uf = reader[ClienteModel.COLUMN_UF].ToString();
-                    cl.Cidade = reader[ClienteModel.COLUMN_CIDADE].ToString();
-                    cl.Bairro = reader[ClienteModel.COLUMN_BAIRRO].ToString();
-                    cl.Cep = reader[ClienteModel.COLUMN_CEP].ToString();
-                    cl.Logradouro = reader[ClienteModel.COLUMN_LOGRADOURO].ToString();
-                    cl.Ddd = reader[ClienteModel.COLUMN_DDD].ToString();
-                    cl.Telefone = reader[ClienteModel.COLUMN_TELEFONE].ToString();
-                    cl.Emprestimos[0].BancoId = int.Parse(reader[EmprestimoModel.COLUMN_BANCO_ID].ToString());
-                    cl.Emprestimos[0].ParcelasNoContrato = int.Parse(reader[EmprestimoModel.COLUMN_PARCELAS_NO_CONTRATO].ToString());
-                    cl.Emprestimos[0].Saldo = float.Parse(reader[EmprestimoModel.COLUMN_SALDO].ToString());
-                    cl.Emprestimos[0].InicioPagamento = Convert.ToDateTime(reader[EmprestimoModel.COLUMN_INICIO_PAGAMENTO].ToString());
-                    cl.Emprestimos[0].ValorParcela = float.Parse(reader[EmprestimoModel.COLUMN_VALOR_PARCELA].ToString());
 
                     lista.Add(cl);
                 }
+
+                reader.Close();
 
                 return lista;
             }
@@ -136,14 +126,12 @@ namespace CampanhaBD.RepositoryADO
             }            
         }
 
-        private string GerarSqlFiltro(CampanhaModel campanha)
+        private string GerarSqlFiltroProcessa(CampanhaModel campanha)
         {
             try
             {
-                string sql_command = "SELECT b.Numero, c.Cpf, c.Nome, c.DataNascimento, c.Uf, c.Cidade, c.Bairro, c.Cep, "
-                + "c.Logradouro, c.Ddd, c.Telefone, e.BancoId, e.ParcelasNoContrato, e.Saldo, e.InicioPagamento, e.ValorParcela "
-                + "from Cliente c, Emprestimo e, Beneficio b "
-                + "where c.Id = e.ClienteId and b.ClienteId = c.Id ";
+                string sql_command = "SELECT DISTINCT e.NumBeneficio, c.Cpf, c.Nome, c.DataNascimento "
+                + "from Cliente c, Emprestimo e where c.Id = e.ClienteId ";
 
                 if (campanha.MinParcela != 0)
                 {
@@ -157,14 +145,14 @@ namespace CampanhaBD.RepositoryADO
                         + " >= e.ValorParcela ";
                 }
 
-                if (campanha.MinParcelasPagas != 0)
+                if (campanha.MinParcelasEmAberto != 0)
                 {
-                    sql_command += "and " + "'" + campanha.MinParcelasPagas + "'" + " <= e.ParcelasPagas ";
+                    sql_command += "and " + "'" + campanha.MinParcelasEmAberto + "'" + " <= e.ParcelasEmAberto ";
                 }
 
-                if (campanha.MaxParcelasPagas != 0)
+                if (campanha.MaxParcelasEmAberto != 0)
                 {
-                    sql_command += "and " + "'" + campanha.MaxParcelasPagas + "'" + " >= e.ParcelasPagas ";
+                    sql_command += "and " + "'" + campanha.MaxParcelasEmAberto + "'" + " >= e.ParcelasEmAberto ";
                 }
 
                 if (campanha.MinDataInicioPag != null)
@@ -292,7 +280,6 @@ namespace CampanhaBD.RepositoryADO
             //reader.Close();
             //return usuarios;
         }
-
 
     }
 }
