@@ -366,6 +366,21 @@ BEGIN
 END
 GO
 
+--Terminar Importação
+--===============================================
+IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_TERMINAR_IMPORTACAO]')
+	AND OBJECTPROPERTY(ID, N'IsProcedure') = 1)
+	DROP PROCEDURE [DBO].[SP_TERMINAR_IMPORTACAO]
+GO
+
+CREATE PROCEDURE [DBO].[SP_TERMINAR_IMPORTACAO]
+	@Id int
+AS
+BEGIN
+	UPDATE [Importacao] SET [Terminado] = 1 WHERE [Id] = @Id
+END
+GO
+
 --====================================================== PROCEDURES TABELA Emprestimo =======================================================================
 
 --Excluir Emprestimos do Beneficio
@@ -380,6 +395,8 @@ CREATE PROCEDURE [DBO].[SP_EXCLUIR_EMPRESTIMO_BENEFICIO]
 	@BancoId int
 AS
 BEGIN
+
+	
 	DELETE FROM [Emprestimo] WHERE [NumBeneficio] = @NumBeneficio AND [BancoId] = @BancoId
 END
 GO
@@ -435,28 +452,24 @@ IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_SALVAR_
 GO
 
 CREATE PROCEDURE [DBO].[SP_SALVAR_EMPRESTIMO_PROCESSA]
+	@ClienteId bigint,
 	@NumBeneficio bigint,
-	@ValorParcela float,
+	@ValorParcela float = null,
 	@ParcelasNoContrato int = null,
 	@ParcelasEmAberto int = null,
 	@Saldo float = null,
 	@InicioPagamento date = null,
-	@BancoId int
+	@BancoId int = null
 AS
 BEGIN
-	DECLARE @NumEmprestimo INT, @ClienteId BIGINT
-	
-	SET @ClienteId = (SELECT [ClienteId] FROM [Beneficio] WHERE [Numero] = @NumBeneficio)  
+	DECLARE @NumEmprestimo INT
 
-	SET @NumEmprestimo = (SELECT COUNT(*) FROM [Emprestimo] WHERE [ClienteId] = @ClienteId AND [NumBeneficio] = @NumBeneficio)
-
-	IF(@NumEmprestimo IS NULL)
-		SET @NumEmprestimo = 1
-	ELSE
-		SET @NumEmprestimo = @NumEmprestimo + 1
+	SET @NumEmprestimo = (SELECT (COUNT(*) + 1) FROM [Emprestimo] WHERE [ClienteId] = @ClienteId AND [NumBeneficio] = @NumBeneficio)
 
 	INSERT INTO [Emprestimo] ([ClienteId], [NumBeneficio], [NumEmprestimo], [ValorParcela], [ParcelasNoContrato], [ParcelasEmAberto], [Saldo], [InicioPagamento], [BancoId])
 	VALUES (@ClienteId, @NumBeneficio, @NumEmprestimo, @ValorParcela, @ParcelasNoContrato, @ParcelasEmAberto, @Saldo, @InicioPagamento, @BancoId)
+
+	UPDATE [Cliente] SET [DataEmpAtualizados] = CONVERT(date, GETDATE()) WHERE [Id] = @ClienteId
 END
 GO
 

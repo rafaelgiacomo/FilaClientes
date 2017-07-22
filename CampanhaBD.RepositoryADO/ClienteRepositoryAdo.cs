@@ -170,10 +170,30 @@ namespace CampanhaBD.RepositoryADO
 
         public ClienteModel ListarPorId(ClienteModel entidade)
         {
-            return new ClienteModel();
-            //var strQuery = string.Format(" SELECT * FROM Cliente WHERE pessoa_id = {0} ", id);
-            //var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
-            //return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
+            try
+            {
+                ClienteModel retorno = null;
+
+                string[] parameters = { ClienteModel.COLUMN_ID };
+
+                object[] values = { entidade.Id };
+
+                var reader = _context.ExecuteProcedureWithReturn(
+                    ClienteModel.PROCEDURE_SELECT_BY_ID, parameters, values);
+
+                if (reader.Read())
+                {
+                    retorno = TransformaReaderEmObjeto(reader);
+                }
+
+                reader.Close();
+
+                return retorno;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public ClienteModel ListarPorCpf(ClienteModel entidade)
@@ -210,6 +230,7 @@ namespace CampanhaBD.RepositoryADO
             {
                 var temObjeto = new ClienteModel();
                 temObjeto.Id = long.Parse(reader["Id"].ToString());
+                temObjeto.Nome = reader["Id"].ToString();
                 temObjeto.DataNascimento = reader["DataNascimento"].ToString();
                 temObjeto.Uf = reader["Uf"].ToString();
                 temObjeto.Cidade = reader["Cidade"].ToString();
@@ -222,10 +243,31 @@ namespace CampanhaBD.RepositoryADO
                 temObjeto.Complemento = reader["Complemento"].ToString();
                 temObjeto.Cpf = reader["Cpf"].ToString();
                 temObjeto.ImportacaoId = int.Parse(reader["ImportacaoId"].ToString());
-                temObjeto.DataTrabalhado = reader["DataTrabalhado"].ToString();
-                temObjeto.DataEmpAtualizado = reader["DataEmpAtualizados"].ToString();
-                temObjeto.DataTelAtualizado = reader["DataTelAtualizado"].ToString();
-                temObjeto.DataImportado = reader["DataImportado"].ToString();
+
+                var dataTrabalhado = reader["DataTrabalhado"].ToString();
+                var dataEmpAtualizado = reader["DataEmpAtualizados"].ToString();
+                var dataTelAtualizado = reader["DataTelAtualizado"].ToString();
+                var dataImportado = reader["DataImportado"].ToString();
+
+                if (!"".Equals(dataTrabalhado))
+                {
+                    temObjeto.DataTrabalhado = Convert.ToDateTime(dataTrabalhado).ToString("dd/MM/yyy");
+                }
+
+                if (!"".Equals(dataEmpAtualizado))
+                {
+                    temObjeto.DataEmpAtualizado = Convert.ToDateTime(dataEmpAtualizado).ToString("dd/MM/yyy");
+                }
+
+                if (!"".Equals(dataTelAtualizado))
+                {
+                    temObjeto.DataTelAtualizado = Convert.ToDateTime(dataTelAtualizado).ToString("dd/MM/yyy");
+                }
+
+                if (!"".Equals(dataImportado))
+                {
+                    temObjeto.DataImportado = Convert.ToDateTime(dataImportado).ToString("dd/MM/yyy");
+                }
 
                 return temObjeto;
             }

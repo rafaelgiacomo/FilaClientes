@@ -80,9 +80,6 @@ namespace CampanhaBD.RepositoryADO
                     entidade.Consulta = Convert.ToInt32(reader[ConsultaProcessaModel.COLUMN_CONSULTA]);
                     entidade.Descricao = reader[ConsultaProcessaModel.COLUMN_DESCRICAO].ToString();
                     entidade.Data = reader[ConsultaProcessaModel.COLUMN_DATA].ToString();
-                    entidade.Integracao = reader[ConsultaProcessaModel.COLUMN_INTEGRACAO].ToString();
-                    entidade.SafraUsuario = reader[ConsultaProcessaModel.COLUMN_SAFRA_USUARIO].ToString();
-                    entidade.SafraSenha = reader[ConsultaProcessaModel.COLUMN_SAFRA_SENHA].ToString();
 
                     lista.Add(entidade);
                 }

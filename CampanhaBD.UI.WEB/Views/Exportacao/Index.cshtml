@@ -1,6 +1,6 @@
 ﻿@using CampanhaBD.UI.WEB.ViewModel
 
-@model CampanhaBD.UI.WEB.ViewModel.ExportacaoViewModel
+@model ExportacaoViewModel
 
 @{
     ViewBag.Title = "Exportação";
@@ -86,6 +86,20 @@
             </div>
 
             <div class="col-md-3">
+                @Html.LabelFor(model => model.MinParcelasContrato, htmlAttributes: new { @class = "control-label" })<br />
+                @Html.EditorFor(model => model.MinParcelasContrato, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.MaxParcelasContrato, htmlAttributes: new { @class = "control-label" })<br />
+                @Html.EditorFor(model => model.MaxParcelasContrato, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-3">
                 @Html.LabelFor(model => model.MinParcelasEmAberto, htmlAttributes: new { @class = "control-label" })<br />
                 @Html.EditorFor(model => model.MinParcelasEmAberto, new { htmlAttributes = new { @class = "form-control" } })
             </div>
@@ -93,6 +107,16 @@
             <div class="col-md-3">
                 @Html.LabelFor(model => model.MaxParcelasEmAberto, htmlAttributes: new { @class = "control-label" })<br />
                 @Html.EditorFor(model => model.MaxParcelasEmAberto, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.MinParcelasPagas, htmlAttributes: new { @class = "control-label" })<br />
+                @Html.EditorFor(model => model.MinParcelasPagas, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.MaxParcelasPagas, htmlAttributes: new { @class = "control-label" })<br />
+                @Html.EditorFor(model => model.MaxParcelasPagas, new { htmlAttributes = new { @class = "form-control" } })
             </div>
 
         </div>
@@ -165,8 +189,8 @@
 
         <hr /><br />
 
-        <input type="submit" name="submit" value="@BotoesExportacaoViewModel.ExportarPlanilha" class="btn btn-success" />
-        <input type="submit" name="submit" value="@BotoesExportacaoViewModel.ExportarProcessa" class="btn btn-primary" />
+        <input type="submit" name="Submit" value="@BotoesViewModel.ExportarPlanilha" class="btn btn-success" />
+        <input type="submit" name="Submit" value="@BotoesViewModel.ExportarProcessa" class="btn btn-primary" />
         <input type="reset" value="Limpar" class="btn btn-default" />
 
     </div>

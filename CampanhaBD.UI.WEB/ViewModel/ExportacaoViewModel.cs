@@ -53,11 +53,23 @@ namespace CampanhaBD.UI.WEB.ViewModel
         [Display(Name = "Max Data Trabalhado")]
         public string MaxDataTrabalhado { get; set; }
 
+        [Display(Name = "Min Qtd Parcelas Contrato")]
+        public int MinParcelasContrato { get; set; }
+
+        [Display(Name = "Max Qtd Parcelas Contrato")]
+        public int MaxParcelasContrato { get; set; }
+
         [Display(Name = "Min Qtd Parcelas Aberto")]
         public int MinParcelasEmAberto { get; set; }
 
         [Display(Name = "Max Qtd Parcelas Aberto")]
         public int MaxParcelasEmAberto { get; set; }
+
+        [Display(Name = "Min Qtd Parcelas Pagas")]
+        public int MinParcelasPagas { get; set; }
+
+        [Display(Name = "Max Qtd Parcelas Pagas")]
+        public int MaxParcelasPagas { get; set; }
 
         [Display(Name = "Min Data Inicio Pagamento")]
         public string MinDataInicioPag { get; set; }
@@ -139,6 +151,10 @@ namespace CampanhaBD.UI.WEB.ViewModel
                 campanha.MinLiquido = MinLiquido;
                 campanha.MaxLiquido = MaxLiquido;
                 campanha.Coeficiente = Coeficiente;
+                campanha.MinParcelasPagas = MinParcelasPagas;
+                campanha.MaxParcelasPagas = MaxParcelasPagas;
+                campanha.MinParcelasContrato = MinParcelasContrato;
+                campanha.MaxParcelasPagas = MaxParcelasPagas;
 
                 return campanha;
 

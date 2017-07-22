@@ -32,6 +32,20 @@ namespace CampanhaBD.Business
             }
         }
 
+        public List<ConsultaProcessaModel> ListaConsultasProcessa()
+        {
+            try
+            {
+                var listaRetorno = _core.UnityOfWorkAdo.ConsultasProcessa.ListarTodos();
+
+                return listaRetorno;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public void AtualizarEmprestimosProcessaPlanilha(string caminho)
         {
             StreamReader stream = new StreamReader(caminho);
@@ -100,7 +114,54 @@ namespace CampanhaBD.Business
         {
             try
             {
+                List<SaldoRefinProcessaModel> listaSaldoRefin = null;
+                SaldoRefinProcessaModel saldoRefin = new SaldoRefinProcessaModel();
+                string cpf = "";
+                saldoRefin.Consulta = consulta;
 
+                listaSaldoRefin = _core.UnityOfWorkAdo.SaldosRefinProcessa.ListarEmprestimosDeConsulta(saldoRefin);
+
+                foreach (SaldoRefinProcessaModel saldo in listaSaldoRefin)
+                {
+                    BeneficioModel benBusca = new BeneficioModel();
+                    EmprestimoModel emp = new EmprestimoModel();
+
+                    if (!"".Equals(saldo.Matricula))
+                    {
+                        try
+                        {
+                            benBusca.Numero = long.Parse(saldo.Matricula);
+                        }
+                        catch
+                        {
+                            benBusca.Numero = 0;
+                        }
+
+                        if (benBusca.Numero != 0)
+                        {
+                            benBusca = _core.UnityOfWorkAdo.Beneficios.ListarPorId(benBusca);
+
+                            if (benBusca != null)
+                            {
+                                emp.BancoId = int.Parse(saldo.CodigoBanco);
+                                emp.NumBeneficio = benBusca.Numero;
+                                emp.ParcelasNoContrato = saldo.ParcelasContrato;
+                                emp.ParcelasEmAberto = saldo.ParcelasAberto;
+                                emp.ValorParcela = saldo.ValorParcela;
+                                emp.Saldo = saldo.SaldoRefin;
+                                emp.ClienteId = benBusca.IdCliente;
+
+                                if (!cpf.Equals(saldo.Cpf))
+                                {
+                                    _core.UnityOfWorkAdo.Emprestimos.ExcluirPorBeneficio(emp);
+                                }
+
+                                cpf = saldo.Cpf;                               
+                                _core.UnityOfWorkAdo.Emprestimos.InserirProcessa(emp);
+                            }
+                        }                        
+                    }                                                      
+                }
             }
             catch
             {

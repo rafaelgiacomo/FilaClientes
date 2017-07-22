@@ -80,7 +80,7 @@ namespace CampanhaBD.RepositoryADO
             }
         }
 
-        public List<BeneficioModel> ListarPorClienteId(BeneficioModel entidade)
+        public List<BeneficioModel> ListarPorClienteId(long clienteId)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace CampanhaBD.RepositoryADO
                 var retorno = new List<BeneficioModel>();
 
                 string[] parameters = { ClienteModel.COLUMN_ID };
-                object[] values = { entidade.IdCliente };
+                object[] values = { clienteId };
 
                 reader = _context.ExecuteProcedureWithReturn(
                     BeneficioModel.PROCEDURE_SELECT_BY_CLIENTE_ID, parameters, values);

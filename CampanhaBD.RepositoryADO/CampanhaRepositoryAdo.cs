@@ -95,12 +95,12 @@ namespace CampanhaBD.RepositoryADO
             return new CampanhaModel();
         }
 
-        public List<ClienteModel> ExportarProcessaFiltro(CampanhaModel campanha)
+        public List<ClienteModel> FiltroExportacao(CampanhaModel campanha)
         {
             try
             {
                 List<ClienteModel> lista = new List<ClienteModel>();
-                string sql = GerarSqlFiltroProcessa(campanha);
+                string sql = GerarSqlFiltro(campanha);
 
                 var reader = _context.ExecuteSqlCommandWithReturn(sql);
 
@@ -109,9 +109,15 @@ namespace CampanhaBD.RepositoryADO
                     ClienteModel cl = new ClienteModel();
 
                     cl.Beneficios[0].Numero = long.Parse(reader[EmprestimoModel.COLUMN_NUM_BENEFICIO].ToString());
+                    cl.Id = long.Parse(reader[ClienteModel.COLUMN_ID].ToString());
                     cl.Cpf = reader[ClienteModel.COLUMN_CPF].ToString();
-                    cl.Nome = reader[ClienteModel.COLUMN_NOME].ToString();
-                    cl.DataNascimento = Convert.ToDateTime(reader[ClienteModel.COLUMN_DATANASCIMENTO].ToString()).ToString("dd/MM/yyyy");
+
+                    var dataNasc = reader[ClienteModel.COLUMN_DATANASCIMENTO].ToString();
+
+                    if (!"".Equals(dataNasc))
+                    {
+                        cl.DataNascimento = Convert.ToDateTime(dataNasc).ToString("dd/MM/yyyy");
+                    }       
 
                     lista.Add(cl);
                 }
@@ -126,11 +132,11 @@ namespace CampanhaBD.RepositoryADO
             }            
         }
 
-        private string GerarSqlFiltroProcessa(CampanhaModel campanha)
+        private string GerarSqlFiltro(CampanhaModel campanha)
         {
             try
             {
-                string sql_command = "SELECT DISTINCT e.NumBeneficio, c.Cpf, c.Nome, c.DataNascimento "
+                string sql_command = "SELECT DISTINCT e.NumBeneficio, c.Id, c.Cpf, c.DataNascimento, c.Nome "
                 + "from Cliente c, Emprestimo e where c.Id = e.ClienteId ";
 
                 if (campanha.MinParcela != 0)
@@ -143,6 +149,28 @@ namespace CampanhaBD.RepositoryADO
                 {
                     sql_command += "and " + "'" + campanha.MaxParcela.ToString().Replace(',', '.') + "'" 
                         + " >= e.ValorParcela ";
+                }
+
+                if (campanha.MinParcelasPagas != 0)
+                {
+                    sql_command += "and " + "'" + campanha.MinParcelasPagas + "'" 
+                        + " <= (e.ParcelasNoContrato - e.ParcelasEmAberto) ";
+                }
+
+                if (campanha.MaxParcelasPagas != 0)
+                {
+                    sql_command += "and " + "'" + campanha.MaxParcelasPagas 
+                        + "'" + " >= (e.ParcelasNoContrato - e.ParcelasEmAberto) ";
+                }
+
+                if (campanha.MinParcelasContrato != 0)
+                {
+                    sql_command += "and " + "'" + campanha.MinParcelasContrato + "'" + " <= e.ParcelasNoContrato ";
+                }
+
+                if (campanha.MaxParcelasContrato != 0)
+                {
+                    sql_command += "and " + "'" + campanha.MaxParcelasContrato + "'" + " >= e.ParcelasNoContrato ";
                 }
 
                 if (campanha.MinParcelasEmAberto != 0)

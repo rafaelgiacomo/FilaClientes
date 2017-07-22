@@ -102,11 +102,37 @@ namespace CampanhaBD.RepositoryADO
             }
         }
 
-        public void Terminar(int id, int usuarioId)
+        public void Terminar(ImportacaoModel entidade)
         {
-            //string strQuery = string.Format(" UPDATE Importacao SET terminado = 'true' WHERE imp_id = '{0}' and usuario_id = '{1}'",
-            //    id, usuarioId);
-            //_context.ExecutaComando(strQuery);
+            try
+            {
+                string[] parameters =
+                {
+                    ImportacaoModel.COLUMN_ID
+                };
+
+                object[] values =
+                {
+                    entidade.Id
+                };
+
+                var reader = _context.ExecuteProcedureWithReturn(
+                    ImportacaoModel.PROCEDURE_TERMINAR, parameters, values);
+
+                if (reader.Read())
+                {
+                    var ultimoId = reader[0].ToString();
+
+                    if (!String.IsNullOrEmpty(ultimoId))
+                        entidade.Id = Convert.ToInt32(ultimoId);
+                }
+
+                reader.Close();
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public ImportacaoModel ListarPorId(ImportacaoModel entidade)

@@ -61,7 +61,7 @@ namespace CampanhaBD.Model
         #region Colunas e Procs
         public const string PROCEDURE_SELECT_BY_CONSULTA = "SP_LISTAR_EMPRESTIMOS_CONSULTA";
         public const string COLUMN_CONSULTA = "Consulta";
-        public const string COLUMN_CPF = "Descricao";
+        public const string COLUMN_CPF = "CPF";
         public const string COLUMN_TIPO = "Tipo";
         public const string COLUMN_BANCO = "Banco";
         public const string COLUMN_CODIGO_BANCO = "Codigo_Banco";

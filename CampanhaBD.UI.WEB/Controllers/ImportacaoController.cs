@@ -93,16 +93,6 @@ namespace CampanhaBD.UI.WEB.Controllers
                 viewModel.UsuarioId = imp.UsuarioId;
                 viewModel.ImpId = impId;
                 viewModel.Colunas = linhaSeparada;
-                viewModel.NumBeneficio = 1;
-                viewModel.Nome = 2;
-                viewModel.DataNascimento = 3;
-                viewModel.Cpf = 4;
-                viewModel.Uf = 15;
-                viewModel.Cidade = 14;
-                viewModel.Bairro = 13;
-                viewModel.DataNascimento = 3;
-                viewModel.Logradouro = 12;
-                viewModel.Cep = 16;
 
                 stream.Close();
                 return View(viewModel);

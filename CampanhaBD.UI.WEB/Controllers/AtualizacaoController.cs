@@ -24,7 +24,9 @@ namespace CampanhaBD.UI.WEB.Controllers
         {
             try
             {
-                AtualizarViewModel viewModel = new AtualizarViewModel();
+                var listaConsultasProcessa = _atuBus.ListaConsultasProcessa();
+
+                AtualizarViewModel viewModel = new AtualizarViewModel(listaConsultasProcessa);
 
                 return View(viewModel);
             }
@@ -40,23 +42,35 @@ namespace CampanhaBD.UI.WEB.Controllers
         {
             try
             {
-                if (viewModel.File != null)
+                #region Atualizar Planilha
+                if (BotoesViewModel.AtualizarPlanilha.Equals(viewModel.Submit))
                 {
-                    string caminho = Path.Combine(Server.MapPath("~/Content/Atualizados"), viewModel.File.FileName);
-                    viewModel.File.SaveAs(caminho);
-
-                    if (viewModel.LayoutArquivo == LayoutArquivoModel.CODIGO_PROCESSA)
+                    if (viewModel.File != null)
                     {
-                        _atuBus.AtualizarEmprestimosProcessaPlanilha(caminho);
+                        string caminho = Path.Combine(Server.MapPath("~/Content/Atualizados"), viewModel.File.FileName);
+                        viewModel.File.SaveAs(caminho);
+
+                        if (viewModel.LayoutArquivo == LayoutArquivoModel.CODIGO_PROCESSA)
+                        {
+                            _atuBus.AtualizarEmprestimosProcessaPlanilha(caminho);
+                        }
+
                     }
 
-                    return View();
+                    return RedirectToAction("Index");
                 }
-                else
+                #endregion
+
+                #region Atualizar Processa
+                if (BotoesViewModel.AtualizarProcessa.Equals(viewModel.Submit))
                 {
-                    ViewBag.Mensagem = "Adicione uma planilha para atualização";
+                    _atuBus.AtualizarEmprestimosProcessa(viewModel.ConsultaProcessa);
+
+                    return RedirectToAction("Index");
                 }
-                return View();
+                #endregion
+
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {

@@ -45,23 +45,35 @@ namespace CampanhaBD.UI.WEB.Controllers
                 CampanhaModel campanha = viewModel.ViewModelParaCampanha();
 
                 #region Exportar Planilha
-                if (BotoesExportacaoViewModel.ExportarPlanilha.Equals(viewModel.Submit))
+                if (BotoesViewModel.ExportarPlanilha.Equals(viewModel.Submit))
                 {
-                    string caminho = Path.Combine(Server.MapPath("~/Content/Exportados"), "Exportacao" + ".csv");
+                    string caminho = Path.Combine(Server.MapPath("~/Content/Exportados"), viewModel.Nome + ".csv");
 
                     if (viewModel.LayoutArquivo == LayoutArquivoModel.CODIGO_PROCESSA)
                     {
                         _expBus.ExportarPlanilhaProcessa(campanha, caminho);
                     }
-                    return File(caminho, "text/CSV", "Teste.csv");
+
+                    if (viewModel.LayoutArquivo == LayoutArquivoModel.CODIGO_PANORAMA)
+                    {
+                        _expBus.ExportarPlanilhaPanorama(campanha, caminho);
+                    }
+
+                    if (viewModel.LayoutArquivo == LayoutArquivoModel.CODIGO_TELEFONE)
+                    {
+                        _expBus.ExportarPlanilhaTelefone(campanha, caminho);
+                    }
+
+                    return File(caminho, "text/CSV", viewModel.Nome + ".csv");
                 }
                 #endregion
 
                 #region Exportar Processa
-                if (BotoesExportacaoViewModel.ExportarProcessa.Equals(viewModel.Submit))
+                if (BotoesViewModel.ExportarProcessa.Equals(viewModel.Submit))
                 {
                     _expBus.ExportarProcessa(campanha);
-                    return View(viewModel);
+
+                    return RedirectToAction("Index");
                 }
                 #endregion
 

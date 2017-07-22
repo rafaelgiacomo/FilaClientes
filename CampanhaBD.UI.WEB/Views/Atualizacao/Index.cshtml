@@ -1,39 +1,70 @@
-﻿@model CampanhaBD.UI.WEB.ViewModel.AtualizarViewModel
+﻿@using CampanhaBD.UI.WEB.ViewModel
+
+@model AtualizarViewModel
 
 @{
     ViewBag.Title = "Atualização";
 }
 
 <div class="box-header with-border">
-    <h3 class="box-title">Selecione os arquivos a serem importados (.csv)</h3>
+    <h3 class="box-title">Atualização de Dados do Cliente</h3>
 </div>
 
-@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Index", "Atualizacao", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <div class="form-horizontal">
 
         <div class="row">
 
-            <div class="form-group">
-                <div class="col-md-3">
-                    @Html.LabelFor(model => model.LayoutArquivo, htmlAttributes: new { @class = "control-label" })<br />
-                    @Html.DropDownListFor(model => model.LayoutArquivo, Model.ListaLayout, null, new { @class = "form-control" })
-                </div>
+            <h3 class="box-title">Selecione os arquivos a serem importados (.csv)</h3>
 
-                <div class="col-md-3">
-                    <input type="file" class="btn btn-file" name="File" id="File" />
+        </div>
+
+            <div class="row">
+
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.LayoutArquivo, htmlAttributes: new { @class = "control-label" })<br />
+                        @Html.DropDownListFor(model => model.LayoutArquivo, Model.ListaLayout, null, new { @class = "form-control" })
+                    </div>
+
+                    <div class="col-md-3">
+                        <br />
+                        <input type="file" class="btn btn-file" name="File" id="File" />
+                    </div>
+
+                    <div class="col-md-3">
+                        <br />
+                        <input type="submit" name="Submit" value="@BotoesViewModel.AtualizarPlanilha" class="btn btn-success" />
+                    </div>
+
                 </div>
 
             </div>
 
+            <div class="row">
+
+                <h3 class="box-title">Ou uma consulta do Processa</h3>
+
+            </div>
+
+            <div class="row">
+
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.ListaConsulta, htmlAttributes: new { @class = "control-label" })<br />
+                        @Html.DropDownListFor(model => model.ConsultaProcessa, Model.ListaConsulta, null, new { @class = "form-control" })
+                    </div>
+
+                    <div class="col-md-3">
+                        <br />
+                        <input type="submit" name="Submit" value="@BotoesViewModel.AtualizarProcessa" class="btn btn-primary" />
+                    </div>
+                </div>
+
+            </div>
+
+            <p class="text-red">@ViewBag.Mensagem</p>
+
         </div>
-
-        <p class="text-red">@ViewBag.Mensagem</p>
-
-        <div class="box-footer">
-            <input type="submit" class="btn btn-primary" name="submit" value="Salvar" />
-            @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-info pull-right" })
-        </div>
-
-    </div>
 }

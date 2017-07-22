@@ -68,29 +68,47 @@ namespace CampanhaBD.Business
                     {
                         _core.UnityOfWorkAdo.Clientes.Inserir(cliente);
 
-                        cliente.Beneficios[0].IdCliente = cliente.Id;
-                        cliente.Beneficios[0].DataCompetencia = DateTime.Now;
-                        cliente.Emprestimos[0].ClienteId = cliente.Id;
+                        if (cliente.Beneficios[0].Numero != 0)
+                        {
+                            cliente.Beneficios[0].IdCliente = cliente.Id;
+                            cliente.Beneficios[0].DataCompetencia = DateTime.Now;
+                            cliente.Emprestimos[0].ClienteId = cliente.Id;
 
-                        _core.UnityOfWorkAdo.Beneficios.Inserir(cliente.Beneficios[0]);
-                        _core.UnityOfWorkAdo.Emprestimos.Inserir(cliente.Emprestimos[0]);
+                            _core.UnityOfWorkAdo.Beneficios.Inserir(cliente.Beneficios[0]);
+
+                            if (cliente.Emprestimos[0].BancoId != 0 && cliente.Emprestimos[0].ValorParcela != 0)
+                            {
+                                _core.UnityOfWorkAdo.Emprestimos.Inserir(cliente.Emprestimos[0]);
+                            }
+                        }                      
+                        
                     }
                     else
                     {
-                        var ben = _core.UnityOfWorkAdo.Beneficios.ListarPorId(cliente.Beneficios[0]);
-
-                        if (ben == null)
+                        if (cliente.Beneficios[0].Numero != 0)
                         {
-                            cliente.Beneficios[0].IdCliente = cl.Id;
-                            cliente.Beneficios[0].DataCompetencia = DateTime.Now;
-                            _core.UnityOfWorkAdo.Beneficios.Inserir(cliente.Beneficios[0]);
+                            var ben = _core.UnityOfWorkAdo.Beneficios.ListarPorId(cliente.Beneficios[0]);
+
+                            if (ben == null)
+                            {
+                                cliente.Beneficios[0].IdCliente = cl.Id;
+                                cliente.Beneficios[0].DataCompetencia = DateTime.Now;
+                                _core.UnityOfWorkAdo.Beneficios.Inserir(cliente.Beneficios[0]);
+                            }
+
+                            if (cliente.Emprestimos[0].BancoId != 0 && cliente.Emprestimos[0].ValorParcela != 0)
+                            {
+                                cliente.Emprestimos[0].ClienteId = cl.Id;
+                                _core.UnityOfWorkAdo.Emprestimos.Inserir(cliente.Emprestimos[0]);
+                            }
+
                         }
 
                         _core.UnityOfWorkAdo.Clientes.AlterarImportacao(cliente);
-                        cliente.Emprestimos[0].ClienteId = cl.Id;
-                        _core.UnityOfWorkAdo.Emprestimos.Inserir(cliente.Emprestimos[0]);
                     }
                 }
+
+                _core.UnityOfWorkAdo.Importacoes.Terminar(imp);
             }
             catch
             {
@@ -99,8 +117,7 @@ namespace CampanhaBD.Business
             finally
             {
                 stream.Close();
-            }            
-            //_core.UnityOfWorkAdo.Importacoes.Terminar(imp.Id, imp.UsuarioId);
+            }
         }
 
         public void AlterarImportacao(ImportacaoModel entidade)

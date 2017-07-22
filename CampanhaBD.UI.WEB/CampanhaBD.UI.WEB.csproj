@@ -186,7 +186,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="ViewModel\BotoesExportacaoViewModel.cs" />
+    <Compile Include="ViewModel\BotoesViewModel.cs" />
     <Compile Include="ViewModel\ExportacaoViewModel.cs" />
     <Compile Include="ViewModel\BancoViewModel.cs" />
     <Compile Include="ViewModel\CampanhaViewModel.cs" />
@@ -205,6 +205,8 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Properties\PublishProfiles\CampanhaBD.pubxml" />
+    <None Include="Properties\PublishProfiles\Cred9LocalHost.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

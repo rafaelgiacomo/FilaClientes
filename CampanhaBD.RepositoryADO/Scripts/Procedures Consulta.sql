@@ -32,7 +32,7 @@ CREATE PROCEDURE [DBO].[SP_LISTAR_EMPRESTIMOS_CONSULTA]
 	@Consulta int
 AS
 BEGIN
-	SELECT [CPF], [Matricula], [Tipo], [Codigo_Banco], [Data_Consulta], [Parcelas_Contrato], [Parcelas_Aberto], [Parcelas_Refin], [Valor_Parcela], [Saldo_Contrato],
+	SELECT [CPF], [Matricula], [Tipo], [Codigo_Banco], [Data_Consulta], [Parcelas_Contrato], [Parcelas_Aberto], [Parcelas_Refin], [Valor_Contrato], [Valor_Parcela], [Saldo_Contrato],
 	[Saldo_Refin], [Status], [OK] FROM [Saldo_Refin] WHERE [Consulta] = @Consulta
 END
 GO

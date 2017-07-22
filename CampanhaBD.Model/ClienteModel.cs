@@ -103,6 +103,23 @@ namespace CampanhaBD.Model
 
         public ClienteModel()
         {
+            Nome = String.Empty;
+            Cpf = String.Empty;
+            Uf = String.Empty;
+            Cidade = String.Empty;
+            Bairro = String.Empty;
+            Ddd = String.Empty;
+            Telefone = String.Empty;
+            DataNascimento = String.Empty;
+            Logradouro = String.Empty;
+            Numero = String.Empty;
+            Complemento = String.Empty;
+            Cep = String.Empty;
+            DataTelAtualizado = String.Empty;
+            DataEmpAtualizado = String.Empty;
+            DataTrabalhado = String.Empty;
+            DataImportado = String.Empty;
+
             Beneficios = new List<BeneficioModel>();
             Emprestimos = new List<EmprestimoModel>();
             Beneficios.Add(new BeneficioModel());
@@ -119,17 +136,24 @@ namespace CampanhaBD.Model
                         Nome = valor;
                         break;
                     case 1:
-                        string ano = valor.Substring(0, 4);
-                        string mes = valor.Substring(4, 2);
-                        string dia = valor.Substring(6, 2);
-                        DataNascimento = (dia + "/" + mes + "/" + ano);
+                        if (!"".Equals(valor))
+                        {
+                            var data = Convert.ToDateTime(valor);
+
+                            if (DateTime.Compare(data, DateTime.MinValue) >= 0)
+                            {
+                                DataNascimento = data.ToString("dd/MM/yyyy");
+                            }                            
+                        }
+                        
                         break;
                     case 2:
                         Cpf = valor + Cpf;
+                        Cpf = Cpf.Replace(".", "");
+                        Cpf = Cpf.Replace("-", "");
 
                         //Validando quantidade de dígitos para 11
                         while (Cpf.Length < 11) { Cpf = "0" + Cpf; }
-                        while (Cpf.Length > 11) { Cpf += "0"; }
 
                         break;
                     case 3:
@@ -163,6 +187,7 @@ namespace CampanhaBD.Model
                         Logradouro = valor;
                         break;
                     case 10:
+                        valor = valor.Replace("-", "");
                         while (valor.Length < 8)
                         {
                             valor = "0" + valor;
@@ -170,12 +195,13 @@ namespace CampanhaBD.Model
                         Cep = valor;
                         break;
                     case 11:
-                        //while (valor.Length < 10)
-                        //{
-                        //    valor = "0" + valor;
-                        //}
-                        Beneficios[0].Numero = long.Parse(valor);
-                        Emprestimos[0].NumBeneficio = long.Parse(valor);
+                        if (!"".Equals(valor))
+                        {
+                            valor = valor.Replace(".", "");
+                            valor = valor.Replace("-", "");
+                            Beneficios[0].Numero = long.Parse(valor);
+                            Emprestimos[0].NumBeneficio = long.Parse(valor);
+                        }                        
                         break;
                     case 12:
                         Emprestimos[0].BancoId = Convert.ToInt32(valor);

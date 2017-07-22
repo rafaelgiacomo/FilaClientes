@@ -49,15 +49,16 @@ namespace CampanhaBD.RepositoryADO
             {
                 string[] parameters =
                 {
-                    EmprestimoModel.COLUMN_BANCO_ID,EmprestimoModel.COLUMN_NUM_BENEFICIO,
+                    EmprestimoModel.COLUMN_CLIENTE_ID, EmprestimoModel.COLUMN_BANCO_ID,
+                    EmprestimoModel.COLUMN_NUM_BENEFICIO,
                     EmprestimoModel.COLUMN_VALOR_PARCELA, EmprestimoModel.COLUMN_PARCELAS_NO_CONTRATO,
-                    EmprestimoModel.COLUMN_PARCELAS_EM_ABERTO, EmprestimoModel.COLUMN_SALDO, EmprestimoModel.COLUMN_INICIO_PAGAMENTO
+                    EmprestimoModel.COLUMN_PARCELAS_EM_ABERTO, EmprestimoModel.COLUMN_SALDO
                 };
 
                 object[] values =
                 {
-                    entidade.BancoId, entidade.NumBeneficio, entidade.ValorParcela,
-                    entidade.ParcelasNoContrato, entidade.ParcelasEmAberto, entidade.Saldo, entidade.InicioPagamento
+                    entidade.ClienteId, entidade.BancoId, entidade.NumBeneficio, entidade.ValorParcela,
+                    entidade.ParcelasNoContrato, entidade.ParcelasEmAberto, entidade.Saldo
                 };
 
                 _context.ExecuteProcedureNoReturn(

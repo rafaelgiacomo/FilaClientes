@@ -197,3 +197,42 @@ REFERENCES [dbo].[Usuario] ([Id])
 GO
 ALTER TABLE [dbo].[CampanhaImportacao] CHECK CONSTRAINT [FK_dbo.CampanhaImportacao_dbo.Usuario_UsuarioId]
 GO
+
+
+/****** Criação de Indices ******/
+
+CREATE NONCLUSTERED INDEX [IX_CpfCliente] ON [dbo].[Cliente]
+(
+	[Cpf] ASC
+)
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Data_Atualizacao_Emp] ON [dbo].[Cliente]
+(
+	[DataEmpAtualizados] ASC
+)
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Data_Atualizacao_Tel] ON [dbo].[Cliente]
+(
+	[DataTelAtualizado] ASC
+)
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Data_Trabalhado] ON [dbo].[Cliente]
+(
+	[DataTrabalhado] ASC
+)
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Valor_Parcela] ON [dbo].[Emprestimo]
+(
+	[ValorParcela] ASC
+) 
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ParcelasEmAberto] ON [dbo].[Emprestimo]
+(
+	[ParcelasEmAberto] ASC
+) 
+GO

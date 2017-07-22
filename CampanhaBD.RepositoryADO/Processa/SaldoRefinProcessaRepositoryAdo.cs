@@ -26,8 +26,8 @@ namespace CampanhaBD.RepositoryADO
                 List<SaldoRefinProcessaModel> lista = new List<SaldoRefinProcessaModel>();
                 SqlDataReader reader = null;
 
-                string[] parameters = { };
-                object[] values = { };
+                string[] parameters = { SaldoRefinProcessaModel.COLUMN_CONSULTA };
+                object[] values = { saldoRefin.Consulta };
 
                 _context.MudarBase(NOME_BASE_CONSULTA);
 
@@ -37,7 +37,7 @@ namespace CampanhaBD.RepositoryADO
                 while (reader.Read())
                 {
                     var entidade = new SaldoRefinProcessaModel();
-                    entidade.Consulta = Convert.ToInt32(reader[SaldoRefinProcessaModel.COLUMN_CONSULTA]);
+                    entidade.Consulta = saldoRefin.Consulta;
                     entidade.Cpf = reader[SaldoRefinProcessaModel.COLUMN_CPF].ToString();
                     entidade.CodigoBanco = reader[SaldoRefinProcessaModel.COLUMN_CODIGO_BANCO].ToString();
                     entidade.Matricula = reader[SaldoRefinProcessaModel.COLUMN_MATRICULA].ToString();
