@@ -128,12 +128,12 @@ namespace CampanhaBD.RepositoryADO
             {
                 string[] parameters =
                 {
-                    ClienteModel.COLUMN_IMPORTACAO_ID, ClienteModel.COLUMN_DATA_TRABALHADO
+                    ClienteModel.COLUMN_ID
                 };
 
                 object[] values =
                 {
-                    entidade.ImportacaoId, entidade.DataTrabalhado
+                    entidade.Id
                 };
 
                 _context.ExecuteProcedureNoReturn(
@@ -230,8 +230,7 @@ namespace CampanhaBD.RepositoryADO
             {
                 var temObjeto = new ClienteModel();
                 temObjeto.Id = long.Parse(reader["Id"].ToString());
-                temObjeto.Nome = reader["Id"].ToString();
-                temObjeto.DataNascimento = reader["DataNascimento"].ToString();
+                temObjeto.Nome = reader["Nome"].ToString();
                 temObjeto.Uf = reader["Uf"].ToString();
                 temObjeto.Cidade = reader["Cidade"].ToString();
                 temObjeto.Bairro = reader["Bairro"].ToString();
@@ -244,6 +243,7 @@ namespace CampanhaBD.RepositoryADO
                 temObjeto.Cpf = reader["Cpf"].ToString();
                 temObjeto.ImportacaoId = int.Parse(reader["ImportacaoId"].ToString());
 
+                var dataNascimento = reader["DataNascimento"].ToString();
                 var dataTrabalhado = reader["DataTrabalhado"].ToString();
                 var dataEmpAtualizado = reader["DataEmpAtualizados"].ToString();
                 var dataTelAtualizado = reader["DataTelAtualizado"].ToString();
@@ -267,6 +267,11 @@ namespace CampanhaBD.RepositoryADO
                 if (!"".Equals(dataImportado))
                 {
                     temObjeto.DataImportado = Convert.ToDateTime(dataImportado).ToString("dd/MM/yyy");
+                }
+
+                if (!"".Equals(dataNascimento))
+                {
+                    temObjeto.DataNascimento = Convert.ToDateTime(dataNascimento).ToString("dd/MM/yyy");
                 }
 
                 return temObjeto;

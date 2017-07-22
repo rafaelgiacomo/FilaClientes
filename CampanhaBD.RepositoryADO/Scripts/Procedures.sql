@@ -216,11 +216,10 @@ IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_ATUALIZ
 GO
 
 CREATE PROCEDURE [DBO].[SP_ATUALIZAR_DATA_TRABALHADO]
-	@Id bigint,
-	@DataTrabalhado datetime
+	@Id bigint
 AS
 BEGIN
-	UPDATE [Cliente] SET [DataTrabalhado] = @DataTrabalhado WHERE [Id] = @Id
+	UPDATE [Cliente] SET [DataTrabalhado] = CONVERT(date, GETDATE()) WHERE [Id] = @Id
 END
 GO
 

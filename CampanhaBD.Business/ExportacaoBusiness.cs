@@ -110,6 +110,7 @@ namespace CampanhaBD.Business
                         row.Add(cl.DataTelAtualizado);
                         row.Add(cl.DataTrabalhado);
 
+                        _core.UnityOfWorkAdo.Clientes.AtualizarDataTrabalhado(cl);
                         writer.WriteRow(row);
                     }
 
