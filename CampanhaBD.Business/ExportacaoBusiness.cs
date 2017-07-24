@@ -179,6 +179,7 @@ namespace CampanhaBD.Business
                     dados.Nome = cl.Nome;
 
                     _core.UnityOfWorkAdo.ConsultasDadosProcessa.InserirConsultaDados(dados);
+                    _core.UnityOfWorkAdo.Clientes.AtualizarDataExpProcessa(cl);
                 }
             }
             catch

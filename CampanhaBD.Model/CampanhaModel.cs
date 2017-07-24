@@ -36,6 +36,10 @@ namespace CampanhaBD.Model
 
         public string MaxDataTrabalhado { get; set; }
 
+        public string MinDataExpProcessa { get; set; }
+
+        public string MaxDataExpProcessa { get; set; }
+
         public int MinParcelasContrato { get; set; }
 
         public int MaxParcelasContrato { get; set; }
@@ -62,5 +66,10 @@ namespace CampanhaBD.Model
 
         public float Coeficiente { get; set; }
 
+        public bool NuncaExpProcessa { get; set; }
+
+        public bool NuncaExpTelefone { get; set; }
+
+        public bool NuncaTrabalhado { get; set; }
     }
 }

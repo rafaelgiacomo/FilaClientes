@@ -17,16 +17,6 @@
         <div class="row">
 
             <div class="col-md-3">
-                @Html.LabelFor(model => model.Nome, htmlAttributes: new { @class = "control-label" })<br />
-                @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Nome)
-            </div>
-
-        </div>
-
-        <div class="row">
-
-            <div class="col-md-3">
                 @Html.LabelFor(model => model.LayoutArquivo, htmlAttributes: new { @class = "control-label" })<br />
                 @Html.DropDownListFor(model => model.LayoutArquivo, Model.ListaLayout, null, new { @class = "form-control" })
             </div>
@@ -181,8 +171,43 @@
             </div>
 
             <div class="col-md-3">
+                @Html.LabelFor(model => model.MinDataExpProcessa, htmlAttributes: new { @class = "control-label" }) <br />
+                @Html.EditorFor(model => model.MinDataExpProcessa, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.MaxDataExpProcessa, htmlAttributes: new { @class = "control-label" }) <br />
+                @Html.EditorFor(model => model.MaxDataExpProcessa, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Nome, htmlAttributes: new { @class = "control-label" })<br />
+                @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Nome)
+            </div>
+
+            <div class="col-md-3">
                 @Html.LabelFor(model => model.Coeficiente, htmlAttributes: new { @class = "control-label" }) <br />
                 @Html.EditorFor(model => model.Coeficiente, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.NuncaExpProcessa, htmlAttributes: new { @class = "control-label" }) <br />
+                @Html.EditorFor(model => model.NuncaExpProcessa, new { htmlAttributes = new { @class = "" } })
+            </div>
+
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.NuncaExpTelefone, htmlAttributes: new { @class = "control-label" }) <br />
+                @Html.EditorFor(model => model.NuncaExpTelefone, new { htmlAttributes = new { @class = "" } })
+            </div>
+
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.NuncaTrabalhado, htmlAttributes: new { @class = "control-label" }) <br />
+                @Html.EditorFor(model => model.NuncaTrabalhado, new { htmlAttributes = new { @class = "" } })
             </div>
 
         </div>
@@ -267,6 +292,20 @@
 
         $(document).ready(function () {
             $('#MaxDataInicioPag').datepicker({
+                format: "dd/mm/yyyy",
+                language: "pt-BR"
+            });
+        });
+
+        $(document).ready(function () {
+            $('#MinDataExpProcessa').datepicker({
+                format: "dd/mm/yyyy",
+                language: "pt-BR"
+            });
+        });
+
+        $(document).ready(function () {
+            $('#MaxDataExpProcessa').datepicker({
                 format: "dd/mm/yyyy",
                 language: "pt-BR"
             });

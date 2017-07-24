@@ -192,6 +192,21 @@ BEGIN
 END
 GO
 
+--Atualizar DataExpProcessa
+--===============================================
+IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_ATUALIZAR_DATA_EXP_PROCESSA]')
+	AND OBJECTPROPERTY(ID, N'IsProcedure') = 1)
+	DROP PROCEDURE [DBO].[SP_ATUALIZAR_DATA_EXP_PROCESSA]
+GO
+
+CREATE PROCEDURE [DBO].[SP_ATUALIZAR_DATA_EXP_PROCESSA]
+	@Id bigint
+AS
+BEGIN
+	UPDATE [Cliente] SET [DataExpProcessa] = CONVERT(date, GETDATE()) WHERE [Id] = @Id
+END
+GO
+
 --Atualizar DataEmpAtualizado
 --===============================================
 IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_ATUALIZAR_DATA_EMP_ATUALIZADO]')
@@ -200,11 +215,25 @@ IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_ATUALIZ
 GO
 
 CREATE PROCEDURE [DBO].[SP_ATUALIZAR_DATA_EMP_ATUALIZADO]
-	@Id bigint,
-	@DataEmpAtualizados datetime
+	@Id bigint
 AS
 BEGIN
-	UPDATE [Cliente] SET [DataEmpAtualizados] = @DataEmpAtualizados WHERE [Id] = @Id
+	UPDATE [Cliente] SET [DataEmpAtualizados] = CONVERT(date, GETDATE()) WHERE [Id] = @Id
+END
+GO
+
+--Atualizar DataEmpAtualizado
+--===============================================
+IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_ATUALIZAR_DATA_EXP_PROCESSA]')
+	AND OBJECTPROPERTY(ID, N'IsProcedure') = 1)
+	DROP PROCEDURE [DBO].[SP_ATUALIZAR_DATA_EXP_PROCESSA]
+GO
+
+CREATE PROCEDURE [DBO].[SP_ATUALIZAR_DATA_EXP_PROCESSA]
+	@Id bigint
+AS
+BEGIN
+	UPDATE [Cliente] SET [DataExpProcessa] = CONVERT(date, GETDATE()) WHERE [Id] = @Id
 END
 GO
 

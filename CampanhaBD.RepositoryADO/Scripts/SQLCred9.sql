@@ -55,6 +55,7 @@ create table Cliente(
 	[Numero] [varchar](7),
 	[Complemento] [varchar](max),
 	[Cep] [varchar](11),
+	[DataExpProcessa] [datetime],
 	[DataImportado] [datetime],
 	[DataTelAtualizado] [datetime],
 	[DataEmpAtualizados] [datetime],
@@ -222,6 +223,12 @@ GO
 CREATE NONCLUSTERED INDEX [IX_Data_Trabalhado] ON [dbo].[Cliente]
 (
 	[DataTrabalhado] ASC
+)
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Data_Exp_Processa] ON [dbo].[Cliente]
+(
+	[DataExpProcessa] ASC
 )
 GO
 

@@ -37,6 +37,8 @@ namespace CampanhaBD.Model
 
         public string Cep { get; set; }
 
+        public string DataExpProcessa { get; set; }
+
         public string DataTelAtualizado { get; set; }
 
         public string DataEmpAtualizado { get; set; }
@@ -58,6 +60,7 @@ namespace CampanhaBD.Model
         public const string PROCEDURE_SELECT_BY_IMPORTACAO = "SP_SELECIONAR_CLIENTES_IMPORTACAO";
         public const string PROCEDURE_SELECT_BY_ID = "SP_SELECIONAR_CLIENTE_ID";
         public const string PROCEDURE_SELECT_BY_CPF = "SP_SELECIONAR_CLIENTE_CPF";
+        public const string PROCEDURE_UPDATE_DATA_EXP_PROCESSA = "SP_ATUALIZAR_DATA_EXP_PROCESSA";
         public const string PROCEDURE_UPDATE_DATA_TRABALHADO = "SP_ATUALIZAR_DATA_TRABALHADO";
         public const string PROCEDURE_UPDATE_DATA_EMPRESTIMO = "SP_ATUALIZAR_DATA_EMP_ATUALIZADO";
         public const string PROCEDURE_UPDATE_DATA_TELEFONE = "SP_ATUALIZAR_DATA_TEL_ATUALIZADO";
@@ -119,6 +122,7 @@ namespace CampanhaBD.Model
             DataEmpAtualizado = String.Empty;
             DataTrabalhado = String.Empty;
             DataImportado = String.Empty;
+            DataExpProcessa = String.Empty;
 
             Beneficios = new List<BeneficioModel>();
             Emprestimos = new List<EmprestimoModel>();

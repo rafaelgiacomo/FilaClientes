@@ -38,8 +38,14 @@ namespace CampanhaBD.UI.WEB.ViewModel
         [Display(Name = "Min Data Emprestimos Atualizados")]
         public string MinDataAtualEmp { get; set; }
 
-        [Display(Name = "Min Data Emprestimos Atualizados")]
+        [Display(Name = "Max Data Emprestimos Atualizados")]
         public string MaxDataAtualEmp { get; set; }
+
+        [Display(Name = "Min Data Exportado Processa")]
+        public string MinDataExpProcessa { get; set; }
+
+        [Display(Name = "Max Data Exportado Processa")]
+        public string MaxDataExpProcessa { get; set; }
 
         [Display(Name = "Min Data Telefone Atualizado")]
         public string MinDataAtualTel { get; set; }
@@ -94,6 +100,15 @@ namespace CampanhaBD.UI.WEB.ViewModel
 
         [Display(Name = "Coeficiente")]
         public float Coeficiente { get; set; }
+
+        [Display(Name = "Nunca Exp Processa")]
+        public bool NuncaExpProcessa { get; set; }
+
+        [Display(Name = "Nunca Exp Telefone")]
+        public bool NuncaExpTelefone { get; set; }
+
+        [Display(Name = "Nunca Trabalhados")]
+        public bool NuncaTrabalhado { get; set; }
 
         public string Submit { get; set; }
 
@@ -155,6 +170,11 @@ namespace CampanhaBD.UI.WEB.ViewModel
                 campanha.MaxParcelasPagas = MaxParcelasPagas;
                 campanha.MinParcelasContrato = MinParcelasContrato;
                 campanha.MaxParcelasPagas = MaxParcelasPagas;
+                campanha.MinDataExpProcessa = MinDataExpProcessa;
+                campanha.MaxDataExpProcessa = MaxDataExpProcessa;
+                campanha.NuncaExpProcessa = NuncaExpProcessa;
+                campanha.NuncaExpTelefone = NuncaExpTelefone;
+                campanha.NuncaTrabalhado = NuncaTrabalhado;
 
                 return campanha;
 

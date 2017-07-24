@@ -111,6 +111,7 @@ namespace CampanhaBD.RepositoryADO
                     cl.Beneficios[0].Numero = long.Parse(reader[EmprestimoModel.COLUMN_NUM_BENEFICIO].ToString());
                     cl.Id = long.Parse(reader[ClienteModel.COLUMN_ID].ToString());
                     cl.Cpf = reader[ClienteModel.COLUMN_CPF].ToString();
+                    cl.Nome = reader[ClienteModel.COLUMN_NOME].ToString();
 
                     var dataNasc = reader[ClienteModel.COLUMN_DATANASCIMENTO].ToString();
 
@@ -139,6 +140,8 @@ namespace CampanhaBD.RepositoryADO
                 string sql_command = "SELECT DISTINCT e.NumBeneficio, c.Id, c.Cpf, c.DataNascimento, c.Nome "
                 + "from Cliente c, Emprestimo e where c.Id = e.ClienteId ";
 
+                #region Valor Parcela
+
                 if (campanha.MinParcela != 0)
                 {
                     sql_command += "and " + "'" + campanha.MinParcela.ToString().Replace(',', '.') + "'" 
@@ -150,6 +153,10 @@ namespace CampanhaBD.RepositoryADO
                     sql_command += "and " + "'" + campanha.MaxParcela.ToString().Replace(',', '.') + "'" 
                         + " >= e.ValorParcela ";
                 }
+
+                #endregion
+
+                #region Parcelas pagas
 
                 if (campanha.MinParcelasPagas != 0)
                 {
@@ -163,6 +170,10 @@ namespace CampanhaBD.RepositoryADO
                         + "'" + " >= (e.ParcelasNoContrato - e.ParcelasEmAberto) ";
                 }
 
+                #endregion
+
+                #region Parcelas no contrato
+
                 if (campanha.MinParcelasContrato != 0)
                 {
                     sql_command += "and " + "'" + campanha.MinParcelasContrato + "'" + " <= e.ParcelasNoContrato ";
@@ -172,6 +183,10 @@ namespace CampanhaBD.RepositoryADO
                 {
                     sql_command += "and " + "'" + campanha.MaxParcelasContrato + "'" + " >= e.ParcelasNoContrato ";
                 }
+
+                #endregion
+
+                #region Parcelas em aberto
 
                 if (campanha.MinParcelasEmAberto != 0)
                 {
@@ -183,6 +198,10 @@ namespace CampanhaBD.RepositoryADO
                     sql_command += "and " + "'" + campanha.MaxParcelasEmAberto + "'" + " >= e.ParcelasEmAberto ";
                 }
 
+                #endregion
+
+                #region Data Inicio Pagamento
+
                 if (campanha.MinDataInicioPag != null)
                 {
                     sql_command += "and " + "'" + campanha.MinDataInicioPag + "'" + " <= e.InicioPagamento ";
@@ -192,6 +211,10 @@ namespace CampanhaBD.RepositoryADO
                 {
                     sql_command += "and " + "'" + campanha.MaxDataInicioPag + "'" + " >= e.InicioPagamento ";
                 }
+
+                #endregion
+
+                #region Data Nascimento
 
                 if (campanha.MinDataNascimento != null)
                 {
@@ -203,15 +226,52 @@ namespace CampanhaBD.RepositoryADO
                     sql_command += "and " + "'" + campanha.MaxDataNascimento + "'" + " >= c.DataNascimento ";
                 }
 
-                if (campanha.MinDataAtualTel != null)
+                #endregion
+
+                #region Data Exportados Processa
+
+                if (campanha.NuncaExpProcessa)
                 {
-                    sql_command += "and " + "'" + campanha.MinDataAtualTel + "'" + " <= c.DataTelAtualizado ";
+                    sql_command += "and c.DataExpProcessa IS NULL ";
+                }
+                else
+                {
+                    if (campanha.MinDataExpProcessa != null)
+                    {
+                        sql_command += "and " + "'" + campanha.MinDataExpProcessa + "'" + " <= c.DataExpProcessa ";
+                    }
+
+                    if (campanha.MaxDataExpProcessa != null)
+                    {
+                        sql_command += "and " + "'" + campanha.MaxDataExpProcessa + "'" + " >= c.DataExpProcessa ";
+                    }
+
                 }
 
-                if (campanha.MaxDataAtualTel != null)
-                { 
-                    sql_command += "and " + "'" + campanha.MaxDataAtualTel + "'" + " >= c.DataTelAtualizado ";
+                #endregion
+
+                #region Data Telefones Atualizados
+
+                if (campanha.NuncaExpTelefone)
+                {
+                    sql_command += "and c.DataTelAtualizado IS NULL ";
                 }
+                else
+                {
+                    if (campanha.MinDataAtualTel != null)
+                    {
+                        sql_command += "and " + "'" + campanha.MinDataAtualTel + "'" + " <= c.DataTelAtualizado ";
+                    }
+
+                    if (campanha.MaxDataAtualTel != null)
+                    {
+                        sql_command += "and " + "'" + campanha.MaxDataAtualTel + "'" + " >= c.DataTelAtualizado ";
+                    }
+                }                
+
+                #endregion
+
+                #region Data Emprestimos Atualizados
 
                 if (campanha.MinDataAtualEmp != null)
                 {
@@ -223,16 +283,28 @@ namespace CampanhaBD.RepositoryADO
                     sql_command += "and " + "'" + campanha.MaxDataAtualEmp + "'" + " >= c.DataEmpAtualizados ";
                 }
 
-                if (campanha.MinDataTrabalhado != null)
-                {
-                    sql_command += "and " + "'" + campanha.MinDataTrabalhado + "'" + " <= c.DataTrabalhado ";
-                }
+                #endregion
 
-                if (campanha.MaxDataTrabalhado != null)
+                #region DataTrabalhado
+                if (campanha.NuncaTrabalhado)
                 {
-                    sql_command += "and " + "'" + campanha.MaxDataTrabalhado + "'" + " >= c.DataTrabalhado ";
+                    sql_command += "and c.DataTrabalhado IS NULL ";
                 }
+                else
+                {
+                    if (campanha.MinDataTrabalhado != null)
+                    {
+                        sql_command += "and " + "'" + campanha.MinDataTrabalhado + "'" + " <= c.DataTrabalhado ";
+                    }
 
+                    if (campanha.MaxDataTrabalhado != null)
+                    {
+                        sql_command += "and " + "'" + campanha.MaxDataTrabalhado + "'" + " >= c.DataTrabalhado ";
+                    }
+                }
+                #endregion
+
+                #region Cep
                 if (campanha.MinCep != null)
                 {
                     sql_command += "and " + "'" + campanha.MinCep + "'" + " <= c.Cep ";
@@ -242,12 +314,16 @@ namespace CampanhaBD.RepositoryADO
                 {
                     sql_command += "and " + "'" + campanha.MaxCep + "'" + " >= c.Cep ";
                 }
+                #endregion
 
+                #region Codigo Banco
                 if (campanha.CodigoBanco != 0)
                 {
                     sql_command += "and " + "'" + campanha.CodigoBanco + "'" + " = e.BancoId ";
                 }
+                #endregion
 
+                #region Filtro Calculo
                 if (campanha.Coeficiente != 0)
                 {
 
@@ -272,6 +348,7 @@ namespace CampanhaBD.RepositoryADO
                             + " >= ((e.ValorParcela/'" + campanha.Coeficiente.ToString().Replace(',', '.') + "') - e.Saldo) ";
                     }
                 }
+                #endregion
 
                 return sql_command;
             }

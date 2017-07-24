@@ -76,6 +76,29 @@ namespace CampanhaBD.RepositoryADO
             //_context.ExecutaComando(strQuery);
         }
 
+        public void AtualizarDataExpProcessa(ClienteModel entidade)
+        {
+            try
+            {
+                string[] parameters =
+                {
+                    ClienteModel.COLUMN_ID
+                };
+
+                object[] values =
+                {
+                    entidade.Id
+                };
+
+                _context.ExecuteProcedureNoReturn(
+                    ClienteModel.PROCEDURE_UPDATE_DATA_EXP_PROCESSA, parameters, values);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public void AtualizarDataTelefone(ClienteModel entidade)
         {
             try
