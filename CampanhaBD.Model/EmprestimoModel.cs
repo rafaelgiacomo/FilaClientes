@@ -19,7 +19,7 @@ namespace CampanhaBD.Model
 
         public float Saldo { get; set; }
 
-        public DateTime InicioPagamento { get; set; }
+        public string InicioPagamento { get; set; }
 
         public int BancoId { get; set; }
         #endregion

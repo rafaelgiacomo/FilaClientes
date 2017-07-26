@@ -361,9 +361,21 @@ BEGIN
 END
 GO
 
---Alterar Importacao
+--Adicionar Caminho da Importacao
 --===============================================
+IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_SALVAR_CAMINHO_IMPORTACAO]')
+	AND OBJECTPROPERTY(ID, N'IsProcedure') = 1)
+	DROP PROCEDURE [DBO].[SP_SALVAR_CAMINHO_IMPORTACAO]
+GO
 
+CREATE PROCEDURE [DBO].[SP_SALVAR_CAMINHO_IMPORTACAO]
+	@Id int,
+	@CaminhoArquivo varchar(max)
+AS
+BEGIN
+	UPDATE [Importacao] SET [CaminhoArquivo] = @CaminhoArquivo WHERE [Id] = @Id
+END
+GO
 
 --Listar Todos Importacoes
 --===============================================
@@ -394,6 +406,21 @@ BEGIN
 END
 GO
 
+--Selecionar por Nome Importacao
+--===============================================
+IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_SELECIONAR_IMPORTACAO_NOME]')
+	AND OBJECTPROPERTY(ID, N'IsProcedure') = 1)
+	DROP PROCEDURE [DBO].[SP_SELECIONAR_IMPORTACAO_NOME]
+GO
+
+CREATE PROCEDURE [DBO].[SP_SELECIONAR_IMPORTACAO_NOME]
+	@Nome varchar(max)
+AS
+BEGIN
+	SELECT [Id], [UsuarioId], [Nome], [Data], [Terminado], [NumImportados], [NumAtualizados], [CaminhoArquivo] FROM [Importacao] WHERE [Nome] = @Nome
+END
+GO
+
 --Terminar Importação
 --===============================================
 IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_TERMINAR_IMPORTACAO]')
@@ -410,6 +437,22 @@ END
 GO
 
 --====================================================== PROCEDURES TABELA Emprestimo =======================================================================
+
+--Listar Emprestimos do Cliente
+--=====================================================================================================
+IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_SELECIONAR_EMPRESTIMOS_CLIENTE_ID]')
+	AND OBJECTPROPERTY(ID, N'IsProcedure') = 1)
+	DROP PROCEDURE [DBO].[SP_SELECIONAR_EMPRESTIMOS_CLIENTE_ID]
+GO
+
+CREATE PROCEDURE [DBO].[SP_SELECIONAR_EMPRESTIMOS_CLIENTE_ID]
+	@ClienteId bigint
+AS
+BEGIN
+	SELECT [BancoId], [ClienteId], [NumBeneficio], [NumEmprestimo], [ValorParcela], [ParcelasNoContrato], [ParcelasEmAberto], 
+		[Saldo], [InicioPagamento] FROM [Emprestimo] WHERE [ClienteId] = @ClienteId 
+END
+GO
 
 --Excluir Emprestimos do Beneficio
 --===============================================

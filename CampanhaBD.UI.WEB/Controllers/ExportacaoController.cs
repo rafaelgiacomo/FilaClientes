@@ -68,6 +68,17 @@ namespace CampanhaBD.UI.WEB.Controllers
                 }
                 #endregion
 
+                #region Ver Filtro
+                if (BotoesViewModel.VerFiltro.Equals(viewModel.Submit))
+                {
+                    string caminho = Path.Combine(Server.MapPath("~/Content/Filtros"), viewModel.Nome + ".csv");
+
+                    _expBus.ExportarPlanilhaFiltro(campanha, caminho);
+
+                    return File(caminho, "text/CSV", viewModel.Nome + ".csv");
+                }
+                #endregion
+
                 #region Exportar Processa
                 if (BotoesViewModel.ExportarProcessa.Equals(viewModel.Submit))
                 {

@@ -147,6 +147,36 @@ namespace CampanhaBD.RepositoryADO
             //return TransformaReaderEmListaDeObjeto(retornoDataReader);
         }
 
+        public List<EmprestimoModel> ListarEmprestimosPorCliente(long clienteId)
+        {
+            try
+            {
+                List<EmprestimoModel> lista = new List<EmprestimoModel>();
+                SqlDataReader reader = null;
+
+                string[] parameters = { EmprestimoModel.COLUMN_CLIENTE_ID };
+                object[] values = { clienteId };
+
+                reader = _context.ExecuteProcedureWithReturn(
+                    EmprestimoModel.PROCEDURE_SELECT_BY_CLIENTE_ID, parameters, values);
+
+                while (reader.Read())
+                {
+                    var entidade = TransformaReaderEmObjeto(reader);
+
+                    lista.Add(entidade);
+                }
+
+                reader.Close();
+
+                return lista;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public EmprestimoModel ListarPorId(EmprestimoModel entidade)
         {
             return new EmprestimoModel();
@@ -155,23 +185,26 @@ namespace CampanhaBD.RepositoryADO
             //return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
         }
 
-        private List<EmprestimoModel> TransformaReaderEmListaDeObjeto(SqlDataReader reader)
+        private EmprestimoModel TransformaReaderEmObjeto(SqlDataReader reader)
         {
-            var usuarios = new List<EmprestimoModel>();
-            while (reader.Read())
+            try
             {
-                var temObjeto = new EmprestimoModel()
-                {
-                    NumEmprestimo = int.Parse(reader["emp_id"].ToString()),
-                    NumBeneficio = int.Parse(reader["numero"].ToString()),
-                    ClienteId = int.Parse(reader["pessoa_id"].ToString()),
-                    ParcelasNoContrato = int.Parse(reader["parcelasContrato"].ToString()),
-                    ParcelasEmAberto = int.Parse(reader["parcelasPagas"].ToString()),
-                };
-                usuarios.Add(temObjeto);
+                var temObjeto = new EmprestimoModel();
+                temObjeto.BancoId = int.Parse(reader[EmprestimoModel.COLUMN_BANCO_ID].ToString());
+                temObjeto.NumEmprestimo = int.Parse(reader[EmprestimoModel.COLUMN_NUM_EMPRESTIMO].ToString());
+                temObjeto.NumBeneficio = long.Parse(reader[EmprestimoModel.COLUMN_NUM_BENEFICIO].ToString());
+                temObjeto.ParcelasNoContrato = int.Parse(reader[EmprestimoModel.COLUMN_PARCELAS_NO_CONTRATO].ToString());
+                temObjeto.ParcelasEmAberto = int.Parse(reader[EmprestimoModel.COLUMN_PARCELAS_EM_ABERTO].ToString());
+                temObjeto.Saldo = float.Parse(reader[EmprestimoModel.COLUMN_SALDO].ToString());
+                temObjeto.ValorParcela = float.Parse(reader[EmprestimoModel.COLUMN_VALOR_PARCELA].ToString());
+                temObjeto.InicioPagamento = reader[EmprestimoModel.COLUMN_INICIO_PAGAMENTO].ToString();
+
+                return temObjeto;
             }
-            reader.Close();
-            return usuarios;
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

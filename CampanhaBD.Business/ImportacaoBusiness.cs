@@ -36,6 +36,18 @@ namespace CampanhaBD.Business
             }
         }
 
+        public void SalvarCaminhoImportacao(ImportacaoModel entidade)
+        {
+            try
+            {
+                _core.UnityOfWorkAdo.Importacoes.SalvarCaminho(entidade);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public void ImportarClientes(ImportacaoModel imp, int[] vetorAssossiacoes)
         {
             StreamReader stream = new StreamReader(imp.CaminhoArquivo);
@@ -177,5 +189,21 @@ namespace CampanhaBD.Business
             }
         }
 
+        public ImportacaoModel ListarPorNome(string nome)
+        {
+            try
+            {
+                ImportacaoModel entidade = new ImportacaoModel();
+                entidade.Nome = nome;
+
+                var retorno = _core.UnityOfWorkAdo.Importacoes.ListarPorNome(entidade);
+
+                return retorno;
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

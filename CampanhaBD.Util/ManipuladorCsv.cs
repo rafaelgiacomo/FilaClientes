@@ -45,10 +45,18 @@ namespace CampanhaBD.Util
                         builder.Append(';');
                     // Implement special handling for values that contain comma or quote
                     // Enclose in quotes and double up any double quotes
-                    if (value.IndexOfAny(new char[] { '"', ';' }) != -1)
-                        builder.AppendFormat("\"{0}\"", value.Replace("\"", "\"\""));
+                    if (value != null)
+                    {
+                        if (value.IndexOfAny(new char[] { '"', ';' }) != -1)
+                            builder.AppendFormat("\"{0}\"", value.Replace("\"", "\"\""));
+                        else
+                            builder.Append(value);
+                    }
                     else
-                        builder.Append(value);
+                    {
+                        builder.Append(String.Empty);
+                    }
+                    
                     firstColumn = false;
                 }
                 row.LineText = builder.ToString();

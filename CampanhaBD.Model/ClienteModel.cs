@@ -142,6 +142,15 @@ namespace CampanhaBD.Model
                     case 1:
                         if (!"".Equals(valor))
                         {
+                            if (valor.Length == 8)
+                            {
+                                string ano = valor.Substring(0, 4);
+                                string mes = valor.Substring(4, 2);
+                                string dia = valor.Substring(6, 2);
+
+                                valor = dia + "/" + mes + "/" + ano;
+                            }
+
                             var data = Convert.ToDateTime(valor);
 
                             if (DateTime.Compare(data, DateTime.MinValue) >= 0)
@@ -224,7 +233,7 @@ namespace CampanhaBD.Model
                         string anoIni = valor.Substring(0, 4);
                         string mesIni = valor.Substring(4, 2);
                         string diaIni = "10";
-                        Emprestimos[0].InicioPagamento = DateTime.Parse(diaIni + "/" + mesIni + "/" + anoIni);
+                        Emprestimos[0].InicioPagamento = (diaIni + "/" + mesIni + "/" + anoIni);
                         break;
                     case 17:
                         Beneficios[0].Salario = float.Parse(valor);

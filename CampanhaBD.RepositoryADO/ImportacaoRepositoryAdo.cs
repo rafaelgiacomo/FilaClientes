@@ -52,6 +52,29 @@ namespace CampanhaBD.RepositoryADO
             }
         }
 
+        public void SalvarCaminho(ImportacaoModel entidade)
+        {
+            try
+            {
+                string[] parameters =
+                {
+                    ImportacaoModel.COLUMN_ID, ImportacaoModel.COLUMN_CAMINHO_ARQUIVO
+                };
+
+                object[] values =
+                {
+                    entidade.Id, entidade.CaminhoArquivo
+                };
+
+                _context.ExecuteProcedureNoReturn(
+                    ImportacaoModel.PROCEDURE_UPDATE_CAMINHO, parameters, values);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public void Alterar(ImportacaoModel entidade)
         {
             //var strQuery = "";
@@ -163,6 +186,34 @@ namespace CampanhaBD.RepositoryADO
             }
         }
 
+        public ImportacaoModel ListarPorNome(ImportacaoModel entidade)
+        {
+            try
+            {
+                SqlDataReader reader = null;
+                ImportacaoModel retorno = null;
+
+                string[] parameters = { ImportacaoModel.COLUMN_NOME };
+                object[] values = { entidade.Nome };
+
+                reader = _context.ExecuteProcedureWithReturn(
+                    ImportacaoModel.PROCEDURE_SELECT_BY_NOME, parameters, values);
+
+                if (reader.Read())
+                {
+                    retorno = TransformaReaderEmObjeto(reader);
+                }
+
+                reader.Close();
+
+                return retorno;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         private ImportacaoModel TransformaReaderEmObjeto(SqlDataReader reader)
         {
             try
@@ -184,5 +235,6 @@ namespace CampanhaBD.RepositoryADO
                 throw;
             }
         }
+
     }
 }

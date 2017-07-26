@@ -25,9 +25,11 @@ namespace CampanhaBD.Model
         #region Colunas e Procs
         public const string PROCEDURE_INSERT = "SP_SALVAR_IMPORTACAO";
         public const string PROCEDURE_UPDATE = "SP_ALTERAR_IMPORTACAO";
+        public const string PROCEDURE_UPDATE_CAMINHO = "SP_SALVAR_CAMINHO_IMPORTACAO";
         public const string PROCEDURE_DELETE = "SP_EXCLUIR_IMPORTACAO";
         public const string PROCEDURE_SELECT_ALL = "SP_LISTAR_TODOS_IMPORTACOES";
         public const string PROCEDURE_SELECT_BY_ID = "SP_SELECIONAR_IMPORTACAO_ID";
+        public const string PROCEDURE_SELECT_BY_NOME = "SP_SELECIONAR_IMPORTACAO_NOME";
         public const string PROCEDURE_TERMINAR = "SP_TERMINAR_IMPORTACAO";
         public const string COLUMN_ID = "Id";
         public const string COLUMN_USUARIO_ID = "UsuarioId";

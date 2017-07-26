@@ -45,9 +45,6 @@ namespace CampanhaBD.UI.WEB.Controllers
             {
                 if (viewModel.File != null)
                 {
-                    string caminho = Path.Combine(Server.MapPath("~/Content/Importados"), viewModel.File.FileName);
-                    viewModel.File.SaveAs(caminho);
-
                     ImportacaoModel imp = new ImportacaoModel();
                     imp.UsuarioId = 1;
                     imp.Nome = viewModel.Nome;
@@ -55,9 +52,16 @@ namespace CampanhaBD.UI.WEB.Controllers
                     imp.Terminado = false;
                     imp.NumImportados = 0;
                     imp.NumAtualizados = 0;
-                    imp.CaminhoArquivo = caminho;
 
                     _impBus.AdicionarImportacao(imp);
+
+                    string caminho = Path.Combine(Server.MapPath("~/Content/Importados"), imp.Id.ToString() + ".csv");
+
+                    imp.CaminhoArquivo = caminho;
+
+                    _impBus.SalvarCaminhoImportacao(imp);
+
+                    viewModel.File.SaveAs(caminho);
 
                     return RedirectToAction("Associar", new { impId = imp.Id });
                 }

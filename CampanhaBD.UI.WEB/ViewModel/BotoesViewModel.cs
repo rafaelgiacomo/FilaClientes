@@ -10,6 +10,7 @@ namespace CampanhaBD.UI.WEB.ViewModel
         #region Constantes
         public const string ExportarPlanilha = "Exportar Planilha";
         public const string ExportarProcessa = "Exportar Processa";
+        public const string VerFiltro = "Visualizar Filtro";
         public const string AtualizarPlanilha = "Importar Planilha";
         public const string AtualizarProcessa = "Importar Processa";
         #endregion
