@@ -12,11 +12,13 @@ namespace CampanhaBD.UI.WEB.Controllers
     {
         private readonly BancoBusiness _bancoBus;
         private readonly ExportacaoBusiness _expBus;
+        private readonly ImportacaoBusiness _impBus;
 
         public ExportacaoController()
         {
             _bancoBus = new BancoBusiness(_core);
             _expBus = new ExportacaoBusiness(_core);
+            _impBus = new ImportacaoBusiness(_core);
         }
 
         public ActionResult Index()
@@ -24,8 +26,11 @@ namespace CampanhaBD.UI.WEB.Controllers
             try
             {
                 var listaBancos = _bancoBus.ListarTodos();
+                var listaImportacoes = _impBus.ListarTodos();
 
-                ExportacaoViewModel viewModel = new ExportacaoViewModel(listaBancos);
+                listaImportacoes.Add(new ImportacaoModel() { Id = 0, Nome = "" } );
+
+                ExportacaoViewModel viewModel = new ExportacaoViewModel(listaBancos, listaImportacoes);
 
                 return View(viewModel);
             }

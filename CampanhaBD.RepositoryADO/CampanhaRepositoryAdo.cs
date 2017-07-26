@@ -316,6 +316,13 @@ namespace CampanhaBD.RepositoryADO
                 }
                 #endregion
 
+                #region Importacao
+                if (campanha.CodigoImportacao != 0)
+                {
+                    sql_command += "and " + "'" + campanha.CodigoImportacao + "'" + " = c.ImportacaoId ";
+                }
+                #endregion
+
                 #region Codigo Banco
                 if (campanha.CodigoBanco != 0)
                 {

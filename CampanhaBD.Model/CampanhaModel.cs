@@ -12,6 +12,8 @@ namespace CampanhaBD.Model
 
         public int CodigoBanco { get; set; }
 
+        public int CodigoImportacao { get; set; }
+
         public string MinDataNascimento { get; set; }
 
         public string MaxDataNascimento { get; set; }

@@ -28,6 +28,15 @@
             </div>
 
             <div class="col-md-3">
+                @Html.LabelFor(model => model.ListaImportacoes, htmlAttributes: new { @class = "control-label" })<br />
+                @Html.DropDownListFor(model => model.Importacao, Model.ListaImportacoes, null, new { @class = "form-control" })
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-3">
                 @Html.LabelFor(model => model.MinDataTrabalhado, htmlAttributes: new { @class = "control-label" })<br />
                 @Html.EditorFor(model => model.MinDataTrabalhado, new { htmlAttributes = new { @class = "form-control" } })
             </div>

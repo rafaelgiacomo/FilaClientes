@@ -17,6 +17,9 @@ namespace CampanhaBD.UI.WEB.ViewModel
         [Display(Name = "Banco")]
         public int CodigoBanco { get; set; }
 
+        [Display(Name = "Importação")]
+        public int Importacao { get; set; }
+
         [Display(Name = "Min Data Nascimento")]
         public string MinDataNascimento { get; set; }
 
@@ -115,8 +118,11 @@ namespace CampanhaBD.UI.WEB.ViewModel
         [Display(Name = "Banco")]
         public SelectList ListaBanco { get; set; }
 
-        [Display(Name = "Banco")]
+        [Display(Name = "Layout Planilha")]
         public SelectList ListaLayout { get; set; }
+
+        [Display(Name = "Importação")]
+        public SelectList ListaImportacoes { get; set; }
         #endregion
 
         public ExportacaoViewModel()
@@ -124,12 +130,14 @@ namespace CampanhaBD.UI.WEB.ViewModel
 
         }
 
-        public ExportacaoViewModel(List<BancoModel> listaBanco)
+        public ExportacaoViewModel(List<BancoModel> listaBanco, List<ImportacaoModel> listaImportacao)
         {
             try
             {
                 ListaLayout = new SelectList(LayoutArquivoModel.GeraLista(), "Codigo", "Nome");
                 ListaBanco = new SelectList(listaBanco, BancoModel.COLUMN_CODIGO, BancoModel.COLUMN_NOME);
+                ListaImportacoes = new SelectList(
+                    listaImportacao, ImportacaoModel.COLUMN_ID, ImportacaoModel.COLUMN_NOME, 0);
             }
             catch (Exception)
             {
@@ -145,6 +153,7 @@ namespace CampanhaBD.UI.WEB.ViewModel
 
                 campanha.Nome = Nome;
                 campanha.CodigoBanco = CodigoBanco;
+                campanha.CodigoImportacao = Importacao;
                 campanha.MinDataNascimento = MinDataNascimento;
                 campanha.MaxDataNascimento = MaxDataNascimento;
                 campanha.MinCep = MinCep;
