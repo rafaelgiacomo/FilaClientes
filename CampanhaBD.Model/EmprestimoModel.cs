@@ -13,13 +13,21 @@ namespace CampanhaBD.Model
 
         public float ValorParcela { get; set; }
 
+        public float ValorBruto { get; set; }
+
+        public string DataInicioPagamento { get; set; }
+
+        public string DataFimPagamento { get; set; }
+
         public int ParcelasNoContrato { get; set; }
 
         public int ParcelasEmAberto { get; set; }
 
-        public float Saldo { get; set; }
+        public int TipoEmprestimo { get; set; }
 
-        public string InicioPagamento { get; set; }
+        public int SituacaoEmprestimo { get; set; }
+
+        public float Saldo { get; set; }
 
         public int BancoId { get; set; }
         #endregion
@@ -43,7 +51,190 @@ namespace CampanhaBD.Model
         public const string COLUMN_PARCELAS_EM_ABERTO = "ParcelasEmAberto";
         public const string COLUMN_SALDO = "Saldo";
         public const string COLUMN_INICIO_PAGAMENTO = "InicioPagamento";
+        public const string COLUMN_FIM_PAGAMENTO = "FimPagamento";
+        public const string COLUMN_TIPO_EMPRESTIMO = "TipoEmprestimo";
+        public const string COLUMN_SITUACAO_EMPRESTIMO = "SituacaoEmprestimo";
         #endregion
 
+        #region Preenchimento de campos
+
+        public void PreencheDataInicioPagamento(string valor)
+        {
+            try
+            {
+                //10 é o dia de desconta na folha de pagamento
+                string anoIni = valor.Substring(0, 4);
+                string mesIni = valor.Substring(4, 2);
+                string diaIni = "10";
+                DataInicioPagamento = (diaIni + "/" + mesIni + "/" + anoIni);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void PreencheDataFimPagamento(string valor)
+        {
+            try
+            {
+                //10 é o dia de desconta na folha de pagamento
+                string anoIni = valor.Substring(0, 4);
+                string mesIni = valor.Substring(4, 2);
+                string diaIni = "10";
+                DataFimPagamento = (diaIni + "/" + mesIni + "/" + anoIni);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void PreencheNumBeneficio(string valor)
+        {
+            try
+            {
+                if (!"".Equals(valor))
+                {
+                    valor = valor.Replace(".", "");
+                    valor = valor.Replace("-", "");
+                    NumBeneficio = long.Parse(valor);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void PreencheValorParcela(string valor)
+        {
+            try
+            {
+                if (!"".Equals(valor))
+                {
+                    valor = valor.Replace('.', ',');
+                    ValorParcela = float.Parse(valor);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void PreencheValorBruto(string valor)
+        {
+            try
+            {
+                if (!"".Equals(valor))
+                {
+                    valor = valor.Replace('.', ',');
+                    ValorBruto = float.Parse(valor);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        
+        public void PreencheParcelasContrato(string valor)
+        {
+            try
+            {
+                if (!"".Equals(valor))
+                {
+                    valor = valor.Replace('.', ',');
+                    ParcelasNoContrato = int.Parse(valor);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void PreencheParcelasEmAberto(string valor)
+        {
+            try
+            {
+                if (!"".Equals(valor))
+                {
+                    valor = valor.Replace('.', ',');
+                    ParcelasEmAberto = int.Parse(valor);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void PreencheTipoEmprestimo(string valor)
+        {
+            try
+            {
+                if (!"".Equals(valor))
+                {
+                    valor = valor.Replace('.', ',');
+                    TipoEmprestimo = int.Parse(valor);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void PreencheSituacaoEmprestimo(string valor)
+        {
+            try
+            {
+                if (!"".Equals(valor))
+                {
+                    valor = valor.Replace('.', ',');
+                    SituacaoEmprestimo = int.Parse(valor);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void PreencheSaldo(string valor)
+        {
+            try
+            {
+                if (!"".Equals(valor))
+                {
+                    valor = valor.Replace('.', ',');
+                    Saldo = float.Parse(valor);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void PreencheBancoId(string valor)
+        {
+            try
+            {
+                if (!"".Equals(valor))
+                {
+                    valor = valor.Replace('.', ',');
+                    BancoId = int.Parse(valor);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        #endregion
     }
 }

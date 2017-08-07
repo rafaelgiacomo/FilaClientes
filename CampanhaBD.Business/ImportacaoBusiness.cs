@@ -10,28 +10,27 @@ namespace CampanhaBD.Business
 {
     public class ImportacaoBusiness
     {
+
+        #region Propriedades
         private CoreBusiness _core;
 
-        public ImportacaoBusiness(CoreBusiness core)
-        {
-            try
-            {
-                _core = core;
-            }
-            catch
-            {
-                throw;
-            }
-        }
+        private ClienteModel _cliente;
 
+        public bool ContinuarImportacao { get; set; }
+        #endregion
+
+        #region Métodos públicos
         public void AdicionarImportacao(ImportacaoModel entidade)
         {
             try
             {
+                _core.UnityOfWorkAdo.AbrirTransacao();
                 _core.UnityOfWorkAdo.Importacoes.Inserir(entidade);
+                _core.UnityOfWorkAdo.Commit();
             }
             catch
             {
+                _core.UnityOfWorkAdo.RollBack();
                 throw;
             }
         }
@@ -48,7 +47,7 @@ namespace CampanhaBD.Business
             }
         }
 
-        public void ImportarClientes(ImportacaoModel imp, int[] vetorAssossiacoes)
+        public void ImportarClientesDeCsv(ImportacaoModel imp, int[] vetorAssossiacoes)
         {
             StreamReader stream = new StreamReader(imp.CaminhoArquivo);
             try
@@ -63,72 +62,85 @@ namespace CampanhaBD.Business
                     ClienteModel cliente = new ClienteModel();
 
                     cliente.ImportacaoId = imp.Id;
-                    cliente.UsuarioId = imp.UsuarioId;
                     cliente.DataImportado = DateTime.Now.ToString();
-
-                    for (int i = 0; i < valores.Length; i++)
-                    {
-                        if (valores[i] > -1)
-                        {
-                            cliente.preencheCampo(i, linhaSeparada[valores[i]]);
-                        }
-                    }
-
-                    var cl = _core.UnityOfWorkAdo.Clientes.ListarPorCpf(cliente);
-
-                    if (cl == null)
-                    {
-                        _core.UnityOfWorkAdo.Clientes.Inserir(cliente);
-
-                        if (cliente.Beneficios[0].Numero != 0)
-                        {
-                            cliente.Beneficios[0].IdCliente = cliente.Id;
-                            cliente.Beneficios[0].DataCompetencia = DateTime.Now;
-                            cliente.Emprestimos[0].ClienteId = cliente.Id;
-
-                            _core.UnityOfWorkAdo.Beneficios.Inserir(cliente.Beneficios[0]);
-
-                            if (cliente.Emprestimos[0].BancoId != 0 && cliente.Emprestimos[0].ValorParcela != 0)
-                            {
-                                _core.UnityOfWorkAdo.Emprestimos.Inserir(cliente.Emprestimos[0]);
-                            }
-                        }                      
-                        
-                    }
-                    else
-                    {
-                        if (cliente.Beneficios[0].Numero != 0)
-                        {
-                            var ben = _core.UnityOfWorkAdo.Beneficios.ListarPorId(cliente.Beneficios[0]);
-
-                            if (ben == null)
-                            {
-                                cliente.Beneficios[0].IdCliente = cl.Id;
-                                cliente.Beneficios[0].DataCompetencia = DateTime.Now;
-                                _core.UnityOfWorkAdo.Beneficios.Inserir(cliente.Beneficios[0]);
-                            }
-
-                            if (cliente.Emprestimos[0].BancoId != 0 && cliente.Emprestimos[0].ValorParcela != 0)
-                            {
-                                cliente.Emprestimos[0].ClienteId = cl.Id;
-                                _core.UnityOfWorkAdo.Emprestimos.Inserir(cliente.Emprestimos[0]);
-                            }
-
-                        }
-
-                        _core.UnityOfWorkAdo.Clientes.AlterarImportacao(cliente);
-                    }
                 }
 
                 _core.UnityOfWorkAdo.Importacoes.Terminar(imp);
             }
-            catch
+            catch (Exception ex)
             {
                 throw;
             }
             finally
             {
                 stream.Close();
+            }
+        }
+
+        public void IniciarImportacaoClientesSql(ImportacaoModel imp, FiltroModel filtro)
+        {
+            try
+            {
+                _core.UnityOfWorkAdo.AbrirTransacao();
+                _core.UnityOfWorkAdo.Importacoes.Inserir(imp);
+                _core.UnityOfWorkAdo.Filtros.FiltroImportacaoBaseOriginal(filtro);
+                _cliente = new ClienteModel();
+                ContinuarImportacao = true;
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void ImportarClienteDoSql(ImportacaoModel imp, FiltroModel filtro)
+        {
+            try
+            {
+                if (ContinuarImportacao)
+                {
+                    _cliente.LimparPropriedades();
+
+                    _cliente.ImportacaoId = imp.Id;
+                    ContinuarImportacao = _core.UnityOfWorkAdo.Filtros.LerDadosClienteBaseOriginal(_cliente);
+
+                    if (ValidaDadosCliente(_cliente))
+                    {
+                        SalvarCliente(_cliente, filtro);
+                    }
+
+                    if (ValidaDadosBeneficio(_cliente.Beneficios[0]))
+                    {
+                        SalvarBeneficio(_cliente.Beneficios[0]);
+                    }
+
+                    if (ValidaDadosEmprestimo(_cliente.Emprestimos[0]))
+                    {
+                        SalvarEmprestimo(_cliente.Emprestimos[0]);
+                    }
+                }
+            }
+            catch
+            {
+                _core.UnityOfWorkAdo.RollBack();
+                throw;
+            }
+        }
+
+        public void TerminarImportacaoClientesSql(ImportacaoModel imp)
+        {
+            try
+            {
+                _core.UnityOfWorkAdo.Filtros.FecharReader();
+
+                _core.UnityOfWorkAdo.Importacoes.SalvarNumImportados(imp);
+                _core.UnityOfWorkAdo.Importacoes.Terminar(imp);
+
+                _core.UnityOfWorkAdo.Commit();
+            }
+            catch (Exception ex)
+            {
+
             }
         }
 
@@ -155,6 +167,33 @@ namespace CampanhaBD.Business
             catch
             {
                 throw;
+            }
+        }
+
+        public void CancelarImportacao()
+        {
+            try
+            {
+                if (!_core.UnityOfWorkAdo.Filtros.Reader.IsClosed)
+                    _core.UnityOfWorkAdo.Filtros.Reader.Close();
+
+                _core.UnityOfWorkAdo.RollBack();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public int EstimarQuantidade(FiltroModel filtro)
+        {
+            try
+            {
+                return _core.UnityOfWorkAdo.Filtros.EstimarQtdFiltroBaseOriginal(filtro);
+            }
+            catch (Exception ex)
+            {
+                return 0;
             }
         }
 
@@ -205,5 +244,137 @@ namespace CampanhaBD.Business
                 throw;
             }
         }
+        #endregion
+
+        #region Métodos privados
+        private void SalvarCliente(ClienteModel cliente, FiltroModel filtro)
+        {
+            try
+            {
+                _core.UnityOfWorkAdo.Clientes.Inserir(cliente);
+            }
+            catch (Exception)
+            {
+                if (filtro.AtualizarDadosCliente)
+                {
+                    _core.UnityOfWorkAdo.Clientes.Alterar(cliente);
+                }
+            }
+        }
+
+        private void SalvarBeneficio(BeneficioModel beneficio)
+        {
+            try
+            {
+                beneficio.DataCompetencia = DateTime.Now;
+                _core.UnityOfWorkAdo.Beneficios.Inserir(beneficio);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void SalvarEmprestimo(EmprestimoModel emprestimo)
+        {
+            try
+            {
+                _core.UnityOfWorkAdo.Emprestimos.Inserir(emprestimo);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private bool ValidaDadosCliente(ClienteModel cliente)
+        {
+            try
+            {
+                if (cliente.Id <= 0)
+                {
+                    return false;
+                }
+
+                if ("".Equals(cliente.Cpf))
+                {
+                    return false;
+                }
+
+                if (cliente.ImportacaoId <= 0)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        private bool ValidaDadosBeneficio(BeneficioModel beneficio)
+        {
+            try
+            {
+                if (beneficio.IdCliente <= 0)
+                {
+                    return false;
+                }
+
+                if (beneficio.Numero <= 0)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        private bool ValidaDadosEmprestimo(EmprestimoModel emprestimo)
+        {
+            try
+            {
+                if (emprestimo.BancoId <= 0)
+                {
+                    return false;
+                }
+
+                if (emprestimo.ClienteId <= 0)
+                {
+                    return false;
+                }
+
+                if (emprestimo.ValorParcela <= 0)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        public ImportacaoBusiness(CoreBusiness core)
+        {
+            try
+            {
+                _core = core;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
     }
 }

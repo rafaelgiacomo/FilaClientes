@@ -50,9 +50,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseOriginalRepositoryAdo.cs" />
     <Compile Include="BancoRepositoryAdo.cs" />
     <Compile Include="BeneficioRepositoryAdo.cs" />
-    <Compile Include="CampanhaRepositoryAdo.cs" />
+    <Compile Include="FiltroRepositoryAdo.cs" />
     <Compile Include="CampanhaImportacaoRepositoryAdo.cs" />
     <Compile Include="ClienteRepositoryAdo.cs" />
     <Compile Include="Processa\SaldoRefinProcessaRepositoryAdo.cs" />

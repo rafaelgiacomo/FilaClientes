@@ -13,8 +13,6 @@ namespace CampanhaBD.Model
 
         public int ImportacaoId { get; set; }
 
-        public int UsuarioId { get; set; }
-
         public string Cpf { get; set; }
 
         public string Uf { get; set; }
@@ -26,6 +24,10 @@ namespace CampanhaBD.Model
         public string Ddd { get; set; }
 
         public string Telefone { get; set; }
+
+        public string Ddd2 { get; set; }
+
+        public string Telefone2 { get; set; }
 
         public string DataNascimento { get; set; }
 
@@ -64,6 +66,7 @@ namespace CampanhaBD.Model
         public const string PROCEDURE_UPDATE_DATA_TRABALHADO = "SP_ATUALIZAR_DATA_TRABALHADO";
         public const string PROCEDURE_UPDATE_DATA_EMPRESTIMO = "SP_ATUALIZAR_DATA_EMP_ATUALIZADO";
         public const string PROCEDURE_UPDATE_DATA_TELEFONE = "SP_ATUALIZAR_DATA_TEL_ATUALIZADO";
+        public const string PROCEDURE_UPDATE_IMPORTACAO = "SP_TROCAR_IMPORTACAO_CLIENTE";
         public const string COLUMN_ID = "Id";
         public const string COLUMN_IMPORTACAO_ID = "ImportacaoId";
         public const string COLUMN_NOME = "Nome";
@@ -84,6 +87,7 @@ namespace CampanhaBD.Model
         public const string COLUMN_DATA_TRABALHADO = "DataTrabalhado";
         #endregion
 
+        #region Indices das Propriedades
         public static readonly int INDICE_NOME = 0;
         public static readonly int INDICE_DATA_NASCIMENTO = 1;
         public static readonly int INDICE_CPF = 2;
@@ -103,150 +107,144 @@ namespace CampanhaBD.Model
         public static readonly int INDICE_INICIO_PAGAMENTO = 16;
         public static readonly int INDICE_VALOR_BENEFICIO = 17;
         public static readonly int INDICE_COMPLEMENTO = 18;
+        #endregion
 
         public ClienteModel()
         {
-            Nome = String.Empty;
-            Cpf = String.Empty;
-            Uf = String.Empty;
-            Cidade = String.Empty;
-            Bairro = String.Empty;
-            Ddd = String.Empty;
-            Telefone = String.Empty;
-            DataNascimento = String.Empty;
-            Logradouro = String.Empty;
-            Numero = String.Empty;
-            Complemento = String.Empty;
-            Cep = String.Empty;
-            DataTelAtualizado = String.Empty;
-            DataEmpAtualizado = String.Empty;
-            DataTrabalhado = String.Empty;
-            DataImportado = String.Empty;
-            DataExpProcessa = String.Empty;
-
-            Beneficios = new List<BeneficioModel>();
-            Emprestimos = new List<EmprestimoModel>();
-            Beneficios.Add(new BeneficioModel());
-            Emprestimos.Add(new EmprestimoModel());
+            LimparPropriedades();
         }
 
-        public void preencheCampo(int indiceCampo, String valor)
+        #region Preenchimento de campos
+        public void PreencheCpfEId(string valor)
         {
             try
             {
-                switch (indiceCampo)
+                if (!"".Equals(valor))
                 {
-                    case 0:
-                        Nome = valor;
-                        break;
-                    case 1:
-                        if (!"".Equals(valor))
-                        {
-                            if (valor.Length == 8)
-                            {
-                                string ano = valor.Substring(0, 4);
-                                string mes = valor.Substring(4, 2);
-                                string dia = valor.Substring(6, 2);
+                    Cpf = valor + Cpf;
+                    Cpf = Cpf.Replace(".", "");
+                    Cpf = Cpf.Replace("-", "");
 
-                                valor = dia + "/" + mes + "/" + ano;
-                            }
+                    //Validando quantidade de dígitos para 11
+                    while (Cpf.Length < 11) { Cpf = "0" + Cpf; }
 
-                            var data = Convert.ToDateTime(valor);
-
-                            if (DateTime.Compare(data, DateTime.MinValue) >= 0)
-                            {
-                                DataNascimento = data.ToString("dd/MM/yyyy");
-                            }                            
-                        }
-                        
-                        break;
-                    case 2:
-                        Cpf = valor + Cpf;
-                        Cpf = Cpf.Replace(".", "");
-                        Cpf = Cpf.Replace("-", "");
-
-                        //Validando quantidade de dígitos para 11
-                        while (Cpf.Length < 11) { Cpf = "0" + Cpf; }
-
-                        break;
-                    case 3:
-                        //Validando Qtd de dígitos do dígito verificador
-                        while (valor.Length < 2) { valor = "0" + valor; }
-                        while (valor.Length > 2) { valor = valor.Replace("0", ""); }
-
-                        //juntando dígito verificador
-                        Cpf += Cpf + valor;
-
-                        //Validando qtd de dígitos final
-                        while (Cpf.Length > 11) { Cpf += "0"; }
-
-                        break;
-                    case 4:
-                        Uf = valor;
-                        break;
-                    case 5:
-                        Cidade = valor;
-                        break;
-                    case 6:
-                        Bairro = valor;
-                        break;
-                    case 7:
-                        Ddd = valor;
-                        break;
-                    case 8:
-                        Telefone = valor;
-                        break;
-                    case 9:
-                        Logradouro = valor;
-                        break;
-                    case 10:
-                        valor = valor.Replace("-", "");
-                        while (valor.Length < 8)
-                        {
-                            valor = "0" + valor;
-                        }
-                        Cep = valor;
-                        break;
-                    case 11:
-                        if (!"".Equals(valor))
-                        {
-                            valor = valor.Replace(".", "");
-                            valor = valor.Replace("-", "");
-                            Beneficios[0].Numero = long.Parse(valor);
-                            Emprestimos[0].NumBeneficio = long.Parse(valor);
-                        }                        
-                        break;
-                    case 12:
-                        Emprestimos[0].BancoId = Convert.ToInt32(valor);
-                        break;
-                    case 13:
-                        Emprestimos[0].Saldo = float.Parse(valor);
-                        break;
-                    case 14:
-                        Emprestimos[0].ValorParcela = float.Parse(valor);
-                        break;
-                    case 15:
-                        Emprestimos[0].ParcelasNoContrato = Convert.ToInt32(valor);
-                        break;
-                    case 16:
-                        //10 é o dia de desconta na folha de pagamento
-                        string anoIni = valor.Substring(0, 4);
-                        string mesIni = valor.Substring(4, 2);
-                        string diaIni = "10";
-                        Emprestimos[0].InicioPagamento = (diaIni + "/" + mesIni + "/" + anoIni);
-                        break;
-                    case 17:
-                        Beneficios[0].Salario = float.Parse(valor);
-                        break;
-                    case 18:
-                        Complemento = valor;
-                        break;
+                    Id = long.Parse(Cpf);
                 }
+            }
+            catch (Exception ex)
+            {
+                //ex.Message += "Classe Cliente - Metodo: PreencheCpf, valor: " + valor;
+            }
+        }
+
+        public void PreencheDataNascimento(string valor)
+        {
+            try
+            {
+                if (!"".Equals(valor))
+                {
+                    if (valor.Length == 8)
+                    {
+                        string ano = valor.Substring(0, 4);
+                        string mes = valor.Substring(4, 2);
+                        string dia = valor.Substring(6, 2);
+
+                        valor = dia + "/" + mes + "/" + ano;
+                    }
+
+                    var data = Convert.ToDateTime(valor);
+
+                    if (DateTime.Compare(data, DateTime.MinValue) >= 0)
+                    {
+                        DataNascimento = data.ToString("dd/MM/yyyy");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void PreencheDigitoCpf(string valor)
+        {
+            try
+            {
+                //Validando Qtd de dígitos do dígito verificador
+                while (valor.Length < 2) { valor = "0" + valor; }
+                while (valor.Length > 2) { valor = valor.Replace("0", ""); }
+
+                //juntando dígito verificador
+                Cpf += Cpf + valor;
+
+                //Validando qtd de dígitos final
+                while (Cpf.Length > 11) { Cpf += "0"; }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void PreencheCep(string valor)
+        {
+            try
+            {
+                valor = valor.Replace("-", "");
+                while (valor.Length < 8)
+                {
+                    valor = "0" + valor;
+                }
+                Cep = valor;
             }
             catch (Exception)
             {
-                throw;
+
             }
         }
+
+        public void LimparPropriedades()
+        {
+            Id = 0;
+            Nome = string.Empty;
+            ImportacaoId = 0;
+            Cpf = string.Empty;
+            Uf = string.Empty;
+            Cidade = string.Empty;
+            Bairro = string.Empty;
+            Ddd = string.Empty;
+            Telefone = string.Empty;
+            DataNascimento = string.Empty;
+            Logradouro = string.Empty;
+            Numero = string.Empty;
+            Complemento = string.Empty;
+            Cep = string.Empty;
+            DataExpProcessa = string.Empty;
+            DataTelAtualizado = string.Empty;
+            DataEmpAtualizado = string.Empty;
+            DataTrabalhado = string.Empty;
+            DataImportado = string.Empty;
+
+            if (Beneficios != null)
+            {
+                Beneficios.Clear();
+            }
+            else
+            {
+                Beneficios = new List<BeneficioModel>();
+            }
+
+            if (Emprestimos != null)
+            {
+                Emprestimos.Clear();
+            }
+            else
+            {
+                Emprestimos = new List<EmprestimoModel>();
+            }
+
+        }
+        #endregion
+
     }
 }

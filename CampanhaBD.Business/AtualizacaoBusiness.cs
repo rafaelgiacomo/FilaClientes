@@ -32,6 +32,7 @@ namespace CampanhaBD.Business
             }
         }
 
+        #region Metodos publicos
         public List<ConsultaProcessaModel> ListaConsultasProcessa()
         {
             try
@@ -60,7 +61,7 @@ namespace CampanhaBD.Business
                     linhaSeparada = linha.Split(';');
 
                     EmprestimoModel empExcluir = new EmprestimoModel();
-                    
+
                     empExcluir.BancoId = 422;
 
                     if ("".Equals(linhaSeparada[INDICE_PROCESSA_BENEFICIO]))
@@ -77,11 +78,11 @@ namespace CampanhaBD.Business
                     {
                         empExcluir.NumBeneficio = long.Parse(linhaSeparada[INDICE_PROCESSA_BENEFICIO]);
                         _core.UnityOfWorkAdo.Emprestimos.ExcluirPorBeneficio(empExcluir);
-                    }                    
+                    }
 
-                    for (int i = 0;i < 10; i++)
+                    for (int i = 0; i < 10; i++)
                     {
-                        if (!"".Equals(linhaSeparada[INDICE_PROCESSA_BANCO_ID + (i*5)]))
+                        if (!"".Equals(linhaSeparada[INDICE_PROCESSA_BANCO_ID + (i * 5)]))
                         {
                             EmprestimoModel emprestimo = new EmprestimoModel();
 
@@ -96,7 +97,7 @@ namespace CampanhaBD.Business
                         else
                         {
                             i = 10;
-                        } 
+                        }
                     }
                 }
             }
@@ -107,7 +108,7 @@ namespace CampanhaBD.Business
             finally
             {
                 stream.Close();
-            }            
+            }
         }
 
         public void AtualizarEmprestimosProcessa(int consulta)
@@ -126,44 +127,34 @@ namespace CampanhaBD.Business
                     BeneficioModel benBusca = new BeneficioModel();
                     EmprestimoModel emp = new EmprestimoModel();
 
-                    if (!"".Equals(saldo.Matricula))
+                    benBusca.PreencheNumBeneficio(saldo.Matricula);
+
+                    if (benBusca.Numero != 0)
                     {
-                        try
-                        {
-                            benBusca.Numero = long.Parse(saldo.Matricula);
-                        }
-                        catch
-                        {
-                            benBusca.Numero = 0;
-                        }
+                        benBusca = _core.UnityOfWorkAdo.Beneficios.ListarPorId(benBusca);
 
-                        if (benBusca.Numero != 0)
+                        if (benBusca != null)
                         {
-                            benBusca = _core.UnityOfWorkAdo.Beneficios.ListarPorId(benBusca);
+                            emp.BancoId = int.Parse(saldo.CodigoBanco);
+                            emp.NumBeneficio = benBusca.Numero;
+                            emp.ParcelasNoContrato = saldo.ParcelasContrato;
+                            emp.ParcelasEmAberto = saldo.ParcelasAberto;
+                            emp.ValorParcela = saldo.ValorParcela;
+                            emp.Saldo = saldo.SaldoRefin;
+                            emp.ClienteId = benBusca.IdCliente;
 
-                            if (benBusca != null)
+                            if (!cpf.Equals(saldo.Cpf))
                             {
-                                emp.BancoId = int.Parse(saldo.CodigoBanco);
-                                emp.NumBeneficio = benBusca.Numero;
-                                emp.ParcelasNoContrato = saldo.ParcelasContrato;
-                                emp.ParcelasEmAberto = saldo.ParcelasAberto;
-                                emp.ValorParcela = saldo.ValorParcela;
-                                emp.Saldo = saldo.SaldoRefin;
-                                emp.ClienteId = benBusca.IdCliente;
-
-                                if (!cpf.Equals(saldo.Cpf))
-                                {
-                                    _core.UnityOfWorkAdo.Emprestimos.ExcluirPorBeneficio(emp);
-                                }
-
-                                cpf = saldo.Cpf;                               
-                                _core.UnityOfWorkAdo.Emprestimos.InserirProcessa(emp);
+                                _core.UnityOfWorkAdo.Emprestimos.ExcluirPorBeneficio(emp);
                             }
-                        }                        
-                    }                                                      
+
+                            cpf = saldo.Cpf;
+                            _core.UnityOfWorkAdo.Emprestimos.InserirProcessa(emp);
+                        }
+                    }
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 throw;
             }
@@ -200,6 +191,36 @@ namespace CampanhaBD.Business
                 throw;
             }
         }
+        #endregion
+
+        #region Metodos privados
+        private bool ValidaDadosEmprestimo(EmprestimoModel emprestimo)
+        {
+            try
+            {
+                if (emprestimo.BancoId <= 0)
+                {
+                    return false;
+                }
+
+                if (emprestimo.ClienteId <= 0)
+                {
+                    return false;
+                }
+
+                if (emprestimo.ValorParcela <= 0)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        #endregion
 
     }
 }

@@ -47,7 +47,7 @@ namespace CampanhaBD.UI.WEB.Controllers
         {
             try
             {
-                CampanhaModel campanha = viewModel.ViewModelParaCampanha();
+                FiltroModel campanha = viewModel.ViewModelParaCampanha();
 
                 #region Exportar Planilha
                 if (BotoesViewModel.ExportarPlanilha.Equals(viewModel.Submit))

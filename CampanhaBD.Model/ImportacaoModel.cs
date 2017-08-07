@@ -26,6 +26,7 @@ namespace CampanhaBD.Model
         public const string PROCEDURE_INSERT = "SP_SALVAR_IMPORTACAO";
         public const string PROCEDURE_UPDATE = "SP_ALTERAR_IMPORTACAO";
         public const string PROCEDURE_UPDATE_CAMINHO = "SP_SALVAR_CAMINHO_IMPORTACAO";
+        public const string PROCEDURE_UPDATE_NUM_IMPORTADOS = "SP_SALVAR_NUM_IMPORTADOS_IMPORTACAO";
         public const string PROCEDURE_DELETE = "SP_EXCLUIR_IMPORTACAO";
         public const string PROCEDURE_SELECT_ALL = "SP_LISTAR_TODOS_IMPORTACOES";
         public const string PROCEDURE_SELECT_BY_ID = "SP_SELECIONAR_IMPORTACAO_ID";
@@ -39,6 +40,32 @@ namespace CampanhaBD.Model
         public const string COLUMN_NUM_IMPORTADOS = "NumImportados";
         public const string COLUMN_NUM_ATUALIZADOS = "NumAtualizados";
         public const string COLUMN_CAMINHO_ARQUIVO = "CaminhoArquivo";
+        #endregion
+
+        #region Validações
+        
+        public bool ValidaDadosParaSalvar()
+        {
+            try
+            {
+                if ("".Equals(Nome))
+                {
+                    return false;
+                }
+
+                if (UsuarioId == 0)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
         #endregion
     }
 }

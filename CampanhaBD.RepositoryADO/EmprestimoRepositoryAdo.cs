@@ -25,19 +25,21 @@ namespace CampanhaBD.RepositoryADO
                 {
                     EmprestimoModel.COLUMN_BANCO_ID, EmprestimoModel.COLUMN_CLIENTE_ID, EmprestimoModel.COLUMN_NUM_BENEFICIO,
                     EmprestimoModel.COLUMN_VALOR_PARCELA, EmprestimoModel.COLUMN_PARCELAS_NO_CONTRATO,
-                    EmprestimoModel.COLUMN_PARCELAS_EM_ABERTO, EmprestimoModel.COLUMN_SALDO, EmprestimoModel.COLUMN_INICIO_PAGAMENTO
+                    EmprestimoModel.COLUMN_PARCELAS_EM_ABERTO, EmprestimoModel.COLUMN_SALDO, EmprestimoModel.COLUMN_INICIO_PAGAMENTO,
+                    EmprestimoModel.COLUMN_FIM_PAGAMENTO, EmprestimoModel.COLUMN_TIPO_EMPRESTIMO, EmprestimoModel.COLUMN_SITUACAO_EMPRESTIMO
                 };
 
                 object[] values = 
                 {
                     entidade.BancoId, entidade.ClienteId, entidade.NumBeneficio, entidade.ValorParcela,
-                    entidade.ParcelasNoContrato, entidade.ParcelasEmAberto, entidade.Saldo, entidade.InicioPagamento
+                    entidade.ParcelasNoContrato, entidade.ParcelasEmAberto, entidade.Saldo, entidade.DataInicioPagamento,
+                    entidade.DataFimPagamento, entidade.TipoEmprestimo,entidade.SituacaoEmprestimo
                 };
 
                 _context.ExecuteProcedureNoReturn(
                     EmprestimoModel.PROCEDURE_INSERT, parameters, values);
             }
-            catch
+            catch(Exception ex)
             {
                 throw;
             }
@@ -197,7 +199,7 @@ namespace CampanhaBD.RepositoryADO
                 temObjeto.ParcelasEmAberto = int.Parse(reader[EmprestimoModel.COLUMN_PARCELAS_EM_ABERTO].ToString());
                 temObjeto.Saldo = float.Parse(reader[EmprestimoModel.COLUMN_SALDO].ToString());
                 temObjeto.ValorParcela = float.Parse(reader[EmprestimoModel.COLUMN_VALOR_PARCELA].ToString());
-                temObjeto.InicioPagamento = reader[EmprestimoModel.COLUMN_INICIO_PAGAMENTO].ToString();
+                temObjeto.DataInicioPagamento = reader[EmprestimoModel.COLUMN_INICIO_PAGAMENTO].ToString();
 
                 return temObjeto;
             }

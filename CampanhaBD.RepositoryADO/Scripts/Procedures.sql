@@ -7,10 +7,41 @@ GO
 SET ANSI_NULLS OFF
 GO
 
+--====================================================== PROCEDURES TABELA BASE ORIGINAL =======================================================================
+
+--Listar Bases Originais
+--======================================================================================================
+IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_LISTAR_TODAS_BASES]')
+	AND OBJECTPROPERTY(ID, N'IsProcedure') = 1)
+	DROP PROCEDURE [DBO].[SP_LISTAR_TODAS_BASES]
+GO
+
+CREATE PROCEDURE [DBO].[SP_LISTAR_TODAS_BASES]
+AS
+BEGIN
+	SELECT [Id], [Descricao] FROM [BaseOriginal]
+END
+GO
+
+--Listar Clientes por Base
+--======================================================================================================
+IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_LISTAR_CLIENTES_BASE_ORIGINAL]')
+	AND OBJECTPROPERTY(ID, N'IsProcedure') = 1)
+	DROP PROCEDURE [DBO].[SP_LISTAR_CLIENTES_BASE_ORIGINAL]
+GO
+
+CREATE PROCEDURE [DBO].[SP_LISTAR_CLIENTES_BASE_ORIGINAL]
+	@BaseId int
+AS
+BEGIN
+	SELECT * FROM [BaseOriginalDados] WHERE [BaseId] = @BaseId
+END
+GO
+
 --====================================================== PROCEDURES TABELA USUARIO =======================================================================
 
 --Salvar Usuario
---===============================================
+--======================================================================================================
 IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_SALVAR_USUARIO]')
 	AND OBJECTPROPERTY(ID, N'IsProcedure') = 1)
 	DROP PROCEDURE [DBO].[SP_SALVAR_USUARIO]
@@ -155,16 +186,15 @@ BEGIN
 END
 GO
 
---====================================================== PROCEDURES TABELA CLIENTE =======================================================================
-
 --Salvar Cliente
---===============================================
+--===================================================================================================
 IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_SALVAR_CLIENTE]')
 	AND OBJECTPROPERTY(ID, N'IsProcedure') = 1)
 	DROP PROCEDURE [DBO].[SP_SALVAR_CLIENTE]
 GO
 
 CREATE PROCEDURE [DBO].[SP_SALVAR_CLIENTE]
+	@Id bigint,
 	@ImportacaoId int,
 	@Nome varchar(max),
 	@Cpf varchar(max),
@@ -173,22 +203,19 @@ CREATE PROCEDURE [DBO].[SP_SALVAR_CLIENTE]
 	@Bairro varchar(max) = null,
 	@Ddd varchar(3) = null,
 	@Telefone varchar(max) = null,
+	@Ddd2 varchar(3) = null,
+	@Telefone2 varchar(max) = null,
 	@DataNascimento datetime = null,
 	@Logradouro varchar(max) = null,
 	@Numero varchar(7) = null,
 	@Complemento varchar(max) = null,
-	@Cep varchar(11) = null,
-	@DataImportado datetime
+	@Cep varchar(11) = null
 AS
 BEGIN
-	INSERT INTO [Cliente] ([ImportacaoId], [Nome], [Cpf], [Uf], [Cidade], [Bairro], [Ddd], [Telefone], [DataNascimento], [Logradouro], [Numero], [Complemento], [Cep],
+	INSERT INTO [Cliente] ([Id], [ImportacaoId], [Nome], [Cpf], [Uf], [Cidade], [Bairro], [Ddd], [Telefone], [Ddd2], [Telefone2], [DataNascimento], [Logradouro], [Numero], [Complemento], [Cep],
 		[DataImportado])
-	VALUES (@ImportacaoId, @Nome, @Cpf, @Uf, @Cidade, @Bairro, @Ddd, @Telefone, @DataNascimento, @Logradouro, @Numero, @Complemento, @Cep, @DataImportado)
-
-	DECLARE @ULTIMO_ID INT 
-	SET @ULTIMO_ID = Scope_identity()
-
-	SELECT @ULTIMO_ID
+	VALUES (@Id, @ImportacaoId, @Nome, @Cpf, @Uf, @Cidade, @Bairro, @Ddd, @Telefone, @Ddd2, @Telefone2, @DataNascimento, @Logradouro, @Numero, @Complemento, @Cep, 
+		CONVERT(date, GETDATE()))
 END
 GO
 
@@ -279,8 +306,7 @@ CREATE PROCEDURE [DBO].[SP_LISTAR_CLIENTES_IMPORTACAO]
 	@ImportacaoId int
 AS
 BEGIN
-	SELECT [Id], [ImportacaoId], [Nome], [Cpf], [Uf], [Cidade], [Bairro], [Ddd], [Telefone], [DataNascimento], [Logradouro], [Numero], [Complemento], [Cep],
-		[DataImportado], [DataTelAtualizado], [DataEmpAtualizados], [DataTrabalhado] FROM [Cliente] where [ImportacaoId] = @ImportacaoId
+	SELECT * FROM [Cliente] where [ImportacaoId] = @ImportacaoId
 END
 GO
 
@@ -295,8 +321,7 @@ CREATE PROCEDURE [DBO].[SP_SELECIONAR_CLIENTE_ID]
 	@Id bigint
 AS
 BEGIN
-	SELECT [Id], [ImportacaoId], [Nome], [Cpf], [Uf], [Cidade], [Bairro], [Ddd], [Telefone], [DataNascimento], [Logradouro], [Numero], [Complemento], [Cep],
-		[DataImportado], [DataTelAtualizado], [DataEmpAtualizados], [DataTrabalhado] FROM [Cliente] where [Id] = @Id
+	SELECT * FROM [Cliente] where [Id] = @Id
 END
 GO
 
@@ -311,8 +336,7 @@ CREATE PROCEDURE [DBO].[SP_SELECIONAR_CLIENTE_CPF]
 	@Cpf varchar(15)
 AS
 BEGIN
-	SELECT [Id], [ImportacaoId], [Nome], [Cpf], [Uf], [Cidade], [Bairro], [Ddd], [Telefone], [DataNascimento], [Logradouro], [Numero], [Complemento], [Cep],
-		[DataImportado], [DataTelAtualizado], [DataEmpAtualizados], [DataTrabalhado] FROM [Cliente] where [Cpf] = @Cpf
+	SELECT * FROM [Cliente] where [Cpf] = @Cpf
 END
 GO
 
@@ -331,10 +355,26 @@ BEGIN
 END
 GO
 
+--Trocar Importacao do Cliente
+--===============================================
+IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_TROCAR_IMPORTACAO_CLIENTE]')
+	AND OBJECTPROPERTY(ID, N'IsProcedure') = 1)
+	DROP PROCEDURE [DBO].[SP_TROCAR_IMPORTACAO_CLIENTE]
+GO
+
+CREATE PROCEDURE [DBO].[SP_TROCAR_IMPORTACAO_CLIENTE]
+	@Id bigint,
+	@ImportacaoId int
+AS
+BEGIN
+	UPDATE [Cliente] SET [ImportacaoId] = @ImportacaoId WHERE [Id] = @Id
+END
+GO
+
 
 --====================================================== PROCEDURES TABELA IMPORTACAO =======================================================================
 
---Salvar Cliente
+--Salvar Importacao
 --===============================================
 IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_SALVAR_IMPORTACAO]')
 	AND OBJECTPROPERTY(ID, N'IsProcedure') = 1)
@@ -344,17 +384,18 @@ GO
 CREATE PROCEDURE [DBO].[SP_SALVAR_IMPORTACAO]
 	@UsuarioId int,
 	@Nome varchar(max),
-	@Data datetime,
 	@Terminado bit = null,
 	@NumImportados int = null,
 	@NumAtualizados int = null,
 	@CaminhoArquivo varchar(max) = null
 AS
 BEGIN
-	INSERT INTO [Importacao] ([UsuarioId], [Nome], [Data], [Terminado], [NumImportados], [NumAtualizados], [CaminhoArquivo])
-	VALUES (@UsuarioId, @Nome, @Data, @Terminado, @NumImportados, @NumAtualizados, @CaminhoArquivo)
+	DECLARE @ULTIMO_ID INT
 
-	DECLARE @ULTIMO_ID INT 
+	INSERT INTO [Importacao] ([UsuarioId], [Nome], [Data], [Terminado], [NumImportados], [NumAtualizados], [CaminhoArquivo])
+	VALUES (@UsuarioId, @Nome, CONVERT(date, GETDATE()), @Terminado, @NumImportados, @NumAtualizados, @CaminhoArquivo)
+
+	 
 	SET @ULTIMO_ID = Scope_identity()
 
 	SELECT @ULTIMO_ID
@@ -377,6 +418,22 @@ BEGIN
 END
 GO
 
+--Adicionar Numero de Importados da Importacao
+--===============================================
+IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_SALVAR_NUM_IMPORTADOS_IMPORTACAO]')
+	AND OBJECTPROPERTY(ID, N'IsProcedure') = 1)
+	DROP PROCEDURE [DBO].[SP_SALVAR_NUM_IMPORTADOS_IMPORTACAO]
+GO
+
+CREATE PROCEDURE [DBO].[SP_SALVAR_NUM_IMPORTADOS_IMPORTACAO]
+	@Id int,
+	@NumImportados int
+AS
+BEGIN
+	UPDATE [Importacao] SET [NumImportados] = @NumImportados WHERE [Id] = @Id
+END
+GO
+
 --Listar Todos Importacoes
 --===============================================
 IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_LISTAR_TODOS_IMPORTACOES]')
@@ -387,7 +444,7 @@ GO
 CREATE PROCEDURE [DBO].[SP_LISTAR_TODOS_IMPORTACOES]
 AS
 BEGIN
-	SELECT [Id], [UsuarioId], [Nome], [Data], [Terminado], [NumImportados], [NumAtualizados], [CaminhoArquivo] FROM [Importacao]
+	SELECT * FROM [Importacao]
 END
 GO
 
@@ -402,7 +459,7 @@ CREATE PROCEDURE [DBO].[SP_SELECIONAR_IMPORTACAO_ID]
 	@Id int
 AS
 BEGIN
-	SELECT [Id], [UsuarioId], [Nome], [Data], [Terminado], [NumImportados], [NumAtualizados], [CaminhoArquivo] FROM [Importacao] WHERE [Id] = @Id
+	SELECT * FROM [Importacao] WHERE [Id] = @Id
 END
 GO
 
@@ -417,7 +474,7 @@ CREATE PROCEDURE [DBO].[SP_SELECIONAR_IMPORTACAO_NOME]
 	@Nome varchar(max)
 AS
 BEGIN
-	SELECT [Id], [UsuarioId], [Nome], [Data], [Terminado], [NumImportados], [NumAtualizados], [CaminhoArquivo] FROM [Importacao] WHERE [Nome] = @Nome
+	SELECT * FROM [Importacao] WHERE [Nome] = @Nome
 END
 GO
 
@@ -449,8 +506,7 @@ CREATE PROCEDURE [DBO].[SP_SELECIONAR_EMPRESTIMOS_CLIENTE_ID]
 	@ClienteId bigint
 AS
 BEGIN
-	SELECT [BancoId], [ClienteId], [NumBeneficio], [NumEmprestimo], [ValorParcela], [ParcelasNoContrato], [ParcelasEmAberto], 
-		[Saldo], [InicioPagamento] FROM [Emprestimo] WHERE [ClienteId] = @ClienteId 
+	SELECT * FROM [Emprestimo] WHERE [ClienteId] = @ClienteId 
 END
 GO
 
@@ -465,9 +521,7 @@ CREATE PROCEDURE [DBO].[SP_EXCLUIR_EMPRESTIMO_BENEFICIO]
 	@NumBeneficio bigint,
 	@BancoId int
 AS
-BEGIN
-
-	
+BEGIN	
 	DELETE FROM [Emprestimo] WHERE [NumBeneficio] = @NumBeneficio AND [BancoId] = @BancoId
 END
 GO
@@ -498,20 +552,26 @@ GO
 CREATE PROCEDURE [DBO].[SP_SALVAR_EMPRESTIMO]
 	@ClienteId bigint,
 	@NumBeneficio bigint,
-	@ValorParcela float,
+	@ValorParcela float = null,
+	@ValorBruto float = null,
 	@ParcelasNoContrato int = null,
 	@ParcelasEmAberto int = null,
 	@Saldo float = null,
 	@InicioPagamento date = null,
-	@BancoId int
+	@FimPagamento date = null,
+	@BancoId int,
+	@TipoEmprestimo int = null,
+	@SituacaoEmprestimo int = null
 AS
 BEGIN
 	DECLARE @NumEmprestimo INT 
 
 	SET @NumEmprestimo = (SELECT (COUNT(*) + 1) FROM [Emprestimo] WHERE [ClienteId] = @ClienteId AND [NumBeneficio] = @NumBeneficio)
 
-	INSERT INTO [Emprestimo] ([ClienteId], [NumBeneficio], [NumEmprestimo], [ValorParcela], [ParcelasNoContrato], [ParcelasEmAberto], [Saldo], [InicioPagamento], [BancoId])
-	VALUES (@ClienteId, @NumBeneficio, @NumEmprestimo, @ValorParcela, @ParcelasNoContrato, @ParcelasEmAberto, @Saldo, @InicioPagamento, @BancoId)
+	INSERT INTO [Emprestimo] ([ClienteId], [NumBeneficio], [NumEmprestimo], [ValorParcela], [ParcelasNoContrato], [ParcelasEmAberto], [Saldo], [InicioPagamento], [BancoId],
+		[ValorBruto], [FimPagamento], [TipoEmprestimo], [SituacaoEmprestimo])
+	VALUES (@ClienteId, @NumBeneficio, @NumEmprestimo, @ValorParcela, @ParcelasNoContrato, @ParcelasEmAberto, @Saldo, @InicioPagamento, @BancoId, @ValorBruto, @FimPagamento,
+		@TipoEmprestimo, @SituacaoEmprestimo)
 END
 GO
 
@@ -557,11 +617,19 @@ CREATE PROCEDURE [DBO].[SP_SALVAR_BENEFICIO]
 	@Numero bigint,
 	@ClienteId bigint,
 	@Salario float = null,
-	@DataCompetencia date = null
+	@DataCompetencia date = null,
+	@DataInicioBeneficio date = null,
+	@BancoPagamento int = null,
+	@AgenciaPagamento int = null,
+	@OrgaoPagador int = null,
+	@ContaCorrente nvarchar(20) = null,
+	@DataIncluidoInss nvarchar(20) = null,
+	@DataExcluidoInss nvarchar(20) = null
 AS
 BEGIN
-	INSERT INTO [Beneficio] ([Numero], [ClienteId], [Salario], [DataCompetencia])
-	VALUES (@Numero, @ClienteId, @Salario, @DataCompetencia)
+	INSERT INTO [Beneficio] ([Numero], [ClienteId], [Salario], [DataCompetencia], [DataInicioBeneficio], [BancoPagamento], [AgenciaPagamento], [OrgaoPagador], [ContaCorrente],
+		[DataIncluidoInss], [DataExcluidoInss])
+	VALUES (@Numero, @ClienteId, @Salario, @DataCompetencia, @DataInicioBeneficio, @BancoPagamento, @AgenciaPagamento, @OrgaoPagador, @ContaCorrente, @DataIncluidoInss, @DataExcluidoInss)
 END
 GO
 
@@ -576,7 +644,7 @@ CREATE PROCEDURE [DBO].[SP_SELECIONAR_BENEFICIO_ID]
 	@Numero bigint
 AS
 BEGIN
-	SELECT [Numero], [ClienteId], [Salario], [DataCompetencia] FROM [Beneficio] WHERE [Numero] = @Numero
+	SELECT * FROM [Beneficio] WHERE [Numero] = @Numero
 END
 GO
 
@@ -591,7 +659,6 @@ CREATE PROCEDURE [DBO].[SP_LISTAR_BENEFICIO_CLIENTE_ID]
 	@ClienteId bigint
 AS
 BEGIN
-	SELECT [Numero], [ClienteId], [Salario], [DataCompetencia] FROM [Beneficio] WHERE [ClienteId] = @ClienteId
+	SELECT * FROM [Beneficio] WHERE [ClienteId] = @ClienteId
 END
 GO
-

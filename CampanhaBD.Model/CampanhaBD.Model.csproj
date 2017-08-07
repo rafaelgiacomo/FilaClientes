@@ -49,13 +49,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseOriginalDadoModel.cs" />
+    <Compile Include="BaseOriginalModel.cs" />
+    <Compile Include="TabelaBaseModel.cs" />
     <Compile Include="Processa\ConsultaDadosProcessaModel.cs" />
     <Compile Include="Processa\SaldoRefinProcessaModel.cs" />
     <Compile Include="Processa\ConsultaProcessaModel.cs" />
     <Compile Include="LayoutArquivoModel.cs" />
     <Compile Include="BancoModel.cs" />
     <Compile Include="BeneficioModel.cs" />
-    <Compile Include="CampanhaModel.cs" />
+    <Compile Include="FiltroModel.cs" />
     <Compile Include="CampanhaImportacaoModel.cs" />
     <Compile Include="ClienteModel.cs" />
     <Compile Include="EmprestimoModel.cs" />

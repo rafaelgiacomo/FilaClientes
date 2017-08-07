@@ -23,15 +23,23 @@ namespace CampanhaBD.RepositoryADO
                 string[] parameters =
                 {
                     BeneficioModel.COLUMN_NUMERO, BeneficioModel.COLUMN_CLIENTE_ID, BeneficioModel.COLUMN_SALARIO,
-                    BeneficioModel.COLUMN_DATA_COMPETENCIA
+                    BeneficioModel.COLUMN_DATA_COMPETENCIA, BeneficioModel.COLUMN_DATA_INICIO_BENEFICIO, 
+                    BeneficioModel.COLUMN_BANCO_PAGAMENTO, BeneficioModel.COLUMN_AGENCIA_PAGAMENTO, 
+                    BeneficioModel.COLUMN_ORGAO_PAGADOR, BeneficioModel.COLUMN_CONTA_CORRENTE,
+                    BeneficioModel.COLUMN_DATA_INCLUIDO_INSS, BeneficioModel.COLUMN_DATA_EXCLUIDO_INSS
                 };
 
-                object[] values = { entidade.Numero, entidade.IdCliente, entidade.Salario, entidade.DataCompetencia };
+                object[] values = {
+                    entidade.Numero, entidade.IdCliente, entidade.Salario, entidade.DataCompetencia,
+                    entidade.DataInicioBeneficio, entidade.BancoPagamento, entidade.AgenciaPagamento,
+                    entidade.CodigoOrgaoPagador, entidade.ContaCorrente, entidade.DataIncluidoInss,
+                    entidade.DataExcluidoInss
+                };
 
                 _context.ExecuteProcedureNoReturn(
                     BeneficioModel.PROCEDURE_INSERT, parameters, values);
             }
-            catch
+            catch(Exception ex)
             {
                 throw;
             }
@@ -87,7 +95,7 @@ namespace CampanhaBD.RepositoryADO
                 SqlDataReader reader = null;
                 var retorno = new List<BeneficioModel>();
 
-                string[] parameters = { ClienteModel.COLUMN_ID };
+                string[] parameters = { BeneficioModel.COLUMN_CLIENTE_ID };
                 object[] values = { clienteId };
 
                 reader = _context.ExecuteProcedureWithReturn(

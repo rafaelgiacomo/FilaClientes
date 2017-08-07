@@ -145,15 +145,15 @@ namespace CampanhaBD.UI.WEB.ViewModel
             }
         }
 
-        public CampanhaModel ViewModelParaCampanha()
+        public FiltroModel ViewModelParaCampanha()
         {
             try
             {
-                CampanhaModel campanha = new CampanhaModel();
+                FiltroModel campanha = new FiltroModel();
 
                 campanha.Nome = Nome;
-                campanha.CodigoBanco = CodigoBanco;
-                campanha.CodigoImportacao = Importacao;
+                campanha.Bancos.Add(CodigoBanco);
+                campanha.Importacoes.Add(Importacao);
                 campanha.MinDataNascimento = MinDataNascimento;
                 campanha.MaxDataNascimento = MaxDataNascimento;
                 campanha.MinCep = MinCep;
@@ -187,7 +187,8 @@ namespace CampanhaBD.UI.WEB.ViewModel
 
                 return campanha;
 
-            } catch(Exception)
+            }
+            catch (Exception)
             {
                 throw;
             }

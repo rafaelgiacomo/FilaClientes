@@ -22,14 +22,14 @@ namespace CampanhaBD.RepositoryADO
             {
                 string[] parameters =
                 {
-                    ImportacaoModel.COLUMN_USUARIO_ID, ImportacaoModel.COLUMN_NOME,ImportacaoModel.COLUMN_DATA,
+                    ImportacaoModel.COLUMN_USUARIO_ID, ImportacaoModel.COLUMN_NOME,
                     ImportacaoModel.COLUMN_TERMINADO, ImportacaoModel.COLUMN_NUM_IMPORTADOS,
                     ImportacaoModel.COLUMN_NUM_ATUALIZADOS, ImportacaoModel.COLUMN_CAMINHO_ARQUIVO
                 };
 
                 object[] values =
                 {
-                    entidade.UsuarioId, entidade.Nome, entidade.Data, entidade.Terminado, entidade.NumImportados,
+                    entidade.UsuarioId, entidade.Nome, entidade.Terminado, entidade.NumImportados,
                     entidade.NumAtualizados, entidade.CaminhoArquivo
                 };
 
@@ -68,6 +68,29 @@ namespace CampanhaBD.RepositoryADO
 
                 _context.ExecuteProcedureNoReturn(
                     ImportacaoModel.PROCEDURE_UPDATE_CAMINHO, parameters, values);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public void SalvarNumImportados(ImportacaoModel entidade)
+        {
+            try
+            {
+                string[] parameters =
+                {
+                    ImportacaoModel.COLUMN_ID, ImportacaoModel.COLUMN_NUM_IMPORTADOS
+                };
+
+                object[] values =
+                {
+                    entidade.Id, entidade.NumImportados
+                };
+
+                _context.ExecuteProcedureNoReturn(
+                    ImportacaoModel.PROCEDURE_UPDATE_NUM_IMPORTADOS, parameters, values);
             }
             catch
             {

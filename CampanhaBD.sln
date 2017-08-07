@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampanhaBD.Business", "Camp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampanhaBD.Util", "CampanhaBD.Util\CampanhaBD.Util.csproj", "{4D166322-E2A4-4DCF-AF65-EE7CB8B2A45F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampanhaBD.UI.Windows", "CampanhaBD.UI.Windows\CampanhaBD.UI.Windows.csproj", "{8F2B0775-D12A-4B3A-9337-B899759B06CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{4D166322-E2A4-4DCF-AF65-EE7CB8B2A45F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D166322-E2A4-4DCF-AF65-EE7CB8B2A45F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D166322-E2A4-4DCF-AF65-EE7CB8B2A45F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F2B0775-D12A-4B3A-9337-B899759B06CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F2B0775-D12A-4B3A-9337-B899759B06CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F2B0775-D12A-4B3A-9337-B899759B06CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F2B0775-D12A-4B3A-9337-B899759B06CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

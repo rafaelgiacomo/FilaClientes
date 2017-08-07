@@ -7,13 +7,14 @@ namespace CampanhaBD.RepositoryADO
 {   
     public class Context : IDisposable
     {
-        private readonly SqlConnection myConnection;
+        private readonly SqlConnection _myConnection;
+        private SqlTransaction _tran;
 
         public Context(string conString)
         {
             try
             {
-                myConnection = new SqlConnection(conString);
+                _myConnection = new SqlConnection(conString);
             }
             catch
             {
@@ -32,7 +33,8 @@ namespace CampanhaBD.RepositoryADO
                 {
                     CommandText = procedureName,
                     CommandType = CommandType.StoredProcedure,
-                    Connection = myConnection,
+                    Connection = _myConnection,
+                    Transaction = _tran
                 };
 
                 for (int i = 0; i < parameters.Length; i++)
@@ -53,16 +55,14 @@ namespace CampanhaBD.RepositoryADO
         public void ExecuteProcedureNoReturn(string procedureName,
             string[] parameters, params object[] values)
         {
-            SqlTransaction tran = myConnection.BeginTransaction();
-
             try
             {
                 var cmdComando = new SqlCommand
                 {
                     CommandText = procedureName,
                     CommandType = CommandType.StoredProcedure,
-                    Connection = myConnection,
-                    Transaction = tran
+                    Connection = _myConnection,
+                    Transaction = _tran
                 };
 
                 for (int i = 0; i < parameters.Length; i++)
@@ -71,35 +71,54 @@ namespace CampanhaBD.RepositoryADO
                 }
 
                 cmdComando.ExecuteNonQuery();
-                tran.Commit();
             }
             catch
             {
-                tran.Rollback();
+                throw;
+            }
+        }
+
+        public void ExecuteProcedureNoReturnNoTransaction(string procedureName,
+            string[] parameters, params object[] values)
+        {
+            try
+            {
+                var cmdComando = new SqlCommand
+                {
+                    CommandText = procedureName,
+                    CommandType = CommandType.StoredProcedure,
+                    Connection = _myConnection
+                };
+
+                for (int i = 0; i < parameters.Length; i++)
+                {
+                    cmdComando.Parameters.AddWithValue(parameters[i], values[i]);
+                }
+
+                cmdComando.ExecuteNonQuery();
+            }
+            catch
+            {
                 throw;
             }
         }
 
         public void ExecuteSqlCommandNoReturn(string command)
         {
-            SqlTransaction tran = myConnection.BeginTransaction();
-
             try
             {
                 var cmdComando = new SqlCommand
                 {
                     CommandText = command,
                     CommandType = CommandType.Text,
-                    Connection = myConnection,
-                    Transaction = tran
+                    Connection = _myConnection,
+                    Transaction = _tran
                 };
 
                 cmdComando.ExecuteNonQuery();
-                tran.Commit();
             }
             catch
             {
-                tran.Rollback();
                 throw;
             }
         }
@@ -114,7 +133,8 @@ namespace CampanhaBD.RepositoryADO
                 {
                     CommandText = commmand,
                     CommandType = CommandType.Text,
-                    Connection = myConnection,
+                    Connection = _myConnection,
+                    Transaction = _tran
                 };
 
                 reader = cmdComando.ExecuteReader();
@@ -127,19 +147,57 @@ namespace CampanhaBD.RepositoryADO
             }
         }
 
+        public SqlDataReader ExecuteSqlCommandWithReturnNoTransaction(string commmand)
+        {
+            try
+            {
+                SqlDataReader reader = null;
+
+                var cmdComando = new SqlCommand
+                {
+                    CommandText = commmand,
+                    CommandType = CommandType.Text,
+                    Connection = _myConnection
+                };
+
+                reader = cmdComando.ExecuteReader();
+
+                return reader;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public void OpenTransaction()
+        {
+            _tran = _myConnection.BeginTransaction();
+        }
+
+        public void Commit()
+        {
+            _tran.Commit();
+        }
+
+        public void RollBack()
+        {
+            _tran.Rollback();
+        }
+
         public void AbrirConexao()
         {
-            if (myConnection.State == ConnectionState.Closed)
+            if (_myConnection.State == ConnectionState.Closed)
             {
-                myConnection.Open();
+                _myConnection.Open();
             }
         }
 
         public void FecharConexao()
         {
-            if (myConnection.State == ConnectionState.Open)
+            if (_myConnection.State == ConnectionState.Open)
             {
-                myConnection.Close();
+                _myConnection.Close();
             }
         }
 
@@ -147,7 +205,7 @@ namespace CampanhaBD.RepositoryADO
         {
             try
             {
-                myConnection.ChangeDatabase(nomeBase);
+                _myConnection.ChangeDatabase(nomeBase);
             }
             catch
             {
@@ -158,9 +216,9 @@ namespace CampanhaBD.RepositoryADO
 
         public void Dispose()
         {
-            if (myConnection.State == ConnectionState.Open)
+            if (_myConnection.State == ConnectionState.Open)
             {
-                myConnection.Close();
+                _myConnection.Close();
             }
         }
     }

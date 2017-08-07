@@ -16,7 +16,7 @@ namespace CampanhaBD.UI.WEB.Controllers
         // GET: Banco
         public ActionResult Index()
         {
-            return View(new List<CampanhaModel>());
+            return View(new List<FiltroModel>());
         }
 
         public ActionResult Criar()
@@ -86,7 +86,7 @@ namespace CampanhaBD.UI.WEB.Controllers
         {
             //Campanha campanha = _unityOfWork.Campanhas.ListarPorId(camId.ToString(), usuarioId.ToString());
 
-            CampanhaModel campanha = new CampanhaModel();
+            FiltroModel campanha = new FiltroModel();
 
             if (campanha == null)
             {

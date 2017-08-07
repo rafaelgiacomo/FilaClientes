@@ -26,30 +26,21 @@ namespace CampanhaBD.RepositoryADO
                     ClienteModel.COLUMN_UF, ClienteModel.COLUMN_CIDADE, ClienteModel.COLUMN_BAIRRO, ClienteModel.COLUMN_DDD,
                     ClienteModel.COLUMN_TELEFONE, ClienteModel.COLUMN_DATANASCIMENTO, ClienteModel.COLUMN_LOGRADOURO,
                     ClienteModel.COLUMN_NUMERO, ClienteModel.COLUMN_COMPLEMENTO, ClienteModel.COLUMN_CEP,
-                    ClienteModel.COLUMN_DATA_IMPORTADO
+                    ClienteModel.COLUMN_ID
                 };
 
                 object[] values =
                 {
                     entidade.ImportacaoId, entidade.Nome, entidade.Cpf, entidade.Uf, entidade.Cidade, entidade.Bairro,
                     entidade.Ddd, entidade.Telefone, entidade.DataNascimento, entidade.Logradouro, entidade.Numero,
-                    entidade.Complemento, entidade.Cep, entidade.DataImportado
+                    entidade.Complemento, entidade.Cep, entidade.Id
                 };
 
-                var reader = _context.ExecuteProcedureWithReturn(
+                _context.ExecuteProcedureNoReturn(
                     ClienteModel.PROCEDURE_INSERT, parameters, values);
 
-                if (reader.Read())
-                {
-                    var ultimoId = reader[0].ToString();
-
-                    if (!String.IsNullOrEmpty(ultimoId))
-                        entidade.Id = Convert.ToInt32(ultimoId);
-                }
-
-                reader.Close();
             }
-            catch
+            catch(Exception ex)
             {
                 throw;
             }
@@ -57,23 +48,43 @@ namespace CampanhaBD.RepositoryADO
 
         public void Alterar(ClienteModel entidade)
         {
-            //var strQuery = "";
-            //strQuery += " UPDATE Cliente SET ";
-            //strQuery += string.Format(" dataNasc = '{0}', ", entidade.DataNascimento);
-            //strQuery += string.Format(" estado = '{0}', ", entidade.Uf);
-            //strQuery += string.Format(" cidade = '{0}', ", entidade.Cidade);
-            //strQuery += string.Format(" bairro = '{0}', ", entidade.Bairro);
-            //strQuery += string.Format(" ddd = '{0}', ", entidade.Ddd);
-            //strQuery += string.Format(" telefone = '{0}', ", entidade.Telefone);
-            //strQuery += string.Format(" logradouro = '{0}', ", entidade.Logradouro);
-            //strQuery += string.Format(" cep = '{0}', ", entidade.Cep);
-            //strQuery += string.Format(" trabalhado = '{0}' ", entidade.Trabalhado);
-            //strQuery += string.Format(" numero = '{0}', ", entidade.Numero);
-            //strQuery += string.Format(" complemento = '{0}', ", entidade.Complemento);
-            //strQuery += string.Format(" CPF = '{0}', ", entidade.Cpf);
-            //strQuery += string.Format(" imp_id = '{0}', ", entidade.ImportacaoId);
-            //strQuery += string.Format(" WHERE pessoa_id = {0} ", entidade.Id);
-            //_context.ExecutaComando(strQuery);
+            try
+            {
+                var strQuery = "UPDATE Cliente SET";
+
+                strQuery += string.Format(" {0} = '{1}'", ClienteModel.COLUMN_IMPORTACAO_ID, entidade.ImportacaoId);
+
+                if ("".Equals(entidade.Nome))
+                    strQuery += string.Format(", {0} = '{1}'", ClienteModel.COLUMN_NOME, entidade.Nome);
+                if (!"".Equals(entidade.Uf))
+                    strQuery += string.Format(", {0} = '{1}'", ClienteModel.COLUMN_UF, entidade.Uf);
+                if (!"".Equals(entidade.Cidade))
+                    strQuery += string.Format(", {0} = '{1}'", ClienteModel.COLUMN_CIDADE, entidade.Cidade);
+                if (!"".Equals(entidade.Bairro))
+                    strQuery += string.Format(", {0} = '{1}'", ClienteModel.COLUMN_BAIRRO, entidade.Bairro);
+                if (!"".Equals(entidade.Ddd))
+                    strQuery += string.Format(", {0} = '{1}'", ClienteModel.COLUMN_DDD, entidade.Ddd);
+                if (!"".Equals(entidade.Telefone))
+                    strQuery += string.Format(", {0} = '{1}'", ClienteModel.COLUMN_TELEFONE, entidade.Telefone);
+                if (!"".Equals(entidade.DataNascimento))
+                    strQuery += string.Format(", {0} = '{1}'", ClienteModel.COLUMN_DATANASCIMENTO, entidade.DataNascimento);
+                if (!"".Equals(entidade.Logradouro))
+                    strQuery += string.Format(", {0} = '{1}'", ClienteModel.COLUMN_LOGRADOURO, entidade.Logradouro);
+                if (!"".Equals(entidade.Numero))
+                    strQuery += string.Format(", {0} = '{1}'", ClienteModel.COLUMN_NUMERO, entidade.Numero);
+                if (!"".Equals(entidade.Complemento))
+                    strQuery += string.Format(", {0} = '{1}'", ClienteModel.COLUMN_COMPLEMENTO, entidade.Complemento);
+                if (!"".Equals(entidade.Cep))
+                    strQuery += string.Format(", {0} = '{1}'", ClienteModel.COLUMN_CEP, entidade.Cep);
+
+                strQuery += string.Format(" WHERE {0} = '{1}' ", ClienteModel.COLUMN_ID, entidade.Id);
+
+                _context.ExecuteSqlCommandNoReturn(strQuery);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public void AtualizarDataExpProcessa(ClienteModel entidade)
@@ -170,11 +181,25 @@ namespace CampanhaBD.RepositoryADO
 
         public void AlterarImportacao(ClienteModel entidade)
         {
-            //var strQuery = "";
-            //strQuery += " UPDATE Cliente SET ";
-            //strQuery += string.Format(" imp_id = '{0}' ", entidade.ImportacaoId);
-            //strQuery += string.Format(" WHERE pessoa_id = {0} ", entidade.Id);
-            //_context.ExecutaComando(strQuery);
+            try
+            {
+                string[] parameters =
+                {
+                    ClienteModel.COLUMN_ID, ClienteModel.COLUMN_IMPORTACAO_ID
+                };
+
+                object[] values =
+                {
+                    entidade.Id, entidade.ImportacaoId
+                };
+
+                _context.ExecuteProcedureNoReturn(
+                    ClienteModel.PROCEDURE_UPDATE_IMPORTACAO, parameters, values);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public void Excluir(ClienteModel entidade)
@@ -247,30 +272,55 @@ namespace CampanhaBD.RepositoryADO
             }
         }
 
+        public List<ClienteModel> TransformaSqlEmLista(string sql)
+        {
+            try
+            {
+                List<ClienteModel> lista = new List<ClienteModel>();
+
+                SqlDataReader reader = _context.ExecuteSqlCommandWithReturn(sql);
+
+                while (reader.Read())
+                {
+                    var entidade = TransformaReaderEmObjeto(reader);
+
+                    lista.Add(entidade);
+                }
+
+                reader.Close();
+
+                return lista;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public static ClienteModel TransformaReaderEmObjeto(SqlDataReader reader)
         {
             try
             {
                 var temObjeto = new ClienteModel();
-                temObjeto.Id = long.Parse(reader["Id"].ToString());
-                temObjeto.Nome = reader["Nome"].ToString();
-                temObjeto.Uf = reader["Uf"].ToString();
-                temObjeto.Cidade = reader["Cidade"].ToString();
-                temObjeto.Bairro = reader["Bairro"].ToString();
-                temObjeto.Ddd = reader["Ddd"].ToString();
-                temObjeto.Telefone = reader["Telefone"].ToString();
-                temObjeto.Logradouro = reader["Logradouro"].ToString();
-                temObjeto.Cep = reader["Cep"].ToString();
-                temObjeto.Numero = reader["Numero"].ToString();
-                temObjeto.Complemento = reader["Complemento"].ToString();
-                temObjeto.Cpf = reader["Cpf"].ToString();
-                temObjeto.ImportacaoId = int.Parse(reader["ImportacaoId"].ToString());
+                temObjeto.Id = long.Parse(reader[ClienteModel.COLUMN_ID].ToString());
+                temObjeto.Nome = reader[ClienteModel.COLUMN_NOME].ToString();
+                temObjeto.Uf = reader[ClienteModel.COLUMN_UF].ToString();
+                temObjeto.Cidade = reader[ClienteModel.COLUMN_CIDADE].ToString();
+                temObjeto.Bairro = reader[ClienteModel.COLUMN_BAIRRO].ToString();
+                temObjeto.Ddd = reader[ClienteModel.COLUMN_DDD].ToString();
+                temObjeto.Telefone = reader[ClienteModel.COLUMN_TELEFONE].ToString();
+                temObjeto.Logradouro = reader[ClienteModel.COLUMN_LOGRADOURO].ToString();
+                temObjeto.Cep = reader[ClienteModel.COLUMN_CEP].ToString();
+                temObjeto.Numero = reader[ClienteModel.COLUMN_NUMERO].ToString();
+                temObjeto.Complemento = reader[ClienteModel.COLUMN_COMPLEMENTO].ToString();
+                temObjeto.Cpf = reader[ClienteModel.COLUMN_CPF].ToString();
+                temObjeto.ImportacaoId = int.Parse(reader[ClienteModel.COLUMN_IMPORTACAO_ID].ToString());
 
-                var dataNascimento = reader["DataNascimento"].ToString();
-                var dataTrabalhado = reader["DataTrabalhado"].ToString();
-                var dataEmpAtualizado = reader["DataEmpAtualizados"].ToString();
-                var dataTelAtualizado = reader["DataTelAtualizado"].ToString();
-                var dataImportado = reader["DataImportado"].ToString();
+                var dataNascimento = reader[ClienteModel.COLUMN_DATANASCIMENTO].ToString();
+                var dataTrabalhado = reader[ClienteModel.COLUMN_DATA_TRABALHADO].ToString();
+                var dataEmpAtualizado = reader[ClienteModel.COLUMN_DATA_EMP_ATUALIZADOS].ToString();
+                var dataTelAtualizado = reader[ClienteModel.COLUMN_DATA_TEL_ATUALIZADO].ToString();
+                var dataImportado = reader[ClienteModel.COLUMN_DATA_IMPORTADO].ToString();
 
                 if (!"".Equals(dataTrabalhado))
                 {

@@ -1,5 +1,6 @@
 ﻿using CampanhaBD.Model;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
@@ -48,11 +49,11 @@ namespace CampanhaBD.UI.WEB.ViewModel
         public string MaxCep { get; set; }
 
         [Display(Name = "Código do Banco")]
-        public int CodigoBanco { get; set; }
+        public List<int> CodigoBanco { get; set; }
 
-        public CampanhaModel ParaCampanhaModel()
+        public FiltroModel ParaCampanhaModel()
         {
-            CampanhaModel campanha = new CampanhaModel()
+            FiltroModel campanha = new FiltroModel()
             {
                 Id = this.Id,
                 //UsuarioId = this.UsuarioId,
@@ -67,12 +68,12 @@ namespace CampanhaBD.UI.WEB.ViewModel
                 //ApenasNaoExportados = this.ApenasNaoExportados,
                 MinCep = this.MinCep,
                 MaxCep = this.MaxCep,
-                CodigoBanco = this.CodigoBanco
+                Bancos = this.CodigoBanco
             };
             return campanha;
         }
 
-        public void ParaViewModel(CampanhaModel campanha)
+        public void ParaViewModel(FiltroModel campanha)
         {
             Id = campanha.Id;
             //UsuarioId = campanha.UsuarioId;
@@ -87,7 +88,7 @@ namespace CampanhaBD.UI.WEB.ViewModel
             //ApenasNaoExportados = campanha.ApenasNaoExportados;
             MinCep = campanha.MinCep;
             MaxCep = campanha.MaxCep;
-            CodigoBanco = campanha.CodigoBanco;
+            CodigoBanco = campanha.Bancos;
         }
 
     }

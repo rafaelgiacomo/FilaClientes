@@ -22,11 +22,11 @@ namespace CampanhaBD.Business
             }
         }
 
-        public void ExportarPlanilhaProcessa(CampanhaModel campanha, string caminho)
+        public void ExportarPlanilhaProcessa(FiltroModel campanha, string caminho)
         {
             try
             {
-                List<ClienteModel> lista = _core.UnityOfWorkAdo.Campanhas.FiltroExportacao(campanha);
+                List<ClienteModel> lista = _core.UnityOfWorkAdo.Filtros.FiltroExportacao(campanha);
                 string[] cabecalho = { "BENEFICIO", "DATA_NASCIMENTO", "CPF", "NOME", "ESPECIE", "UF", "IDENTFICACAO_CLIENTE",
                 "STATUS", "OK" };
 
@@ -42,6 +42,8 @@ namespace CampanhaBD.Business
                     foreach (ClienteModel cl in lista)
                     {
                         row = new ManipuladorCsv.CsvRow();
+
+                        cl.Beneficios = _core.UnityOfWorkAdo.Beneficios.ListarPorClienteId(cl.Id);
 
                         row.Add(cl.Beneficios[0].Numero.ToString());
                         row.Add(cl.DataNascimento);
@@ -66,11 +68,11 @@ namespace CampanhaBD.Business
             }
         }
 
-        public void ExportarPlanilhaFiltro(CampanhaModel campanha, string caminho)
+        public void ExportarPlanilhaFiltro(FiltroModel campanha, string caminho)
         {
             try
             {
-                List<ClienteModel> lista = _core.UnityOfWorkAdo.Campanhas.FiltroExportacao(campanha);
+                List<ClienteModel> lista = _core.UnityOfWorkAdo.Filtros.FiltroExportacao(campanha);
                 string[] cabecalho = FormarCabecalhoPlanilhaCompleto();
 
                 using (ManipuladorCsv.CsvFileWriter writer = new ManipuladorCsv.CsvFileWriter(caminho))
@@ -85,12 +87,17 @@ namespace CampanhaBD.Business
                     foreach (ClienteModel cliente in lista)
                     {
                         var cl = _core.UnityOfWorkAdo.Clientes.ListarPorId(cliente);
-                        cl.Beneficios = cliente.Beneficios;
+                        cl.Beneficios = _core.UnityOfWorkAdo.Beneficios.ListarPorClienteId(cl.Id);
                         cl.Emprestimos = _core.UnityOfWorkAdo.Emprestimos.ListarEmprestimosPorCliente(cl.Id);
 
                         row = new ManipuladorCsv.CsvRow();
 
-                        row.Add(cl.Beneficios[0].Numero.ToString());
+                        if (cl.Beneficios.Count > 0)
+                        {
+                            row.Add(cl.Beneficios[0].Numero.ToString());
+                        }
+
+                        
                         row.Add(cl.Cpf);
                         row.Add(cl.DataNascimento);
                         row.Add(cl.Nome);
@@ -116,7 +123,7 @@ namespace CampanhaBD.Business
                             row.Add(emp.ParcelasEmAberto.ToString());
                             row.Add(emp.ValorParcela.ToString());
                             row.Add(emp.Saldo.ToString());
-                            row.Add(emp.InicioPagamento);
+                            row.Add(emp.DataInicioPagamento);
                         }
 
                         writer.WriteRow(row);
@@ -131,11 +138,11 @@ namespace CampanhaBD.Business
             }
         }
 
-        public void ExportarPlanilhaPanorama(CampanhaModel campanha, string caminho)
+        public void ExportarPlanilhaPanorama(FiltroModel campanha, string caminho)
         {
             try
             {
-                List<ClienteModel> lista = _core.UnityOfWorkAdo.Campanhas.FiltroExportacao(campanha);
+                List<ClienteModel> lista = _core.UnityOfWorkAdo.Filtros.FiltroExportacao(campanha);
                 string[] cabecalho = 
                 {
                     "BENEFICIO", "CPF", "DATA_NASCIMENTO", "NOME", "UF", "CIDADE", "BAIRRO", "CEP", "LOGRADOURO",
@@ -155,7 +162,7 @@ namespace CampanhaBD.Business
                     foreach (ClienteModel cliente in lista)
                     {
                         var cl = _core.UnityOfWorkAdo.Clientes.ListarPorId(cliente);
-                        cl.Beneficios = cliente.Beneficios;
+                        cl.Beneficios = _core.UnityOfWorkAdo.Beneficios.ListarPorClienteId(cl.Id);
 
                         row = new ManipuladorCsv.CsvRow();
 
@@ -189,11 +196,11 @@ namespace CampanhaBD.Business
             }
         }
 
-        public void ExportarPlanilhaTelefone(CampanhaModel campanha, string caminho)
+        public void ExportarPlanilhaTelefone(FiltroModel campanha, string caminho)
         {
             try
             {
-                List<ClienteModel> lista = _core.UnityOfWorkAdo.Campanhas.FiltroExportacao(campanha);
+                List<ClienteModel> lista = _core.UnityOfWorkAdo.Filtros.FiltroExportacao(campanha);
                 string[] cabecalho = { "CPF" };
 
                 using (ManipuladorCsv.CsvFileWriter writer = new ManipuladorCsv.CsvFileWriter(caminho))
@@ -223,11 +230,11 @@ namespace CampanhaBD.Business
             }
         }
 
-        public void ExportarProcessa(CampanhaModel campanha)
+        public void ExportarProcessa(FiltroModel campanha)
         {
             try
             {
-                List<ClienteModel> listaClientes = _core.UnityOfWorkAdo.Campanhas.FiltroExportacao(campanha);
+                List<ClienteModel> listaClientes = _core.UnityOfWorkAdo.Filtros.FiltroExportacao(campanha);
 
                 ConsultaProcessaModel consultaProcessa = new ConsultaProcessaModel();
                 consultaProcessa.Descricao = campanha.Nome;
@@ -237,6 +244,8 @@ namespace CampanhaBD.Business
                 foreach (ClienteModel cl in listaClientes)
                 {
                     ConsultaDadosProcessaModel dados = new ConsultaDadosProcessaModel();
+
+                    cl.Beneficios = _core.UnityOfWorkAdo.Beneficios.ListarPorClienteId(cl.Id);
 
                     dados.Consulta = consultaProcessa.Consulta;
                     dados.Beneficio = cl.Beneficios[0].Numero.ToString();
@@ -248,7 +257,7 @@ namespace CampanhaBD.Business
                     _core.UnityOfWorkAdo.Clientes.AtualizarDataExpProcessa(cl);
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 throw;
             }

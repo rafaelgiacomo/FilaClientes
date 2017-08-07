@@ -41,7 +41,7 @@ create table Importacao(
 GO
 
 create table Cliente(
-	[Id] [bigint] identity(1,1),
+	[Id] [bigint],
 	[ImportacaoId] [int],
 	[Nome] [varchar](max),
 	[Cpf] [nvarchar](15) UNIQUE NONCLUSTERED,
@@ -50,6 +50,8 @@ create table Cliente(
 	[Bairro] [varchar](max),
 	[Ddd] [varchar](3),
 	[Telefone] [nvarchar](16),
+	[Ddd2] [varchar](3),
+	[Telefone2] [nvarchar](16),
 	[DataNascimento] [date],
 	[Logradouro] [varchar](max),
 	[Numero] [varchar](7),
@@ -71,6 +73,13 @@ create table Beneficio(
 	[Numero] [bigint],
 	[ClienteId] [bigint],
 	[Salario] [float],
+	[DataInicioBeneficio] [date],
+	[BancoPagamento] [int],
+	[AgenciaPagamento] [int],
+	[OrgaoPagador] [int],
+	[ContaCorrente] [nvarchar](20),
+	[DataIncluidoInss] [date],
+	[DataExcluidoInss] [date],
 	[DataCompetencia] [date],
 	CONSTRAINT [PK_dbo.Beneficio] PRIMARY KEY CLUSTERED
 	(
@@ -85,10 +94,14 @@ create table Emprestimo(
 	[NumBeneficio] [bigint],
 	[NumEmprestimo] [int],
 	[ValorParcela] [float],
+	[ValorBruto] [float],
 	[ParcelasNoContrato] [int],
 	[ParcelasEmAberto] [int],
 	[Saldo] [float],
 	[InicioPagamento] [date],
+	[FimPagamento] [date],
+	[TipoEmprestimo] [int],
+	[SituacaoEmprestimo] [int],
 	CONSTRAINT [PK_dbo.Emprestimo] PRIMARY KEY CLUSTERED
 	(
 		[ClienteId] ASC,
@@ -135,8 +148,71 @@ create table CampanhaImportacao(
 )
 GO
 
+CREATE TABLE BaseOriginal
+(
+	[Id] int NOT NULL IDENTITY (1, 1),
+	[Descricao] nvarchar(255) NULL,
+	CONSTRAINT [PK_dbo.BaseOriginal] PRIMARY KEY CLUSTERED
+	(
+		[Id] ASC
+	)
+)
+GO
+
+CREATE TABLE BaseOriginalDados
+(
+	[Id] bigint NOT NULL IDENTITY (1, 1),
+	[BaseId] int NULL,
+	[NumBeneficio] nvarchar(255) NULL,
+	[Nome] nvarchar(255) NULL,
+	[DataNascimento] nvarchar(255) NULL,
+	[Cpf] nvarchar(255) NULL,
+	[Especie] nvarchar(255) NULL,
+	[DataInicioBeneficio] nvarchar(255) NULL,
+	[ValorBeneficio] money NULL,
+	[BancoPagamento] nvarchar(255) NULL,
+	[AgenciaPagamento] nvarchar(255) NULL,
+	[OrgaoPagador] nvarchar(255) NULL,
+	[ContaCorrente] nvarchar(255) NULL,
+	[Ddd] nvarchar(255) NULL,
+	[Telefone] nvarchar(255) NULL,
+	[aps-benef] nvarchar(255) NULL,
+	[cs-meio-pagto] nvarchar(255) NULL,
+	[BancoEmprestimo] nvarchar(255) NULL,
+	[ContratoEmprestimo] nvarchar(255) NULL,
+	[ValorEmprestimo] money NULL,
+	[DataInicioPagamento] nvarchar(255) NULL,
+	[DataFimPagamento] nvarchar(255) NULL,
+	[ParcelasNoContrato] nvarchar(255) NULL,
+	[ValorParcela] money NULL,
+	[TipoEmprestimo] nvarchar(255) NULL,
+	[Endereco] nvarchar(255) NULL,
+	[Bairro] nvarchar(255) NULL,
+	[Municipio] nvarchar(255) NULL,
+	[Uf] nvarchar(255) NULL,
+	[Cep] nvarchar(255) NULL,
+	[SituacaoEmprestimo] nvarchar(255) NULL,
+	[DataIncluidoINSS] nvarchar(255) NULL,
+	[DataExcluidoINSS] nvarchar(255) NULL,
+	[DataImportado] date NULL,
+	[ResultadoImportacao] int null,
+	[MsgLogImportacao] nvarchar(max) NULL,
+	CONSTRAINT [PK_dbo.BaseOriginalDados] PRIMARY KEY CLUSTERED
+	(
+		[Id] ASC
+	)
+)
+GO
+
 --Definindo Chaves Estrangeiras
 --===========================================================
+
+--Tabela BaseOriginalDados
+ALTER TABLE [dbo].[BaseOriginalDados]  WITH CHECK ADD  CONSTRAINT [FK_dbo.BaseOriginalDados_dbo.BaseOriginal_BaseId] FOREIGN KEY([BaseId])
+REFERENCES [dbo].[BaseOriginal] ([Id])
+GO
+ALTER TABLE [dbo].[BaseOriginalDados] CHECK CONSTRAINT [FK_dbo.BaseOriginalDados_dbo.BaseOriginal_BaseId]
+GO
 
 --Tabela Cliente
 ALTER TABLE [dbo].[Cliente]  WITH CHECK ADD  CONSTRAINT [FK_dbo.Cliente_dbo.Importacao_ImportacaoId] FOREIGN KEY([ImportacaoId])
@@ -199,7 +275,6 @@ GO
 ALTER TABLE [dbo].[CampanhaImportacao] CHECK CONSTRAINT [FK_dbo.CampanhaImportacao_dbo.Usuario_UsuarioId]
 GO
 
-
 /****** Criação de Indices ******/
 
 CREATE NONCLUSTERED INDEX [IX_CpfCliente] ON [dbo].[Cliente]
@@ -243,3 +318,16 @@ CREATE NONCLUSTERED INDEX [IX_ParcelasEmAberto] ON [dbo].[Emprestimo]
 	[ParcelasEmAberto] ASC
 ) 
 GO
+
+CREATE NONCLUSTERED INDEX [IX_CodigoBanco_BaseOriginalDados] ON [dbo].[BaseOriginalDados]
+(
+	[BancoEmprestimo] ASC
+) 
+GO
+
+CREATE NONCLUSTERED INDEX [IX_TipoEmprestimo_BaseOriginalDados] ON [dbo].[BaseOriginalDados]
+(
+	[TipoEmprestimo] ASC
+) 
+GO
+

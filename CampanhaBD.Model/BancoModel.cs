@@ -17,5 +17,10 @@
         public const string COLUMN_CODIGO = "Codigo";
         public const string COLUMN_NOME = "Nome";
         #endregion
+
+        public override string ToString()
+        {
+            return (string.Concat(Codigo, " - ", Nome));
+        }
     }
 }

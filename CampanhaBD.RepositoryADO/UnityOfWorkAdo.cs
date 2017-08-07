@@ -14,12 +14,13 @@ namespace CampanhaBD.RepositoryADO
         private UsuarioRepositoryAdo _usuarioRepository;
         private BancoRepositoryAdo _bancoRepository;
         private ImportacaoRepositoryAdo _importacaoRepository;
-        private CampanhaRepositoryAdo _campanhaRepository;
+        private FiltroRepositoryAdo _campanhaRepository;
         private BeneficioRepositoryAdo _beneficioRepository;
         private EmprestimoRepositoryAdo _emprestimoRepository;
         private ConsultaProcessaRepositoryAdo _consultaRepository;
         private ConsultaDadosProcessaRepositoryAdo _consultaDadosRepository;
         private SaldoRefinProcessaRepositoryAdo _saldoRefinRepository;
+        private BaseOriginalRepositoryAdo _baseOriginalRepository;
         #pragma warning restore 649
 
         private UnityOfWorkAdo(string connectionString)
@@ -36,14 +37,19 @@ namespace CampanhaBD.RepositoryADO
             return _unit;
         }
 
+        public void AbrirTransacao()
+        {
+            _context.OpenTransaction();
+        }
+
         public void Commit()
         {
-            
+            _context.Commit();
         }
 
         public void RollBack()
         {
-            
+            _context.RollBack();
         }
 
         public void AbrirConexao()
@@ -80,9 +86,16 @@ namespace CampanhaBD.RepositoryADO
             get { return (_importacaoRepository ?? new ImportacaoRepositoryAdo(_context)); }
         }
 
-        public CampanhaRepositoryAdo Campanhas
+        public FiltroRepositoryAdo Filtros
         {
-            get { return (_campanhaRepository ?? new CampanhaRepositoryAdo(_context)); }
+            get
+            {
+                if (_campanhaRepository == null)
+                {
+                    _campanhaRepository = new FiltroRepositoryAdo(_context);
+                }
+                return _campanhaRepository;
+            }
         }
 
         public BeneficioRepositoryAdo Beneficios
@@ -108,6 +121,11 @@ namespace CampanhaBD.RepositoryADO
         public SaldoRefinProcessaRepositoryAdo SaldosRefinProcessa
         {
             get { return (_saldoRefinRepository ?? new SaldoRefinProcessaRepositoryAdo(_context)); }
+        }
+
+        public BaseOriginalRepositoryAdo BasesOriginais
+        {
+            get { return (_baseOriginalRepository ?? new BaseOriginalRepositoryAdo(_context)); }
         }
 
     }

@@ -53,23 +53,29 @@ namespace CampanhaBD.UI.WEB.Controllers
                     imp.NumImportados = 0;
                     imp.NumAtualizados = 0;
 
-                    _impBus.AdicionarImportacao(imp);
+                    var impBusca = _impBus.ListarPorNome(imp.Nome);
 
-                    string caminho = Path.Combine(Server.MapPath("~/Content/Importados"), imp.Id.ToString() + ".csv");
+                    if (impBusca == null)
+                    {
+                        _impBus.AdicionarImportacao(imp);
+                        imp.CaminhoArquivo = Path.Combine(Server.MapPath("~/Content/Importados"), imp.Id.ToString() + ".csv");
+                        _impBus.SalvarCaminhoImportacao(imp);
+                        viewModel.File.SaveAs(imp.CaminhoArquivo);
 
-                    imp.CaminhoArquivo = caminho;
-
-                    _impBus.SalvarCaminhoImportacao(imp);
-
-                    viewModel.File.SaveAs(caminho);
-
-                    return RedirectToAction("Associar", new { impId = imp.Id });
+                        return RedirectToAction("Associar", new { impId = imp.Id });
+                    }
+                    else
+                    {
+                        ViewBag.Mensagem = "Já existe uma importação com esse nome! " 
+                            +"Por favor escolha outro nome para a importação e selecione a planilha novamente.";
+                        return View();
+                    }                    
                 }
                 else
                 {
                     ViewBag.Mensagem = "Adicione uma planilha para importação";
+                    return View();
                 }
-                return View();
             }
             catch (Exception ex)
             {
@@ -115,7 +121,7 @@ namespace CampanhaBD.UI.WEB.Controllers
             {
                 ImportacaoModel imp = _impBus.ListarPorId(model.ImpId);
 
-                _impBus.ImportarClientes(imp, criaVetorValores(model));
+                _impBus.ImportarClientesDeCsv(imp, criaVetorValores(model));
 
                 return RedirectToAction("Index");
             }
@@ -152,7 +158,7 @@ namespace CampanhaBD.UI.WEB.Controllers
                 vet[ClienteModel.INDICE_COMPLEMENTO] = model.Complemento - 1;
                 return vet;
             }
-            catch
+            catch(Exception ex)
             {
                 throw;
             }
