@@ -1,4 +1,5 @@
 ﻿using CampanhaBD.Model;
+using CampanhaBD.RepositoryADO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +10,13 @@ namespace CampanhaBD.Business
 {
     public class BaseOriginalBusiness
     {
-        private CoreBusiness _core;
+        private string _connectionString;
 
-        public BaseOriginalBusiness(CoreBusiness core)
+        public BaseOriginalBusiness(string connectionString)
         {
             try
             {
-                _core = core;
+                _connectionString = connectionString;
             }
             catch
             {
@@ -27,9 +28,14 @@ namespace CampanhaBD.Business
         {
             try
             {
-                var retorno = _core.UnityOfWorkAdo.BasesOriginais.ListarBases();
+                List<BaseOriginalModel> listaBases = new List<BaseOriginalModel>();
 
-                return retorno;
+                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+                {
+                    listaBases = unit.BasesOriginais.ListarBases();
+                }                    
+
+                return listaBases;
             }
             catch
             {

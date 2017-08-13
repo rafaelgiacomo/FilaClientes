@@ -16,7 +16,7 @@ namespace CampanhaBD.UI.WEB.Controllers
 
         public ImportacaoController()
         {
-            _impBus = new ImportacaoBusiness(_core);
+            _impBus = new ImportacaoBusiness(_connectionString);
         }
 
         public ActionResult Index()

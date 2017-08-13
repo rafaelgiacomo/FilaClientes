@@ -1,4 +1,5 @@
 ﻿using CampanhaBD.Model;
+using CampanhaBD.RepositoryADO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +10,13 @@ namespace CampanhaBD.Business
 {
     public class BancoBusiness
     {
-        private CoreBusiness _core;
+        private string _connectionString;
 
-        public BancoBusiness(CoreBusiness core)
+        public BancoBusiness(string connectionString)
         {
             try
             {
-                _core = core;
+                _connectionString = connectionString;
             }
             catch
             {
@@ -27,7 +28,10 @@ namespace CampanhaBD.Business
         {
             try
             {
-                _core.UnityOfWorkAdo.Bancos.Inserir(entidade);
+                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+                {
+                    unit.Bancos.Inserir(entidade);
+                }                    
             }
             catch
             {
@@ -39,7 +43,10 @@ namespace CampanhaBD.Business
         {
             try
             {
-                _core.UnityOfWorkAdo.Bancos.Alterar(entidade);
+                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+                {
+                    unit.Bancos.Alterar(entidade);
+                }                
             }
             catch
             {
@@ -51,9 +58,12 @@ namespace CampanhaBD.Business
         {
             try
             {
-                BancoModel entidade = new BancoModel();
-                entidade.Codigo = codigo;
-                _core.UnityOfWorkAdo.Bancos.Excluir(entidade);
+                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+                {
+                    BancoModel entidade = new BancoModel();
+                    entidade.Codigo = codigo;
+                    unit.Bancos.Excluir(entidade);
+                }                
             }
             catch
             {
@@ -65,9 +75,14 @@ namespace CampanhaBD.Business
         {
             try
             {
-                var retorno = _core.UnityOfWorkAdo.Bancos.ListarTodos();
+                List<BancoModel> listaRetorno = new List<BancoModel>();
 
-                return retorno;
+                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+                {
+                    listaRetorno = unit.Bancos.ListarTodos();
+                }                
+
+                return listaRetorno;
             }
             catch
             {
@@ -79,10 +94,15 @@ namespace CampanhaBD.Business
         {
             try
             {
-                BancoModel entidade = new BancoModel();
-                entidade.Codigo = codigo;
+                BancoModel retorno = null;
 
-                var retorno = _core.UnityOfWorkAdo.Bancos.ListarPorId(entidade);
+                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+                {
+                    BancoModel entidade = new BancoModel();
+                    entidade.Codigo = codigo;
+
+                    retorno = unit.Bancos.ListarPorId(entidade);
+                }                
 
                 return retorno;
             }

@@ -325,6 +325,7 @@ namespace CampanhaBD.RepositoryADO
                 if (!"".Equals(dataTrabalhado))
                 {
                     temObjeto.DataTrabalhado = Convert.ToDateTime(dataTrabalhado).ToString("dd/MM/yyy");
+                    Console.WriteLine("Teste");
                 }
 
                 if (!"".Equals(dataEmpAtualizado))

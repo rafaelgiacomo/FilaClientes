@@ -16,9 +16,9 @@ namespace CampanhaBD.UI.WEB.Controllers
 
         public ExportacaoController()
         {
-            _bancoBus = new BancoBusiness(_core);
-            _expBus = new ExportacaoBusiness(_core);
-            _impBus = new ImportacaoBusiness(_core);
+            _bancoBus = new BancoBusiness(_connectionString);
+            _expBus = new ExportacaoBusiness(_connectionString);
+            _impBus = new ImportacaoBusiness(_connectionString);
         }
 
         public ActionResult Index()

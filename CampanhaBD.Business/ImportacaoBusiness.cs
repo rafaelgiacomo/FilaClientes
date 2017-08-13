@@ -1,4 +1,5 @@
 ﻿using CampanhaBD.Model;
+using CampanhaBD.RepositoryADO;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,11 +13,9 @@ namespace CampanhaBD.Business
     {
 
         #region Propriedades
-        private CoreBusiness _core;
+        private string _connectionString;
 
         private ClienteModel _cliente;
-
-        public bool ContinuarImportacao { get; set; }
         #endregion
 
         #region Métodos públicos
@@ -24,13 +23,16 @@ namespace CampanhaBD.Business
         {
             try
             {
-                _core.UnityOfWorkAdo.AbrirTransacao();
-                _core.UnityOfWorkAdo.Importacoes.Inserir(entidade);
-                _core.UnityOfWorkAdo.Commit();
+                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+                {
+                    unit.AbrirTransacao();
+                    unit.Importacoes.Inserir(entidade);
+                    unit.Commit();
+                }
             }
             catch
             {
-                _core.UnityOfWorkAdo.RollBack();
+                //_core.UnityOfWorkAdo.RollBack();
                 throw;
             }
         }
@@ -39,7 +41,10 @@ namespace CampanhaBD.Business
         {
             try
             {
-                _core.UnityOfWorkAdo.Importacoes.SalvarCaminho(entidade);
+                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+                {
+                    unit.Importacoes.SalvarCaminho(entidade);
+                }
             }
             catch
             {
@@ -65,7 +70,6 @@ namespace CampanhaBD.Business
                     cliente.DataImportado = DateTime.Now.ToString();
                 }
 
-                _core.UnityOfWorkAdo.Importacoes.Terminar(imp);
             }
             catch (Exception ex)
             {
@@ -81,11 +85,12 @@ namespace CampanhaBD.Business
         {
             try
             {
-                _core.UnityOfWorkAdo.AbrirTransacao();
-                _core.UnityOfWorkAdo.Importacoes.Inserir(imp);
-                _core.UnityOfWorkAdo.Filtros.FiltroImportacaoBaseOriginal(filtro);
-                _cliente = new ClienteModel();
-                ContinuarImportacao = true;
+                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+                {
+                    unit.Importacoes.Inserir(imp);
+                    unit.Filtros.FiltroImportacaoBaseOriginal(filtro);
+                    _cliente = new ClienteModel();
+                }
             }
             catch (Exception ex)
             {
@@ -97,12 +102,12 @@ namespace CampanhaBD.Business
         {
             try
             {
-                if (ContinuarImportacao)
+                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
                 {
                     _cliente.LimparPropriedades();
 
                     _cliente.ImportacaoId = imp.Id;
-                    ContinuarImportacao = _core.UnityOfWorkAdo.Filtros.LerDadosClienteBaseOriginal(_cliente);
+                    unit.Filtros.LerDadosClienteBaseOriginal(_cliente);
 
                     if (ValidaDadosCliente(_cliente))
                     {
@@ -122,7 +127,6 @@ namespace CampanhaBD.Business
             }
             catch
             {
-                _core.UnityOfWorkAdo.RollBack();
                 throw;
             }
         }
@@ -131,12 +135,15 @@ namespace CampanhaBD.Business
         {
             try
             {
-                _core.UnityOfWorkAdo.Filtros.FecharReader();
+                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+                {
+                    unit.Filtros.FecharReader();
 
-                _core.UnityOfWorkAdo.Importacoes.SalvarNumImportados(imp);
-                _core.UnityOfWorkAdo.Importacoes.Terminar(imp);
+                    unit.Importacoes.SalvarNumImportados(imp);
+                    unit.Importacoes.Terminar(imp);
 
-                _core.UnityOfWorkAdo.Commit();
+                    //unit.Commit();
+                }
             }
             catch (Exception ex)
             {
@@ -148,7 +155,10 @@ namespace CampanhaBD.Business
         {
             try
             {
-                _core.UnityOfWorkAdo.Importacoes.Alterar(entidade);
+                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+                {
+                    unit.Importacoes.Alterar(entidade);
+                }
             }
             catch
             {
@@ -160,9 +170,12 @@ namespace CampanhaBD.Business
         {
             try
             {
-                ImportacaoModel entidade = new ImportacaoModel();
-                entidade.Id = id;
-                _core.UnityOfWorkAdo.Importacoes.Excluir(entidade);
+                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+                {
+                    ImportacaoModel entidade = new ImportacaoModel();
+                    entidade.Id = id;
+                    unit.Importacoes.Excluir(entidade);
+                }
             }
             catch
             {
@@ -174,10 +187,13 @@ namespace CampanhaBD.Business
         {
             try
             {
-                if (!_core.UnityOfWorkAdo.Filtros.Reader.IsClosed)
-                    _core.UnityOfWorkAdo.Filtros.Reader.Close();
+                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+                {
+                    if (!unit.Filtros.Reader.IsClosed)
+                        unit.Filtros.Reader.Close();
 
-                _core.UnityOfWorkAdo.RollBack();
+                    unit.RollBack();
+                }
             }
             catch (Exception ex)
             {
@@ -189,7 +205,10 @@ namespace CampanhaBD.Business
         {
             try
             {
-                return _core.UnityOfWorkAdo.Filtros.EstimarQtdFiltroBaseOriginal(filtro);
+                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+                {
+                    return unit.Filtros.EstimarQtdFiltroBaseOriginal(filtro);
+                }
             }
             catch (Exception ex)
             {
@@ -201,7 +220,12 @@ namespace CampanhaBD.Business
         {
             try
             {
-                var retorno = _core.UnityOfWorkAdo.Importacoes.ListarTodos();
+                List<ImportacaoModel> retorno = new List<ImportacaoModel>();
+
+                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+                {
+                    retorno = unit.Importacoes.ListarTodos();
+                }
 
                 return retorno;
             }
@@ -216,9 +240,13 @@ namespace CampanhaBD.Business
             try
             {
                 ImportacaoModel entidade = new ImportacaoModel();
+                ImportacaoModel retorno = null;
                 entidade.Id = id;
 
-                var retorno = _core.UnityOfWorkAdo.Importacoes.ListarPorId(entidade);
+                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+                {
+                    retorno = unit.Importacoes.ListarPorId(entidade);
+                }
 
                 return retorno;
             }
@@ -233,9 +261,13 @@ namespace CampanhaBD.Business
             try
             {
                 ImportacaoModel entidade = new ImportacaoModel();
+                ImportacaoModel retorno = null;
                 entidade.Nome = nome;
 
-                var retorno = _core.UnityOfWorkAdo.Importacoes.ListarPorNome(entidade);
+                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+                {
+                    retorno = unit.Importacoes.ListarPorNome(entidade);
+                }
 
                 return retorno;
             }
@@ -251,13 +283,26 @@ namespace CampanhaBD.Business
         {
             try
             {
-                _core.UnityOfWorkAdo.Clientes.Inserir(cliente);
-            }
-            catch (Exception)
-            {
-                if (filtro.AtualizarDadosCliente)
+                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
                 {
-                    _core.UnityOfWorkAdo.Clientes.Alterar(cliente);
+                    unit.Clientes.Inserir(cliente);
+                }
+            }
+            catch (Exception ex)
+            {
+                try
+                {
+                    if (!filtro.AtualizarDadosCliente)
+                    {
+                        using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+                        {
+                            unit.Clientes.Alterar(cliente);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw;
                 }
             }
         }
@@ -266,8 +311,11 @@ namespace CampanhaBD.Business
         {
             try
             {
-                beneficio.DataCompetencia = DateTime.Now;
-                _core.UnityOfWorkAdo.Beneficios.Inserir(beneficio);
+                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+                {
+                    beneficio.DataCompetencia = DateTime.Now;
+                    unit.Beneficios.Inserir(beneficio);
+                }
             }
             catch (Exception ex)
             {
@@ -279,7 +327,11 @@ namespace CampanhaBD.Business
         {
             try
             {
-                _core.UnityOfWorkAdo.Emprestimos.Inserir(emprestimo);
+                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+                {
+                    unit.Emprestimos.Inserir(emprestimo);
+                }
+
             }
             catch (Exception ex)
             {
@@ -291,11 +343,6 @@ namespace CampanhaBD.Business
         {
             try
             {
-                if (cliente.Id <= 0)
-                {
-                    return false;
-                }
-
                 if ("".Equals(cliente.Cpf))
                 {
                     return false;
@@ -364,11 +411,11 @@ namespace CampanhaBD.Business
         }
         #endregion
 
-        public ImportacaoBusiness(CoreBusiness core)
+        public ImportacaoBusiness(string connectionString)
         {
             try
             {
-                _core = core;
+                _connectionString = connectionString;
             }
             catch
             {

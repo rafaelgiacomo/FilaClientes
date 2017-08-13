@@ -207,8 +207,8 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Properties\PublishProfiles\Cred9.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\datepicker\css\bootstrap-datepicker.min.css" />
-    <Content Include="Scripts\datepicker\js\bootstrap-datepicker.min.js" />
+    <EmbeddedResource Include="Scripts\datepicker\css\bootstrap-datepicker.min.css" />
+    <EmbeddedResource Include="Scripts\datepicker\js\bootstrap-datepicker.min.js" />
     <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.pt-BR.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

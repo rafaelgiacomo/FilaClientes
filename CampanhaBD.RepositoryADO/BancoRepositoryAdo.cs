@@ -103,7 +103,7 @@ namespace CampanhaBD.RepositoryADO
             try
             {
                 SqlDataReader reader = null;
-                var retorno = new BancoModel();
+                BancoModel retorno = null;
 
                 string[] parameters = { BancoModel.COLUMN_CODIGO };
                 object[] values = { entidade.Codigo };
@@ -113,6 +113,8 @@ namespace CampanhaBD.RepositoryADO
 
                 if (reader.Read())
                 {
+                    retorno = new BancoModel();
+
                     retorno.Codigo = Convert.ToInt32(reader[BancoModel.COLUMN_CODIGO].ToString());
                     retorno.Nome = reader[BancoModel.COLUMN_NOME].ToString();
                 }

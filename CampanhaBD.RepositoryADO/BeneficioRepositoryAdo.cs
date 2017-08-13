@@ -122,10 +122,10 @@ namespace CampanhaBD.RepositoryADO
             try
             {
                 var temObjeto = new BeneficioModel();
-                temObjeto.Numero = long.Parse(reader["Numero"].ToString());
-                temObjeto.IdCliente = long.Parse(reader["ClienteId"].ToString());
-                temObjeto.Salario = float.Parse(reader["Salario"].ToString());
-                temObjeto.DataCompetencia = DateTime.Parse(reader["DataCompetencia"].ToString());
+                temObjeto.Numero = long.Parse(reader[BeneficioModel.COLUMN_NUMERO].ToString());
+                temObjeto.IdCliente = long.Parse(reader[BeneficioModel.COLUMN_CLIENTE_ID].ToString());
+                temObjeto.Salario = float.Parse(reader[BeneficioModel.COLUMN_SALARIO].ToString());
+                temObjeto.DataCompetencia = DateTime.Parse(reader[BeneficioModel.COLUMN_DATA_COMPETENCIA].ToString());
 
                 return temObjeto;
             }

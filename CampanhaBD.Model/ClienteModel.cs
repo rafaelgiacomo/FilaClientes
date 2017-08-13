@@ -76,6 +76,8 @@ namespace CampanhaBD.Model
         public const string COLUMN_BAIRRO = "Bairro";
         public const string COLUMN_DDD = "Ddd";
         public const string COLUMN_TELEFONE = "Telefone";
+        public const string COLUMN_DDD2 = "Ddd2";
+        public const string COLUMN_TELEFONE2 = "Telefone2";
         public const string COLUMN_DATANASCIMENTO = "DataNascimento";
         public const string COLUMN_LOGRADOURO = "Logradouro";
         public const string COLUMN_NUMERO = "Numero";
@@ -85,6 +87,7 @@ namespace CampanhaBD.Model
         public const string COLUMN_DATA_TEL_ATUALIZADO = "DataTelAtualizado";
         public const string COLUMN_DATA_EMP_ATUALIZADOS = "DataEmpAtualizados";
         public const string COLUMN_DATA_TRABALHADO = "DataTrabalhado";
+        public const string COLUMN_DATA_EXP_PROCESSA = "DataExpProcessa";
         #endregion
 
         #region Indices das Propriedades
@@ -115,7 +118,7 @@ namespace CampanhaBD.Model
         }
 
         #region Preenchimento de campos
-        public void PreencheCpfEId(string valor)
+        public void PreencheCpf(string valor)
         {
             try
             {
@@ -127,8 +130,6 @@ namespace CampanhaBD.Model
 
                     //Validando quantidade de dígitos para 11
                     while (Cpf.Length < 11) { Cpf = "0" + Cpf; }
-
-                    Id = long.Parse(Cpf);
                 }
             }
             catch (Exception ex)
@@ -157,6 +158,106 @@ namespace CampanhaBD.Model
                     if (DateTime.Compare(data, DateTime.MinValue) >= 0)
                     {
                         DataNascimento = data.ToString("dd/MM/yyyy");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void PreencheDataExpProcessa(string valor)
+        {
+            try
+            {
+                if (!"".Equals(valor))
+                {
+                    var data = Convert.ToDateTime(valor);
+
+                    if (DateTime.Compare(data, DateTime.MinValue) >= 0)
+                    {
+                        DataExpProcessa = data.ToString("dd/MM/yyyy");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void PreencheDataImportado(string valor)
+        {
+            try
+            {
+                if (!"".Equals(valor))
+                {
+                    var data = Convert.ToDateTime(valor);
+
+                    if (DateTime.Compare(data, DateTime.MinValue) >= 0)
+                    {
+                        DataImportado = data.ToString("dd/MM/yyyy");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void PreencheDataTelAtualizado(string valor)
+        {
+            try
+            {
+                if (!"".Equals(valor))
+                {
+                    var data = Convert.ToDateTime(valor);
+
+                    if (DateTime.Compare(data, DateTime.MinValue) >= 0)
+                    {
+                        DataTelAtualizado = data.ToString("dd/MM/yyyy");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void PreencheDataEmpAtualizados(string valor)
+        {
+            try
+            {
+                if (!"".Equals(valor))
+                {
+                    var data = Convert.ToDateTime(valor);
+
+                    if (DateTime.Compare(data, DateTime.MinValue) >= 0)
+                    {
+                        DataEmpAtualizado = data.ToString("dd/MM/yyyy");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void PreencheDataTrabalhado(string valor)
+        {
+            try
+            {
+                if (!"".Equals(valor))
+                {
+                    var data = Convert.ToDateTime(valor);
+
+                    if (DateTime.Compare(data, DateTime.MinValue) >= 0)
+                    {
+                        DataTrabalhado = data.ToString("dd/MM/yyyy");
                     }
                 }
             }

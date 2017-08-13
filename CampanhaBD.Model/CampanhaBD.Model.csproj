@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="BaseOriginalDadoModel.cs" />
     <Compile Include="BaseOriginalModel.cs" />
+    <Compile Include="ExportacaoModel.cs" />
     <Compile Include="TabelaBaseModel.cs" />
     <Compile Include="Processa\ConsultaDadosProcessaModel.cs" />
     <Compile Include="Processa\SaldoRefinProcessaModel.cs" />
@@ -69,6 +70,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CampanhaBD.Util\CampanhaBD.Util.csproj">
+      <Project>{4d166322-e2a4-4dcf-af65-ee7cb8b2a45f}</Project>
+      <Name>CampanhaBD.Util</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

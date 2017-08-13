@@ -1,4 +1,5 @@
 ﻿using CampanhaBD.Model;
+using CampanhaBD.RepositoryADO;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +11,7 @@ namespace CampanhaBD.Business
 {
     public class AtualizacaoBusiness
     {
-        private CoreBusiness _core;
+        private string _connectionString;
 
         public static readonly int INDICE_PROCESSA_BENEFICIO = 2;
         public static readonly int INDICE_PROCESSA_CPF = 4;
@@ -20,11 +21,11 @@ namespace CampanhaBD.Business
         public static readonly int INDICE_PROCESSA_VALOR_PARCELA = 74;
         public static readonly int INDICE_PROCESSA_SALDO = 75;
 
-        public AtualizacaoBusiness(CoreBusiness core)
+        public AtualizacaoBusiness(string connectionString)
         {
             try
             {
-                _core = core;
+                _connectionString = connectionString;
             }
             catch
             {
@@ -37,7 +38,12 @@ namespace CampanhaBD.Business
         {
             try
             {
-                var listaRetorno = _core.UnityOfWorkAdo.ConsultasProcessa.ListarTodos();
+                List<ConsultaProcessaModel> listaRetorno = new List<ConsultaProcessaModel>();
+
+                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+                {
+                    listaRetorno = unit.ConsultasProcessa.ListarTodos();
+                }                   
 
                 return listaRetorno;
             }
@@ -55,53 +61,56 @@ namespace CampanhaBD.Business
                 int[] valores = criaVetorValores();
                 string[] linhaSeparada = null;
 
-                string linha = stream.ReadLine(); //Le o cabeçalho
-                while ((linha = stream.ReadLine()) != null)
+                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
                 {
-                    linhaSeparada = linha.Split(';');
-
-                    EmprestimoModel empExcluir = new EmprestimoModel();
-
-                    empExcluir.BancoId = 422;
-
-                    if ("".Equals(linhaSeparada[INDICE_PROCESSA_BENEFICIO]))
+                    string linha = stream.ReadLine(); //Le o cabeçalho
+                    while ((linha = stream.ReadLine()) != null)
                     {
-                        ClienteModel cl = new ClienteModel();
-                        cl.Cpf = linhaSeparada[INDICE_PROCESSA_CPF];
-                        cl = _core.UnityOfWorkAdo.Clientes.ListarPorCpf(cl);
+                        linhaSeparada = linha.Split(';');
 
-                        empExcluir.ClienteId = cl.Id;
+                        EmprestimoModel empExcluir = new EmprestimoModel();
 
-                        _core.UnityOfWorkAdo.Emprestimos.ExcluirPorClienteId(empExcluir);
-                    }
-                    else
-                    {
-                        empExcluir.NumBeneficio = long.Parse(linhaSeparada[INDICE_PROCESSA_BENEFICIO]);
-                        _core.UnityOfWorkAdo.Emprestimos.ExcluirPorBeneficio(empExcluir);
-                    }
+                        empExcluir.BancoId = 422;
 
-                    for (int i = 0; i < 10; i++)
-                    {
-                        if (!"".Equals(linhaSeparada[INDICE_PROCESSA_BANCO_ID + (i * 5)]))
+                        if ("".Equals(linhaSeparada[INDICE_PROCESSA_BENEFICIO]))
                         {
-                            EmprestimoModel emprestimo = new EmprestimoModel();
+                            ClienteModel cl = new ClienteModel();
+                            cl.Cpf = linhaSeparada[INDICE_PROCESSA_CPF];
+                            cl = unit.Clientes.ListarPorCpf(cl);
 
-                            emprestimo.BancoId = 422;
-                            emprestimo.NumBeneficio = long.Parse(linhaSeparada[INDICE_PROCESSA_BENEFICIO]);
-                            emprestimo.ParcelasNoContrato = int.Parse(linhaSeparada[INDICE_PROCESSA_PARCELAS_CONTRATO + (i * 5)]);
-                            emprestimo.ParcelasEmAberto = int.Parse(linhaSeparada[INDICE_PROCESSA_PARCELAS_ABERTO + (i * 5)]);
-                            emprestimo.ValorParcela = float.Parse(linhaSeparada[INDICE_PROCESSA_VALOR_PARCELA + (i * 5)]);
+                            empExcluir.ClienteId = cl.Id;
 
-                            _core.UnityOfWorkAdo.Emprestimos.InserirProcessa(emprestimo);
+                            unit.Emprestimos.ExcluirPorClienteId(empExcluir);
                         }
                         else
                         {
-                            i = 10;
+                            empExcluir.NumBeneficio = long.Parse(linhaSeparada[INDICE_PROCESSA_BENEFICIO]);
+                            unit.Emprestimos.ExcluirPorBeneficio(empExcluir);
+                        }
+
+                        for (int i = 0; i < 10; i++)
+                        {
+                            if (!"".Equals(linhaSeparada[INDICE_PROCESSA_BANCO_ID + (i * 5)]))
+                            {
+                                EmprestimoModel emprestimo = new EmprestimoModel();
+
+                                emprestimo.BancoId = 422;
+                                emprestimo.NumBeneficio = long.Parse(linhaSeparada[INDICE_PROCESSA_BENEFICIO]);
+                                emprestimo.ParcelasNoContrato = int.Parse(linhaSeparada[INDICE_PROCESSA_PARCELAS_CONTRATO + (i * 5)]);
+                                emprestimo.ParcelasEmAberto = int.Parse(linhaSeparada[INDICE_PROCESSA_PARCELAS_ABERTO + (i * 5)]);
+                                emprestimo.ValorParcela = float.Parse(linhaSeparada[INDICE_PROCESSA_VALOR_PARCELA + (i * 5)]);
+
+                                unit.Emprestimos.InserirProcessa(emprestimo);
+                            }
+                            else
+                            {
+                                i = 10;
+                            }
                         }
                     }
-                }
+                }                    
             }
-            catch
+            catch (Exception ex)
             {
                 throw;
             }
@@ -120,39 +129,47 @@ namespace CampanhaBD.Business
                 string cpf = "";
                 saldoRefin.Consulta = consulta;
 
-                listaSaldoRefin = _core.UnityOfWorkAdo.SaldosRefinProcessa.ListarEmprestimosDeConsulta(saldoRefin);
-
-                foreach (SaldoRefinProcessaModel saldo in listaSaldoRefin)
+                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
                 {
-                    BeneficioModel benBusca = new BeneficioModel();
-                    EmprestimoModel emp = new EmprestimoModel();
+                    listaSaldoRefin = unit.SaldosRefinProcessa.ListarEmprestimosDeConsulta(saldoRefin);
 
-                    benBusca.PreencheNumBeneficio(saldo.Matricula);
-
-                    if (benBusca.Numero != 0)
+                    foreach (SaldoRefinProcessaModel saldo in listaSaldoRefin)
                     {
-                        benBusca = _core.UnityOfWorkAdo.Beneficios.ListarPorId(benBusca);
+                        BeneficioModel benBusca = new BeneficioModel();
+                        EmprestimoModel emp = new EmprestimoModel();
+
+                        benBusca.PreencheNumBeneficio(saldo.Matricula);
+
+                        benBusca = unit.Beneficios.ListarPorId(benBusca);
 
                         if (benBusca != null)
                         {
-                            emp.BancoId = int.Parse(saldo.CodigoBanco);
-                            emp.NumBeneficio = benBusca.Numero;
-                            emp.ParcelasNoContrato = saldo.ParcelasContrato;
-                            emp.ParcelasEmAberto = saldo.ParcelasAberto;
-                            emp.ValorParcela = saldo.ValorParcela;
-                            emp.Saldo = saldo.SaldoRefin;
-                            emp.ClienteId = benBusca.IdCliente;
-
-                            if (!cpf.Equals(saldo.Cpf))
+                            if (benBusca.Numero != 0)
                             {
-                                _core.UnityOfWorkAdo.Emprestimos.ExcluirPorBeneficio(emp);
-                            }
+                                emp.BancoId = int.Parse(saldo.CodigoBanco);
+                                emp.ClienteId = benBusca.IdCliente;
+                                emp.NumBeneficio = benBusca.Numero;
+                                emp.ParcelasNoContrato = saldo.ParcelasContrato;
+                                emp.ParcelasEmAberto = saldo.ParcelasAberto;
+                                emp.ValorParcela = saldo.ValorParcela;
+                                emp.Saldo = saldo.SaldoRefin;
+                                emp.ClienteId = benBusca.IdCliente;
 
-                            cpf = saldo.Cpf;
-                            _core.UnityOfWorkAdo.Emprestimos.InserirProcessa(emp);
+                                if (!cpf.Equals(saldo.Cpf))
+                                {
+                                    unit.Emprestimos.ExcluirPorBeneficio(emp);
+                                }
+
+                                cpf = saldo.Cpf;
+
+                                if (ValidaDadosEmprestimo(emp))
+                                {
+                                    unit.Emprestimos.InserirProcessa(emp);
+                                }
+                            }
                         }
                     }
-                }
+                }                
             }
             catch (Exception ex)
             {
@@ -198,6 +215,11 @@ namespace CampanhaBD.Business
         {
             try
             {
+                if (emprestimo == null)
+                {
+                    return false;
+                }
+
                 if (emprestimo.BancoId <= 0)
                 {
                     return false;

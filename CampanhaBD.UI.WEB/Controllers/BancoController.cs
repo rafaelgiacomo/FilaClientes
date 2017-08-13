@@ -16,7 +16,7 @@ namespace CampanhaBD.UI.WEB.Controllers
 
         public BancoController()
         {
-            _bancoBus = new BancoBusiness(_core);
+            _bancoBus = new BancoBusiness(_connectionString);
         }
 
         // GET: Banco

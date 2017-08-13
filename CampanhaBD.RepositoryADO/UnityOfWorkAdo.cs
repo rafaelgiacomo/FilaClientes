@@ -7,7 +7,6 @@ namespace CampanhaBD.RepositoryADO
     {
         private readonly string _connectionString;
         private readonly Context _context;
-        private static UnityOfWorkAdo _unit;
 
         #pragma warning disable 649
         private ClienteRepositoryAdo _clientRepository;
@@ -23,18 +22,11 @@ namespace CampanhaBD.RepositoryADO
         private BaseOriginalRepositoryAdo _baseOriginalRepository;
         #pragma warning restore 649
 
-        private UnityOfWorkAdo(string connectionString)
+        public UnityOfWorkAdo(string connectionString)
         {
             _connectionString = connectionString;
             _context = new Context(connectionString);
-        }
-
-        public static UnityOfWorkAdo getInstance(string connectionString)
-        {
-            if (_unit == null)
-                _unit = new UnityOfWorkAdo(connectionString);
-
-            return _unit;
+            _context.AbrirConexao();
         }
 
         public void AbrirTransacao()
@@ -64,6 +56,7 @@ namespace CampanhaBD.RepositoryADO
 
         public void Dispose()
         {
+            _context.FecharConexao();
         }
 
         public ClienteRepositoryAdo Clientes

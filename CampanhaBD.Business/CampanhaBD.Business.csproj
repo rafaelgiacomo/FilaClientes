@@ -47,13 +47,16 @@
     <Compile Include="ImportacaoBusiness.cs" />
     <Compile Include="ClienteBusiness.cs" />
     <Compile Include="BancoBusiness.cs" />
-    <Compile Include="CoreBusiness.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CampanhaBD.Interface\CampanhaBD.Interface.csproj">
+      <Project>{C620E36A-FB57-4CB0-9B25-5674A79729A4}</Project>
+      <Name>CampanhaBD.Interface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CampanhaBD.Model\CampanhaBD.Model.csproj">
       <Project>{7b038d68-28db-44ae-8913-d60db5ae1302}</Project>
       <Name>CampanhaBD.Model</Name>

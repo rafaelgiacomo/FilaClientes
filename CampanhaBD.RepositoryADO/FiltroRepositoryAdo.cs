@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
 using CampanhaBD.Model;
-using CampanhaBD.Interface;
+using CampanhaBD.Util;
 
 namespace CampanhaBD.RepositoryADO
 {
@@ -53,7 +52,7 @@ namespace CampanhaBD.RepositoryADO
             {
                 string sql = GerarSqlImportacaoClientes(filtro);
 
-                Reader = _context.ExecuteSqlCommandWithReturn(sql);                
+                Reader = _context.ExecuteSqlCommandWithReturn(sql);
             }
             catch (Exception)
             {
@@ -71,7 +70,7 @@ namespace CampanhaBD.RepositoryADO
                     BeneficioModel ben = new BeneficioModel();
 
                     #region Dados Cliente
-                    cl.PreencheCpfEId(Reader[BaseOriginalDadoModel.COLUMN_CPF].ToString());
+                    cl.PreencheCpf(Reader[BaseOriginalDadoModel.COLUMN_CPF].ToString());
                     cl.PreencheDataNascimento(Reader[BaseOriginalDadoModel.COLUMN_DATA_NASCIMENTO].ToString());
                     cl.PreencheCep(Reader[BaseOriginalDadoModel.COLUMN_CEP].ToString());
 
@@ -140,23 +139,143 @@ namespace CampanhaBD.RepositoryADO
             }
         }
 
-        public List<ClienteModel> FiltroExportacao(FiltroModel campanha)
+        public void ExportaCompleto(FiltroModel campanha, ref ExportacaoModel exportacao)
+        {
+            try
+            {
+                string sql = GerarSqlFiltroExportacaoCompleto(campanha);
+
+                var reader = _context.ExecuteSqlCommandWithReturn(sql);
+
+                CsvRow row = new CsvRow();
+                while (reader.Read())
+                {
+                    row.Add(reader[EmprestimoModel.COLUMN_NUM_BENEFICIO].ToString());
+                    row.Add(reader[ClienteModel.COLUMN_CPF].ToString());
+                    row.Add(reader[ClienteModel.COLUMN_DATANASCIMENTO].ToString());
+                    row.Add(reader[ClienteModel.COLUMN_NOME].ToString());
+                    row.Add(reader[ClienteModel.COLUMN_UF].ToString());
+                    row.Add(reader[ClienteModel.COLUMN_CIDADE].ToString());
+                    row.Add(reader[ClienteModel.COLUMN_BAIRRO].ToString());
+                    row.Add(reader[ClienteModel.COLUMN_CEP].ToString());
+                    row.Add(reader[ClienteModel.COLUMN_LOGRADOURO].ToString());
+                    row.Add(reader[ClienteModel.COLUMN_NUMERO].ToString());
+                    row.Add(reader[ClienteModel.COLUMN_COMPLEMENTO].ToString());
+                    row.Add(reader[ClienteModel.COLUMN_DDD].ToString());
+                    row.Add(reader[ClienteModel.COLUMN_TELEFONE].ToString());
+                    row.Add(reader[ClienteModel.COLUMN_DDD2].ToString());
+                    row.Add(reader[ClienteModel.COLUMN_TELEFONE2].ToString());
+                    row.Add(reader[ClienteModel.COLUMN_DATA_EMP_ATUALIZADOS].ToString());
+                    row.Add(reader[ClienteModel.COLUMN_DATA_TEL_ATUALIZADO].ToString());
+                    row.Add(reader[ClienteModel.COLUMN_DATA_TRABALHADO].ToString());
+                    row.Add(reader[ClienteModel.COLUMN_DATA_EXP_PROCESSA].ToString());
+                    row.Add(reader[ClienteModel.COLUMN_DATA_IMPORTADO].ToString());
+
+                    row.Add(reader[EmprestimoModel.COLUMN_BANCO_ID].ToString());
+                    row.Add(reader[EmprestimoModel.COLUMN_FIM_PAGAMENTO].ToString());
+                    row.Add(reader[EmprestimoModel.COLUMN_INICIO_PAGAMENTO].ToString());
+                    row.Add(reader[EmprestimoModel.COLUMN_PARCELAS_NO_CONTRATO].ToString());
+                    row.Add(reader[EmprestimoModel.COLUMN_PARCELAS_EM_ABERTO].ToString());
+                    row.Add(reader[EmprestimoModel.COLUMN_SALDO].ToString());
+                    row.Add(reader[EmprestimoModel.COLUMN_SITUACAO_EMPRESTIMO].ToString());
+                    row.Add(reader[EmprestimoModel.COLUMN_TIPO_EMPRESTIMO].ToString());
+                    row.Add(reader[EmprestimoModel.COLUMN_VALOR_BRUTO].ToString());
+                    row.Add(reader[EmprestimoModel.COLUMN_VALOR_PARCELA].ToString());
+
+                    exportacao.EscreverLinha(row);
+
+                    row.Clear();
+                }
+
+                reader.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void ExportaTelefone(FiltroModel campanha, ref ExportacaoModel exportacao)
+        {
+            try
+            {
+                string sql = GerarSqlFiltroExportacaoTelefone(campanha);
+
+                var reader = _context.ExecuteSqlCommandWithReturn(sql);
+
+                CsvRow row = new CsvRow();
+                while (reader.Read())
+                {
+                    row.Add(reader[ClienteModel.COLUMN_CPF].ToString());
+
+                    exportacao.EscreverLinha(row);
+
+                    row.Clear();
+                }
+
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public void ExportaProcessa(FiltroModel campanha, ref ExportacaoModel exportacao)
+        {
+            try
+            {
+                string sql = GerarSqlFiltroExportacaoProcessa(campanha);
+                var reader = _context.ExecuteSqlCommandWithReturn(sql);
+
+                CsvRow row = new CsvRow();
+                while (reader.Read())
+                {
+
+                    row.Add(reader[EmprestimoModel.COLUMN_NUM_BENEFICIO].ToString());
+                    row.Add(reader[ClienteModel.COLUMN_DATANASCIMENTO].ToString());
+                    row.Add(reader[ClienteModel.COLUMN_CPF].ToString());
+                    row.Add(reader[ClienteModel.COLUMN_NOME].ToString());
+                    row.Add(string.Empty);
+                    row.Add(reader[ClienteModel.COLUMN_UF].ToString());
+                    row.Add(string.Empty);
+                    row.Add(string.Empty);
+                    row.Add(string.Empty);
+
+                    exportacao.EscreverLinha(row);
+
+                    row.Clear();
+                }
+
+                reader.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public List<ClienteModel> ExportaProcessa(FiltroModel campanha)
         {
             try
             {
                 List<ClienteModel> lista = new List<ClienteModel>();
-                string sql = GerarSqlFiltroExportacao(campanha);
+                string sql = GerarSqlFiltroExportacaoProcessa(campanha);
 
                 var reader = _context.ExecuteSqlCommandWithReturn(sql);
 
                 while (reader.Read())
                 {
                     ClienteModel cl = new ClienteModel();
+                    BeneficioModel ben = new BeneficioModel();
 
-                    cl.PreencheCpfEId(reader[ClienteModel.COLUMN_CPF].ToString());
+                    cl.PreencheCpf(reader[ClienteModel.COLUMN_CPF].ToString());
                     cl.Id = long.Parse(reader[ClienteModel.COLUMN_ID].ToString());
                     cl.Nome = reader[ClienteModel.COLUMN_NOME].ToString();
                     cl.PreencheDataNascimento(reader[ClienteModel.COLUMN_DATANASCIMENTO].ToString());
+                    ben.PreencheNumBeneficio(reader[BeneficioModel.COLUMN_NUMERO].ToString());
+
+                    cl.Beneficios.Add(ben);
 
                     lista.Add(cl);
                 }
@@ -174,6 +293,7 @@ namespace CampanhaBD.RepositoryADO
 
         #region Métodos privados
 
+        //Gera SQL para Estimar QTD de clientes com Filtro na tabela BaseOriginalDados
         private string GerarSqlImportacaoQuantidade(FiltroModel filtro)
         {
             try
@@ -190,6 +310,7 @@ namespace CampanhaBD.RepositoryADO
             }
         }
 
+        //Gera SQL para importação da Tabela BaseOriginalDados
         private string GerarSqlImportacaoClientes(FiltroModel filtro)
         {
             try
@@ -206,6 +327,7 @@ namespace CampanhaBD.RepositoryADO
             }
         }
 
+        //Gera Filtros para SQL de importação
         private string GerarFiltrosImportacao(FiltroModel filtro)
         {
             try
@@ -277,12 +399,58 @@ namespace CampanhaBD.RepositoryADO
             }
         }
 
-        private string GerarSqlFiltroExportacao(FiltroModel filtro)
+        //Gera SQL para Exportação de Telefone
+        private string GerarSqlFiltroExportacaoTelefone(FiltroModel filtro)
         {
             try
             {
-                string sql_command = "SELECT DISTINCT c.Id, c.Cpf, c.DataNascimento, c.Nome "
+                string sql_command = "SELECT DISTINCT c.Cpf from Cliente c, Emprestimo e where c.Id = e.ClienteId ";
+
+                return sql_command += SqlFiltrosExportacao(filtro);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        //Gera SQL para exportação Processa
+        private string GerarSqlFiltroExportacaoProcessa(FiltroModel filtro)
+        {
+            try
+            {
+                string sql_command = "SELECT DISTINCT c.Id, c.Cpf, c.DataNascimento, c.Nome, c.Uf, e.NumBeneficio "
                 + "from Cliente c, Emprestimo e where c.Id = e.ClienteId ";
+
+                return sql_command += SqlFiltrosExportacao(filtro);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        //Gera SQL para exportação Completa
+        private string GerarSqlFiltroExportacaoCompleto(FiltroModel filtro)
+        {
+            try
+            {
+                string sql_command = "SELECT * from Cliente c, Emprestimo e where c.Id = e.ClienteId ";
+
+                return sql_command += SqlFiltrosExportacao(filtro);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        //Gera Filtros para Exportação
+        private string SqlFiltrosExportacao(FiltroModel filtro)
+        {
+            try
+            {
+                string sql_command = "";
 
                 #region Valor Parcela
 
@@ -461,17 +629,20 @@ namespace CampanhaBD.RepositoryADO
                 #endregion
 
                 #region Importacao
-                sql_command += string.Format(" AND ( ");
-                for (int i = 0; i < filtro.Importacoes.Count; i++)
+                if (filtro.Importacoes.Count > 0)
                 {
-                    var imp = filtro.Importacoes[i];
-                    if (i > 0)
+                    sql_command += string.Format(" AND ( ");
+                    for (int i = 0; i < filtro.Importacoes.Count; i++)
                     {
-                        sql_command += "OR";
+                        var imp = filtro.Importacoes[i];
+                        if (i > 0)
+                        {
+                            sql_command += "OR";
+                        }
+                        sql_command += string.Format(" {0} = '{1}'", ClienteModel.COLUMN_IMPORTACAO_ID, imp);
                     }
-                    sql_command += string.Format(" {0} = '{1}'", ClienteModel.COLUMN_IMPORTACAO_ID, imp);
+                    sql_command += string.Format(" )");
                 }
-                sql_command += string.Format(" )");
                 #endregion
 
                 #region Codigo Banco
@@ -544,7 +715,7 @@ namespace CampanhaBD.RepositoryADO
                 throw;
             }
         }
-        
+
         #endregion
     }
 }

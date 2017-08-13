@@ -151,9 +151,13 @@ namespace CampanhaBD.UI.WEB.ViewModel
             {
                 FiltroModel campanha = new FiltroModel();
 
+                if (Importacao > 0)
+                {
+                    campanha.Importacoes.Add(Importacao);
+                }
+
                 campanha.Nome = Nome;
                 campanha.Bancos.Add(CodigoBanco);
-                campanha.Importacoes.Add(Importacao);
                 campanha.MinDataNascimento = MinDataNascimento;
                 campanha.MaxDataNascimento = MaxDataNascimento;
                 campanha.MinCep = MinCep;

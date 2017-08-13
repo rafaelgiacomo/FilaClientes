@@ -47,6 +47,7 @@ namespace CampanhaBD.Model
         public const string COLUMN_NUM_BENEFICIO = "NumBeneficio";
         public const string COLUMN_NUM_EMPRESTIMO = "NumEmprestimo";
         public const string COLUMN_VALOR_PARCELA = "ValorParcela";
+        public const string COLUMN_VALOR_BRUTO = "ValorBruto";
         public const string COLUMN_PARCELAS_NO_CONTRATO = "ParcelasNoContrato";
         public const string COLUMN_PARCELAS_EM_ABERTO = "ParcelasEmAberto";
         public const string COLUMN_SALDO = "Saldo";

@@ -17,7 +17,7 @@ namespace CampanhaBD.UI.WEB.Controllers
 
         public AtualizacaoController()
         {
-            _atuBus = new AtualizacaoBusiness(_core);
+            _atuBus = new AtualizacaoBusiness(_connectionString);
         }
 
         public ActionResult Index()

@@ -18,8 +18,7 @@ namespace CampanhaBD.UI.Windows
     {
 
         #region Propriedades
-        public readonly CoreBusiness _core = CoreBusiness.GetInstance(
-            ConfigurationManager.ConnectionStrings["CampanhaBD"].ConnectionString);
+        public readonly string _connectionString = ConfigurationManager.ConnectionStrings["CampanhaBD"].ConnectionString;
 
         private BaseOriginalBusiness _baseOriginalBus;
         private BancoBusiness _bancoBus;
@@ -41,11 +40,9 @@ namespace CampanhaBD.UI.Windows
         {
             try
             {
-                _core.AbrirConexao();
-
-                _baseOriginalBus = new BaseOriginalBusiness(_core);
-                _bancoBus = new BancoBusiness(_core);
-                _impBus = new ImportacaoBusiness(_core);
+                _baseOriginalBus = new BaseOriginalBusiness(_connectionString);
+                _bancoBus = new BancoBusiness(_connectionString);
+                _impBus = new ImportacaoBusiness(_connectionString);
 
                 ListaBases = _baseOriginalBus.ListarBases();
                 ListaBancos = _bancoBus.ListarTodos();
@@ -188,7 +185,6 @@ namespace CampanhaBD.UI.Windows
 
         private void FrmImportacao_FormClosing(object sender, FormClosingEventArgs e)
         {
-            _core.FecharConexao();
         }
 
         #endregion

@@ -15,12 +15,10 @@ namespace CampanhaBD.UI.WEB.Controllers
     [Authorize]
     public class BaseController : Controller, IDisposable
     {
-        public readonly CoreBusiness _core = CoreBusiness.GetInstance(
-            ConfigurationManager.ConnectionStrings["CampanhaBD"].ConnectionString);
+        public readonly string _connectionString = ConfigurationManager.ConnectionStrings["CampanhaBD"].ConnectionString;
 
         public BaseController()
         {
-            _core.AbrirConexao();
         }
 
         public ActionResult Erro()
@@ -31,7 +29,6 @@ namespace CampanhaBD.UI.WEB.Controllers
 
         void IDisposable.Dispose()
         {
-            _core.FecharConexao();
         }
     }
 }
