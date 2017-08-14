@@ -194,7 +194,6 @@ IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_SALVAR_
 GO
 
 CREATE PROCEDURE [DBO].[SP_SALVAR_CLIENTE]
-	@Id bigint,
 	@ImportacaoId int,
 	@Nome varchar(max),
 	@Cpf varchar(max),
@@ -212,9 +211,9 @@ CREATE PROCEDURE [DBO].[SP_SALVAR_CLIENTE]
 	@Cep varchar(11) = null
 AS
 BEGIN
-	INSERT INTO [Cliente] ([Id], [ImportacaoId], [Nome], [Cpf], [Uf], [Cidade], [Bairro], [Ddd], [Telefone], [Ddd2], [Telefone2], [DataNascimento], [Logradouro], [Numero], [Complemento], [Cep],
+	INSERT INTO [Cliente] ([ImportacaoId], [Nome], [Cpf], [Uf], [Cidade], [Bairro], [Ddd], [Telefone], [Ddd2], [Telefone2], [DataNascimento], [Logradouro], [Numero], [Complemento], [Cep],
 		[DataImportado])
-	VALUES (@Id, @ImportacaoId, @Nome, @Cpf, @Uf, @Cidade, @Bairro, @Ddd, @Telefone, @Ddd2, @Telefone2, @DataNascimento, @Logradouro, @Numero, @Complemento, @Cep, 
+	VALUES (@ImportacaoId, @Nome, @Cpf, @Uf, @Cidade, @Bairro, @Ddd, @Telefone, @Ddd2, @Telefone2, @DataNascimento, @Logradouro, @Numero, @Complemento, @Cep, 
 		CONVERT(date, GETDATE()))
 END
 GO
@@ -337,6 +336,21 @@ CREATE PROCEDURE [DBO].[SP_SELECIONAR_CLIENTE_CPF]
 AS
 BEGIN
 	SELECT * FROM [Cliente] where [Cpf] = @Cpf
+END
+GO
+
+--Selecionar Id do Cliente por CPF
+--===============================================
+IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_SELECIONAR_ID_CLIENTE_CPF]')
+	AND OBJECTPROPERTY(ID, N'IsProcedure') = 1)
+	DROP PROCEDURE [DBO].[SP_SELECIONAR_ID_CLIENTE_CPF]
+GO
+
+CREATE PROCEDURE [DBO].[SP_SELECIONAR_ID_CLIENTE_CPF]
+	@Cpf varchar(15)
+AS
+BEGIN
+	SELECT [Id] FROM [Cliente] where [Cpf] = @Cpf
 END
 GO
 

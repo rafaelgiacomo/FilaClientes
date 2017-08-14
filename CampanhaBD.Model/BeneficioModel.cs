@@ -56,8 +56,6 @@ namespace CampanhaBD.Model
             {
                 if (!"".Equals(valor))
                 {
-                    valor = valor.Replace(".", "");
-                    valor = valor.Replace("-", "");
                     Numero = long.Parse(valor);
                 }
             }
@@ -73,8 +71,6 @@ namespace CampanhaBD.Model
             {
                 if (!"".Equals(valor))
                 {
-                    valor = valor.Replace(".", "");
-                    valor = valor.Replace("-", "");
                     Salario = float.Parse(valor);
                 }
             }
@@ -90,8 +86,6 @@ namespace CampanhaBD.Model
             {
                 if (!"".Equals(valor))
                 {
-                    valor = valor.Replace(".", "");
-                    valor = valor.Replace("-", "");
                     BancoPagamento = int.Parse(valor);
                 }
             }
@@ -107,8 +101,6 @@ namespace CampanhaBD.Model
             {
                 if (!"".Equals(valor))
                 {
-                    valor = valor.Replace(".", "");
-                    valor = valor.Replace("-", "");
                     AgenciaPagamento = int.Parse(valor);
                 }
             }
@@ -124,8 +116,6 @@ namespace CampanhaBD.Model
             {
                 if (!"".Equals(valor))
                 {
-                    valor = valor.Replace(".", "");
-                    valor = valor.Replace("-", "");
                     CodigoOrgaoPagador = int.Parse(valor);
                 }
             }
@@ -149,13 +139,6 @@ namespace CampanhaBD.Model
 
                         valor = dia + "/" + mes + "/" + ano;
                     }
-
-                    var data = Convert.ToDateTime(valor);
-
-                    if (DateTime.Compare(data, DateTime.MinValue) >= 0)
-                    {
-                        DataIncluidoInss = data.ToString("dd/MM/yyyy");
-                    }
                 }
             }
             catch (Exception ex)
@@ -178,13 +161,6 @@ namespace CampanhaBD.Model
 
                         valor = dia + "/" + mes + "/" + ano;
                     }
-
-                    var data = Convert.ToDateTime(valor);
-
-                    if (DateTime.Compare(data, DateTime.MinValue) >= 0)
-                    {
-                        DataExcluidoInss = data.ToString("dd/MM/yyyy");
-                    }
                 }
             }
             catch (Exception ex)
@@ -206,13 +182,6 @@ namespace CampanhaBD.Model
                         string dia = valor.Substring(6, 2);
 
                         valor = dia + "/" + mes + "/" + ano;
-                    }
-
-                    var data = Convert.ToDateTime(valor);
-
-                    if (DateTime.Compare(data, DateTime.MinValue) >= 0)
-                    {
-                        DataInicioBeneficio = data.ToString("dd/MM/yyyy");
                     }
                 }
             }

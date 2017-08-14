@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
 using CampanhaBD.Model;
 using CampanhaBD.Interface;
 
@@ -16,6 +15,7 @@ namespace CampanhaBD.RepositoryADO
             _context = context;
         }
 
+        #region Metodos publicos
         public void Inserir(ImportacaoModel entidade)
         {
             try
@@ -236,7 +236,9 @@ namespace CampanhaBD.RepositoryADO
                 throw;
             }
         }
+        #endregion
 
+        #region Metodos Privados
         private ImportacaoModel TransformaReaderEmObjeto(SqlDataReader reader)
         {
             try
@@ -258,6 +260,6 @@ namespace CampanhaBD.RepositoryADO
                 throw;
             }
         }
-
+        #endregion
     }
 }

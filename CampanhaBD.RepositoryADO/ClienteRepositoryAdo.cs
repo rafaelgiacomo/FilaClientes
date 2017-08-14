@@ -16,6 +16,7 @@ namespace CampanhaBD.RepositoryADO
             _context = context;
         }
 
+        #region Metodos Publicos
         public void Inserir(ClienteModel entidade)
         {
             try
@@ -25,19 +26,28 @@ namespace CampanhaBD.RepositoryADO
                     ClienteModel.COLUMN_IMPORTACAO_ID, ClienteModel.COLUMN_NOME, ClienteModel.COLUMN_CPF,
                     ClienteModel.COLUMN_UF, ClienteModel.COLUMN_CIDADE, ClienteModel.COLUMN_BAIRRO, ClienteModel.COLUMN_DDD,
                     ClienteModel.COLUMN_TELEFONE, ClienteModel.COLUMN_DATANASCIMENTO, ClienteModel.COLUMN_LOGRADOURO,
-                    ClienteModel.COLUMN_NUMERO, ClienteModel.COLUMN_COMPLEMENTO, ClienteModel.COLUMN_CEP,
-                    ClienteModel.COLUMN_ID
+                    ClienteModel.COLUMN_NUMERO, ClienteModel.COLUMN_COMPLEMENTO, ClienteModel.COLUMN_CEP
                 };
 
                 object[] values =
                 {
                     entidade.ImportacaoId, entidade.Nome, entidade.Cpf, entidade.Uf, entidade.Cidade, entidade.Bairro,
                     entidade.Ddd, entidade.Telefone, entidade.DataNascimento, entidade.Logradouro, entidade.Numero,
-                    entidade.Complemento, entidade.Cep, entidade.Id
+                    entidade.Complemento, entidade.Cep
                 };
 
-                _context.ExecuteProcedureNoReturn(
+                var reader = _context.ExecuteProcedureWithReturn(
                     ClienteModel.PROCEDURE_INSERT, parameters, values);
+
+                if (reader.Read())
+                {
+                    var ultimoId = reader[0].ToString();
+
+                    if (!string.IsNullOrEmpty(ultimoId))
+                        entidade.Id = Convert.ToInt32(ultimoId);
+                }
+
+                reader.Close();
 
             }
             catch(Exception ex)
@@ -272,6 +282,34 @@ namespace CampanhaBD.RepositoryADO
             }
         }
 
+        public long SelecionarIdPorCpf(ClienteModel entidade)
+        {
+            try
+            {
+                long retorno = 0;
+
+                string[] parameters = { ClienteModel.COLUMN_CPF };
+
+                object[] values = { entidade.Cpf };
+
+                var reader = _context.ExecuteProcedureWithReturn(
+                    ClienteModel.PROCEDURE_SELECT_ID_BY_CPF, parameters, values);
+
+                if (reader.Read())
+                {
+                    retorno = long.Parse(reader[ClienteModel.COLUMN_ID].ToString());
+                }
+
+                reader.Close();
+
+                return retorno;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public List<ClienteModel> TransformaSqlEmLista(string sql)
         {
             try
@@ -355,6 +393,6 @@ namespace CampanhaBD.RepositoryADO
                 throw;
             }
         }
-
+        #endregion
     }
 }

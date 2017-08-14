@@ -62,6 +62,7 @@ namespace CampanhaBD.Model
         public const string PROCEDURE_SELECT_BY_IMPORTACAO = "SP_SELECIONAR_CLIENTES_IMPORTACAO";
         public const string PROCEDURE_SELECT_BY_ID = "SP_SELECIONAR_CLIENTE_ID";
         public const string PROCEDURE_SELECT_BY_CPF = "SP_SELECIONAR_CLIENTE_CPF";
+        public const string PROCEDURE_SELECT_ID_BY_CPF = "SP_SELECIONAR_ID_CLIENTE_CPF";
         public const string PROCEDURE_UPDATE_DATA_EXP_PROCESSA = "SP_ATUALIZAR_DATA_EXP_PROCESSA";
         public const string PROCEDURE_UPDATE_DATA_TRABALHADO = "SP_ATUALIZAR_DATA_TRABALHADO";
         public const string PROCEDURE_UPDATE_DATA_EMPRESTIMO = "SP_ATUALIZAR_DATA_EMP_ATUALIZADO";
@@ -151,13 +152,6 @@ namespace CampanhaBD.Model
                         string dia = valor.Substring(6, 2);
 
                         valor = dia + "/" + mes + "/" + ano;
-                    }
-
-                    var data = Convert.ToDateTime(valor);
-
-                    if (DateTime.Compare(data, DateTime.MinValue) >= 0)
-                    {
-                        DataNascimento = data.ToString("dd/MM/yyyy");
                     }
                 }
             }
@@ -291,7 +285,6 @@ namespace CampanhaBD.Model
         {
             try
             {
-                valor = valor.Replace("-", "");
                 while (valor.Length < 8)
                 {
                     valor = "0" + valor;

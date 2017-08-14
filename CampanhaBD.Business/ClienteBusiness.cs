@@ -24,6 +24,7 @@ namespace CampanhaBD.Business
             }
         }
 
+        #region Metodos Publicos
         public void AdicionarCliente(ClienteModel entidade)
         {
             try
@@ -133,6 +134,6 @@ namespace CampanhaBD.Business
                 throw;
             }
         }
-
+        #endregion
     }
 }

@@ -97,8 +97,6 @@ namespace CampanhaBD.Model
             {
                 if (!"".Equals(valor))
                 {
-                    valor = valor.Replace(".", "");
-                    valor = valor.Replace("-", "");
                     NumBeneficio = long.Parse(valor);
                 }
             }
@@ -114,7 +112,6 @@ namespace CampanhaBD.Model
             {
                 if (!"".Equals(valor))
                 {
-                    valor = valor.Replace('.', ',');
                     ValorParcela = float.Parse(valor);
                 }
             }
@@ -130,7 +127,6 @@ namespace CampanhaBD.Model
             {
                 if (!"".Equals(valor))
                 {
-                    valor = valor.Replace('.', ',');
                     ValorBruto = float.Parse(valor);
                 }
             }
@@ -146,7 +142,6 @@ namespace CampanhaBD.Model
             {
                 if (!"".Equals(valor))
                 {
-                    valor = valor.Replace('.', ',');
                     ParcelasNoContrato = int.Parse(valor);
                 }
             }
@@ -162,7 +157,6 @@ namespace CampanhaBD.Model
             {
                 if (!"".Equals(valor))
                 {
-                    valor = valor.Replace('.', ',');
                     ParcelasEmAberto = int.Parse(valor);
                 }
             }
@@ -178,7 +172,6 @@ namespace CampanhaBD.Model
             {
                 if (!"".Equals(valor))
                 {
-                    valor = valor.Replace('.', ',');
                     TipoEmprestimo = int.Parse(valor);
                 }
             }
@@ -194,7 +187,6 @@ namespace CampanhaBD.Model
             {
                 if (!"".Equals(valor))
                 {
-                    valor = valor.Replace('.', ',');
                     SituacaoEmprestimo = int.Parse(valor);
                 }
             }
@@ -210,7 +202,6 @@ namespace CampanhaBD.Model
             {
                 if (!"".Equals(valor))
                 {
-                    valor = valor.Replace('.', ',');
                     Saldo = float.Parse(valor);
                 }
             }
@@ -226,7 +217,6 @@ namespace CampanhaBD.Model
             {
                 if (!"".Equals(valor))
                 {
-                    valor = valor.Replace('.', ',');
                     BancoId = int.Parse(valor);
                 }
             }

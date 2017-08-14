@@ -67,20 +67,27 @@ namespace CampanhaBD.UI.Windows
 
                 int qtdClientes = _impBus.EstimarQuantidade(Filtro);
 
-                if (Importacao.ValidaDadosParaSalvar())
+                if (qtdClientes > 0)
                 {
-                    pgbProgresso.Style = ProgressBarStyle.Blocks;
-                    pgbProgresso.Value = 0;
-                    pgbProgresso.Maximum = qtdClientes;
+                    if (Importacao.ValidaDadosParaSalvar())
+                    {
+                        pgbProgresso.Style = ProgressBarStyle.Blocks;
+                        pgbProgresso.Value = 0;
+                        pgbProgresso.Maximum = qtdClientes;
 
-                    backgroundWorker1.RunWorkerAsync();
+                        backgroundWorker1.RunWorkerAsync();
 
-                    TravarTela(true);
+                        TravarTela(true);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Informe um nome para importação");
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Informe um nome para importação");
-                }
+                    MessageBox.Show("Nenhum cliente foi encotrado para importação");
+                }                
             }
             catch (Exception ex)
             {
@@ -96,7 +103,7 @@ namespace CampanhaBD.UI.Windows
                 _impBus.IniciarImportacaoClientesSql(Importacao, Filtro);
 
                 //Loop de Importação
-                for (int i=0; i<pgbProgresso.Maximum; i++)
+                for (int i=1; i<=pgbProgresso.Maximum; i++)
                 {
                     if (backgroundWorker1.CancellationPending)
                     {

@@ -9,8 +9,6 @@ namespace CampanhaBD.RepositoryADO
     public class FiltroRepositoryAdo
     {
 
-        public SqlDataReader Reader { get; set; }
-
         private Context _context;
 
         #region Método públicos
@@ -46,13 +44,58 @@ namespace CampanhaBD.RepositoryADO
             }
         }
 
-        public void FiltroImportacaoBaseOriginal(FiltroModel filtro)
+        public List<BaseOriginalDadoModel> FiltroImportacaoBaseOriginal(FiltroModel filtro)
         {
             try
             {
+                List<BaseOriginalDadoModel> listaClientes = new List<BaseOriginalDadoModel>();
                 string sql = GerarSqlImportacaoClientes(filtro);
 
-                Reader = _context.ExecuteSqlCommandWithReturn(sql);
+                var reader = _context.ExecuteSqlCommandWithReturn(sql);
+
+                while (reader.Read())
+                {
+                    BaseOriginalDadoModel cl = new BaseOriginalDadoModel();
+
+                    cl.PreencheId(reader[BaseOriginalDadoModel.COLUMN_ID].ToString());
+                    cl.PreencheBaseId(reader[BaseOriginalDadoModel.COLUMN_BASE_ID].ToString());
+                    cl.NumBeneficio = reader[BaseOriginalDadoModel.COLUMN_NUM_BENEFICIO].ToString();
+                    cl.Nome = reader[BaseOriginalDadoModel.COLUMN_NOME].ToString();
+                    cl.DataNascimento = reader[BaseOriginalDadoModel.COLUMN_DATA_NASCIMENTO].ToString();
+                    cl.Cpf = reader[BaseOriginalDadoModel.COLUMN_CPF].ToString();
+                    cl.Especie = reader[BaseOriginalDadoModel.COLUMN_ESPECIE].ToString();
+                    cl.DataInicioBeneficio = reader[BaseOriginalDadoModel.COLUMN_DATA_INICIO_BENEFICIO].ToString();
+                    cl.ValorBeneficio = reader[BaseOriginalDadoModel.COLUMN_VALOR_BENEFICIO].ToString();
+                    cl.BancoPagamento = reader[BaseOriginalDadoModel.COLUMN_BANCO_PAGAMENTO].ToString();
+                    cl.AgenciaPagamento = reader[BaseOriginalDadoModel.COLUMN_AGENCIA_PAGAMENTO].ToString();
+                    cl.OrgaoPagador = reader[BaseOriginalDadoModel.COLUMN_ORGAO_PAGADOR].ToString();
+                    cl.ContaCorrente = reader[BaseOriginalDadoModel.COLUMN_CONTA_CORRENTE].ToString();
+                    cl.ApsBenef = reader[BaseOriginalDadoModel.COLUMN_ASP_BENEF].ToString();
+                    cl.CsMeioPgto = reader[BaseOriginalDadoModel.COLUMN_CS_MEIO_PAGTO].ToString();
+                    cl.BancoEmprestimo = reader[BaseOriginalDadoModel.COLUMN_BANCO_EMPRESTIMO].ToString();
+                    cl.ContratoEmprestimo = reader[BaseOriginalDadoModel.COLUMN_CONTRATO_EMPRESTIMO].ToString();
+                    cl.ValorEmprestimo = reader[BaseOriginalDadoModel.COLUMN_VALOR_EMPRESTIMO].ToString();
+                    cl.DataInicioPagamento = reader[BaseOriginalDadoModel.COLUMN_DATA_INICIO_PAGAMENTO].ToString();
+                    cl.DataFimPagamento = reader[BaseOriginalDadoModel.COLUMN_DATA_FIM_PAGAMENTO].ToString();
+                    cl.ParcelasNoContrato = reader[BaseOriginalDadoModel.COLUMN_PARCELAS_CONTRATO].ToString();
+                    cl.ValorParcela = reader[BaseOriginalDadoModel.COLUMN_VALOR_PARCELA].ToString();
+                    cl.TipoEmprestimo = reader[BaseOriginalDadoModel.COLUMN_TIPO_EMPRESTIMO].ToString();
+                    cl.Endereco = reader[BaseOriginalDadoModel.COLUMN_ENDERECO].ToString();
+                    cl.Bairro = reader[BaseOriginalDadoModel.COLUMN_BAIRRO].ToString();
+                    cl.Municipio = reader[BaseOriginalDadoModel.COLUMN_MUNICIPIO].ToString();
+                    cl.Uf = reader[BaseOriginalDadoModel.COLUMN_UF].ToString();
+                    cl.Cep = reader[BaseOriginalDadoModel.COLUMN_CEP].ToString();
+                    cl.SituacaoEmprestimo = reader[BaseOriginalDadoModel.COLUMN_SITUACAO_EMPRESTIMO].ToString();
+                    cl.DataIncluidoInss = reader[BaseOriginalDadoModel.COLUMN_DATA_INCLUIDO_INSS].ToString();
+                    cl.DataExcluidoInss = reader[BaseOriginalDadoModel.COLUMN_DATA_EXCLUIDO_INSS].ToString();
+                    cl.DataImportado = reader[BaseOriginalDadoModel.COLUMN_DATA_IMPORTADO].ToString();
+                    cl.ResultadoImportacao = reader[BaseOriginalDadoModel.COLUMN_RESULTADO_IMPORTACAO].ToString();
+                    cl.MsgLogImportacao = reader[BaseOriginalDadoModel.COLUMN_MSG_LOG_IMPORTACAO].ToString();
+
+                    listaClientes.Add(cl);
+                }
+
+                return listaClientes;
             }
             catch (Exception)
             {
@@ -60,84 +103,72 @@ namespace CampanhaBD.RepositoryADO
             }
         }
 
-        public bool LerDadosClienteBaseOriginal(ClienteModel cl)
-        {
-            try
-            {
-                if (Reader.Read())
-                {
-                    EmprestimoModel emp = new EmprestimoModel();
-                    BeneficioModel ben = new BeneficioModel();
+        //public bool LerDadosClienteBaseOriginal(ClienteModel cl)
+        //{
+        //    try
+        //    {
+        //        if (Reader.Read())
+        //        {
+        //            EmprestimoModel emp = new EmprestimoModel();
+        //            BeneficioModel ben = new BeneficioModel();
 
-                    #region Dados Cliente
-                    cl.PreencheCpf(Reader[BaseOriginalDadoModel.COLUMN_CPF].ToString());
-                    cl.PreencheDataNascimento(Reader[BaseOriginalDadoModel.COLUMN_DATA_NASCIMENTO].ToString());
-                    cl.PreencheCep(Reader[BaseOriginalDadoModel.COLUMN_CEP].ToString());
+        //            #region Dados Cliente
+        //            cl.PreencheCpf(Reader[BaseOriginalDadoModel.COLUMN_CPF].ToString());
+        //            cl.PreencheDataNascimento(Reader[BaseOriginalDadoModel.COLUMN_DATA_NASCIMENTO].ToString());
+        //            cl.PreencheCep(Reader[BaseOriginalDadoModel.COLUMN_CEP].ToString());
 
-                    cl.Uf = Reader[BaseOriginalDadoModel.COLUMN_UF].ToString();
-                    cl.Cidade = Reader[BaseOriginalDadoModel.COLUMN_MUNICIPIO].ToString();
-                    cl.Logradouro = Reader[BaseOriginalDadoModel.COLUMN_ENDERECO].ToString();
-                    //cl.Numero = Reader[BaseOriginalDadoModel.COLUMN_NUM_BENEFICIO].ToString();
-                    cl.Ddd = Reader[BaseOriginalDadoModel.COLUMN_DDD].ToString();
-                    cl.Telefone = Reader[BaseOriginalDadoModel.COLUMN_TELEFONE].ToString();
-                    cl.Nome = Reader[BaseOriginalDadoModel.COLUMN_NOME].ToString();
-                    cl.Bairro = Reader[BaseOriginalDadoModel.COLUMN_BAIRRO].ToString();
-                    //cl.Complemento = Reader[BaseOriginalDadoModel.COLUMN_COMPLEMENTO].ToString();
-                    #endregion
+        //            cl.Uf = Reader[BaseOriginalDadoModel.COLUMN_UF].ToString();
+        //            cl.Cidade = Reader[BaseOriginalDadoModel.COLUMN_MUNICIPIO].ToString();
+        //            cl.Logradouro = Reader[BaseOriginalDadoModel.COLUMN_ENDERECO].ToString();
+        //            //cl.Numero = Reader[BaseOriginalDadoModel.COLUMN_NUM_BENEFICIO].ToString();
+        //            cl.Ddd = Reader[BaseOriginalDadoModel.COLUMN_DDD].ToString();
+        //            cl.Telefone = Reader[BaseOriginalDadoModel.COLUMN_TELEFONE].ToString();
+        //            cl.Nome = Reader[BaseOriginalDadoModel.COLUMN_NOME].ToString();
+        //            cl.Bairro = Reader[BaseOriginalDadoModel.COLUMN_BAIRRO].ToString();
+        //            //cl.Complemento = Reader[BaseOriginalDadoModel.COLUMN_COMPLEMENTO].ToString();
+        //            #endregion
 
-                    #region Dados Emprestimo
-                    emp.ClienteId = cl.Id;
-                    emp.PreencheValorParcela(Reader[BaseOriginalDadoModel.COLUMN_VALOR_PARCELA].ToString());
-                    emp.PreencheValorBruto(Reader[BaseOriginalDadoModel.COLUMN_VALOR_EMPRESTIMO].ToString());
-                    emp.PreencheNumBeneficio(Reader[BaseOriginalDadoModel.COLUMN_NUM_BENEFICIO].ToString());
-                    emp.PreencheDataInicioPagamento(Reader[BaseOriginalDadoModel.COLUMN_DATA_INICIO_PAGAMENTO].ToString());
-                    emp.PreencheDataFimPagamento(Reader[BaseOriginalDadoModel.COLUMN_DATA_FIM_PAGAMENTO].ToString());
-                    emp.PreencheParcelasContrato(Reader[BaseOriginalDadoModel.COLUMN_PARCELAS_CONTRATO].ToString());
-                    emp.PreencheBancoId(Reader[BaseOriginalDadoModel.COLUMN_BANCO_EMPRESTIMO].ToString());
-                    emp.PreencheTipoEmprestimo(Reader[BaseOriginalDadoModel.COLUMN_TIPO_EMPRESTIMO].ToString());
-                    emp.PreencheSituacaoEmprestimo(Reader[BaseOriginalDadoModel.COLUMN_SITUACAO_EMPRESTIMO].ToString());
-                    #endregion
+        //            #region Dados Emprestimo
+        //            emp.ClienteId = cl.Id;
+        //            emp.PreencheValorParcela(Reader[BaseOriginalDadoModel.COLUMN_VALOR_PARCELA].ToString());
+        //            emp.PreencheValorBruto(Reader[BaseOriginalDadoModel.COLUMN_VALOR_EMPRESTIMO].ToString());
+        //            emp.PreencheNumBeneficio(Reader[BaseOriginalDadoModel.COLUMN_NUM_BENEFICIO].ToString());
+        //            emp.PreencheDataInicioPagamento(Reader[BaseOriginalDadoModel.COLUMN_DATA_INICIO_PAGAMENTO].ToString());
+        //            emp.PreencheDataFimPagamento(Reader[BaseOriginalDadoModel.COLUMN_DATA_FIM_PAGAMENTO].ToString());
+        //            emp.PreencheParcelasContrato(Reader[BaseOriginalDadoModel.COLUMN_PARCELAS_CONTRATO].ToString());
+        //            emp.PreencheBancoId(Reader[BaseOriginalDadoModel.COLUMN_BANCO_EMPRESTIMO].ToString());
+        //            emp.PreencheTipoEmprestimo(Reader[BaseOriginalDadoModel.COLUMN_TIPO_EMPRESTIMO].ToString());
+        //            emp.PreencheSituacaoEmprestimo(Reader[BaseOriginalDadoModel.COLUMN_SITUACAO_EMPRESTIMO].ToString());
+        //            #endregion
 
-                    #region DadosBeneficio
-                    ben.IdCliente = cl.Id;
-                    ben.PreencheNumBeneficio(Reader[BaseOriginalDadoModel.COLUMN_NUM_BENEFICIO].ToString());
-                    ben.PreencheBancoPagamento(Reader[BaseOriginalDadoModel.COLUMN_BANCO_PAGAMENTO].ToString());
-                    ben.PreencheAgenciaPagamento(Reader[BaseOriginalDadoModel.COLUMN_AGENCIA_PAGAMENTO].ToString());
-                    ben.PreencheOrgaoPagador(Reader[BaseOriginalDadoModel.COLUMN_ORGAO_PAGADOR].ToString());
-                    ben.PreencheSalario(Reader[BaseOriginalDadoModel.COLUMN_VALOR_BENEFICIO].ToString());
-                    ben.PreencheDataInicioBeneficio(Reader[BaseOriginalDadoModel.COLUMN_DATA_INICIO_BENEFICIO].ToString());
-                    ben.PreencheDataIncluidoInss(Reader[BaseOriginalDadoModel.COLUMN_DATA_INCLUIDO_INSS].ToString());
-                    ben.PreencheDataExcluidoInss(Reader[BaseOriginalDadoModel.COLUMN_DATA_EXCLUIDO_INSS].ToString());
-                    #endregion
+        //            #region DadosBeneficio
+        //            ben.IdCliente = cl.Id;
+        //            ben.PreencheNumBeneficio(Reader[BaseOriginalDadoModel.COLUMN_NUM_BENEFICIO].ToString());
+        //            ben.PreencheBancoPagamento(Reader[BaseOriginalDadoModel.COLUMN_BANCO_PAGAMENTO].ToString());
+        //            ben.PreencheAgenciaPagamento(Reader[BaseOriginalDadoModel.COLUMN_AGENCIA_PAGAMENTO].ToString());
+        //            ben.PreencheOrgaoPagador(Reader[BaseOriginalDadoModel.COLUMN_ORGAO_PAGADOR].ToString());
+        //            ben.PreencheSalario(Reader[BaseOriginalDadoModel.COLUMN_VALOR_BENEFICIO].ToString());
+        //            ben.PreencheDataInicioBeneficio(Reader[BaseOriginalDadoModel.COLUMN_DATA_INICIO_BENEFICIO].ToString());
+        //            ben.PreencheDataIncluidoInss(Reader[BaseOriginalDadoModel.COLUMN_DATA_INCLUIDO_INSS].ToString());
+        //            ben.PreencheDataExcluidoInss(Reader[BaseOriginalDadoModel.COLUMN_DATA_EXCLUIDO_INSS].ToString());
+        //            #endregion
 
-                    cl.Emprestimos.Clear();
-                    cl.Beneficios.Clear();
+        //            cl.Emprestimos.Clear();
+        //            cl.Beneficios.Clear();
 
-                    cl.Emprestimos.Add(emp);
-                    cl.Beneficios.Add(ben);
+        //            cl.Emprestimos.Add(emp);
+        //            cl.Beneficios.Add(ben);
 
-                    return true;
-                }
+        //            return true;
+        //        }
 
-                return false;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
-
-        public void FecharReader()
-        {
-            try
-            {
-                Reader.Close();
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
+        //        return false;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return false;
+        //    }
+        //}
 
         public void ExportaCompleto(FiltroModel campanha, ref ExportacaoModel exportacao)
         {

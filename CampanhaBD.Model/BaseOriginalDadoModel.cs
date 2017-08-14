@@ -1,77 +1,83 @@
 ﻿
+using System;
+
 namespace CampanhaBD.Model
 {
     public class BaseOriginalDadoModel
     {
-        //#region Propriedades
-        //public long Id { get; set; }
+        #region Propriedades
+        public long Id { get; set; }
 
-        //public int BaseId { get; set; }
+        public int BaseId { get; set; }
 
-        //public string NumBeneficio { get; set; }
+        public string NumBeneficio { get; set; }
 
-        //public string Nome { get; set; }
+        public string Nome { get; set; }
 
-        //public string DataNascimento { get; set; }
+        public string DataNascimento { get; set; }
 
-        //public string Cpf { get; set; }
+        public string Cpf { get; set; }
 
-        //public string Especie { get; set; }
+        public string Especie { get; set; }
 
-        //public string DataInicioBeneficio { get; set; }
+        public string DataInicioBeneficio { get; set; }
 
-        //public string ValorBeneficio { get; set; }
+        public string ValorBeneficio { get; set; }
 
-        //public string BancoPagamento { get; set; }
+        public string BancoPagamento { get; set; }
 
-        //public string AgenciaPagamento { get; set; }
+        public string AgenciaPagamento { get; set; }
 
-        //public string OrgaoPagador { get; set; }
+        public string OrgaoPagador { get; set; }
 
-        //public string ContaCorrente { get; set; }
+        public string ContaCorrente { get; set; }
 
-        //public string ApsBenef { get; set; }
+        public string ApsBenef { get; set; }
 
-        //public string CsMeioPgto { get; set; }
+        public string CsMeioPgto { get; set; }
 
-        //public string BancoEmprestimo { get; set; }
+        public string BancoEmprestimo { get; set; }
 
-        //public string ContratoEmprestimo { get; set; }
+        public string ContratoEmprestimo { get; set; }
 
-        //public string ValorEmprestimo { get; set; }
+        public string ValorEmprestimo { get; set; }
 
-        //public string DataInicioPagamento { get; set; }
+        public string DataInicioPagamento { get; set; }
 
-        //public string DataFimPagamento { get; set; }
+        public string DataFimPagamento { get; set; }
 
-        //public string ParcelasNoContrato { get; set; }
+        public string ParcelasNoContrato { get; set; }
 
-        //public string ValorParcela { get; set; }
+        public string ValorParcela { get; set; }
 
-        //public string TipoEmprestimo { get; set; }
+        public string TipoEmprestimo { get; set; }
 
-        //public string Endereco { get; set; }
+        public string Endereco { get; set; }
 
-        //public string Bairro { get; set; }
+        public string Bairro { get; set; }
 
-        //public string Municipio { get; set; }
+        public string Municipio { get; set; }
 
-        //public string Uf { get; set; }
+        public string Uf { get; set; }
 
-        //public string Cep { get; set; }
+        public string Cep { get; set; }
 
-        //public string SituacaoEmprestimo { get; set; }
+        public string SituacaoEmprestimo { get; set; }
 
-        //public string DataIncluidoInss { get; set; }
+        public string DataIncluidoInss { get; set; }
 
-        //public string DataExcluidoInss { get; set; }
+        public string DataExcluidoInss { get; set; }
 
-        //public string DataImportado { get; set; }
+        public string DataImportado { get; set; }
 
-        //public string ResultadoImportacao { get; set; }
+        public string ResultadoImportacao { get; set; }
 
-        //public string MsgLogImportacao { get; set; }
-        //#endregion
+        public string MsgLogImportacao { get; set; }
+
+        public string Ddd { get; set; }
+
+        public string Telefone { get; set; }
+        #endregion
 
         #region Colunas e Procs
         public const string COLUMN_ID = "Id";
@@ -111,6 +117,40 @@ namespace CampanhaBD.Model
         public const string COLUMN_DATA_IMPORTADO = "DataImportado";
         public const string COLUMN_RESULTADO_IMPORTACAO = "ResultadoImportacao";
         public const string COLUMN_MSG_LOG_IMPORTACAO = "MsgLogImportacao";
+        #endregion
+
+        #region Preenchimento de campos
+
+        public void PreencheId(string valor)
+        {
+            try
+            {
+                if (!"".Equals(valor))
+                {
+                    Id = long.Parse(valor);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void PreencheBaseId(string valor)
+        {
+            try
+            {
+                if (!"".Equals(valor))
+                {
+                    BaseId = int.Parse(valor);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
         #endregion
     }
 }

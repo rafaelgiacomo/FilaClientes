@@ -16,6 +16,8 @@ namespace CampanhaBD.Business
         private string _connectionString;
 
         private ClienteModel _cliente;
+
+        public List<BaseOriginalDadoModel> ClientesImportados { get; set; }
         #endregion
 
         #region Métodos públicos
@@ -25,9 +27,7 @@ namespace CampanhaBD.Business
             {
                 using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
                 {
-                    unit.AbrirTransacao();
                     unit.Importacoes.Inserir(entidade);
-                    unit.Commit();
                 }
             }
             catch
@@ -88,7 +88,7 @@ namespace CampanhaBD.Business
                 using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
                 {
                     unit.Importacoes.Inserir(imp);
-                    unit.Filtros.FiltroImportacaoBaseOriginal(filtro);
+                    ClientesImportados = unit.Filtros.FiltroImportacaoBaseOriginal(filtro);
                     _cliente = new ClienteModel();
                 }
             }
@@ -102,12 +102,14 @@ namespace CampanhaBD.Business
         {
             try
             {
-                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+                if (ClientesImportados.Count > 0)
                 {
+
                     _cliente.LimparPropriedades();
 
                     _cliente.ImportacaoId = imp.Id;
-                    unit.Filtros.LerDadosClienteBaseOriginal(_cliente);
+                    //unit.Filtros.LerDadosClienteBaseOriginal(_cliente);
+                    DadosBaseParaCliente();
 
                     if (ValidaDadosCliente(_cliente))
                     {
@@ -123,6 +125,8 @@ namespace CampanhaBD.Business
                     {
                         SalvarEmprestimo(_cliente.Emprestimos[0]);
                     }
+
+                    ClientesImportados.RemoveAt(ClientesImportados.Count - 1);
                 }
             }
             catch
@@ -137,12 +141,8 @@ namespace CampanhaBD.Business
             {
                 using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
                 {
-                    unit.Filtros.FecharReader();
-
                     unit.Importacoes.SalvarNumImportados(imp);
                     unit.Importacoes.Terminar(imp);
-
-                    //unit.Commit();
                 }
             }
             catch (Exception ex)
@@ -187,13 +187,7 @@ namespace CampanhaBD.Business
         {
             try
             {
-                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
-                {
-                    if (!unit.Filtros.Reader.IsClosed)
-                        unit.Filtros.Reader.Close();
 
-                    unit.RollBack();
-                }
             }
             catch (Exception ex)
             {
@@ -279,6 +273,67 @@ namespace CampanhaBD.Business
         #endregion
 
         #region Métodos privados
+        private void DadosBaseParaCliente()
+        {
+            try
+            {
+                BaseOriginalDadoModel registro = ClientesImportados.Last();
+                EmprestimoModel emp = new EmprestimoModel();
+                BeneficioModel ben = new BeneficioModel();
+
+                #region Dados Cliente
+                _cliente.PreencheCpf(registro.Cpf);
+                _cliente.PreencheDataNascimento(registro.DataNascimento);
+                _cliente.PreencheCep(registro.Cep);
+
+                _cliente.Uf = registro.Uf;
+                _cliente.Cidade = registro.Municipio;
+                _cliente.Logradouro = registro.Endereco;
+                //cl.Numero = Reader[BaseOriginalDadoModel.COLUMN_NUM_BENEFICIO].ToString();
+                _cliente.Ddd = registro.Ddd;
+                _cliente.Telefone = registro.Telefone;
+                _cliente.Nome = registro.Nome;
+                _cliente.Bairro = registro.Bairro;
+                //cl.Complemento = Reader[BaseOriginalDadoModel.COLUMN_COMPLEMENTO].ToString();
+                #endregion
+
+                #region Dados Emprestimo
+                emp.ClienteId = _cliente.Id;
+                emp.PreencheValorParcela(registro.ValorParcela);
+                emp.PreencheValorBruto(registro.ValorEmprestimo);
+                emp.PreencheNumBeneficio(registro.NumBeneficio);
+                emp.PreencheDataInicioPagamento(registro.DataInicioPagamento);
+                emp.PreencheDataFimPagamento(registro.DataFimPagamento);
+                emp.PreencheParcelasContrato(registro.ParcelasNoContrato);
+                emp.PreencheBancoId(registro.BancoEmprestimo);
+                emp.PreencheTipoEmprestimo(registro.TipoEmprestimo);
+                emp.PreencheSituacaoEmprestimo(registro.SituacaoEmprestimo);
+                #endregion
+
+                #region DadosBeneficio
+                ben.IdCliente = _cliente.Id;
+                ben.Numero = emp.NumBeneficio;
+                ben.PreencheBancoPagamento(registro.BancoPagamento);
+                ben.PreencheAgenciaPagamento(registro.AgenciaPagamento);
+                ben.PreencheOrgaoPagador(registro.OrgaoPagador);
+                ben.PreencheSalario(registro.ValorBeneficio);
+                ben.PreencheDataInicioBeneficio(registro.DataInicioBeneficio);
+                ben.PreencheDataIncluidoInss(registro.DataIncluidoInss);
+                ben.PreencheDataExcluidoInss(registro.DataExcluidoInss);
+                #endregion
+
+                _cliente.Emprestimos.Clear();
+                _cliente.Beneficios.Clear();
+
+                _cliente.Emprestimos.Add(emp);
+                _cliente.Beneficios.Add(ben);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         private void SalvarCliente(ClienteModel cliente, FiltroModel filtro)
         {
             try
@@ -286,6 +341,9 @@ namespace CampanhaBD.Business
                 using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
                 {
                     unit.Clientes.Inserir(cliente);
+
+                    cliente.Beneficios[0].IdCliente = cliente.Id;
+                    cliente.Emprestimos[0].ClienteId = cliente.Id;
                 }
             }
             catch (Exception ex)
@@ -296,11 +354,20 @@ namespace CampanhaBD.Business
                     {
                         using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
                         {
-                            unit.Clientes.Alterar(cliente);
+                            var idCliente = unit.Clientes.SelecionarIdPorCpf(cliente);
+
+                            if (idCliente > 0)
+                            {
+                                cliente.Id = idCliente;
+                                cliente.Beneficios[0].IdCliente = cliente.Id;
+                                cliente.Emprestimos[0].ClienteId = cliente.Id;
+
+                                unit.Clientes.Alterar(cliente);
+                            }                        
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception ex2)
                 {
                     throw;
                 }
@@ -416,6 +483,7 @@ namespace CampanhaBD.Business
             try
             {
                 _connectionString = connectionString;
+                ClientesImportados = new List<BaseOriginalDadoModel>();
             }
             catch
             {
