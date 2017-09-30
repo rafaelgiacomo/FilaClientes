@@ -43,13 +43,13 @@ namespace CampanhaBD.RepositoryADO
                 {
                     var ultimoId = reader[0].ToString();
 
-                    if (!String.IsNullOrEmpty(ultimoId))
+                    if (!string.IsNullOrEmpty(ultimoId))
                         entidade.Consulta = Convert.ToInt32(ultimoId);
                 }
 
                 reader.Close();
             }
-            catch
+            catch(Exception ex)
             {
                 throw;
             }

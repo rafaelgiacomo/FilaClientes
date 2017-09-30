@@ -49,6 +49,8 @@ namespace CampanhaBD.Model
 
         public string DataImportado { get; set; }
 
+        public bool Ativado { get; set; }
+
         public List<BeneficioModel> Beneficios { get; set; }
 
         public List<EmprestimoModel> Emprestimos { get; set; }
@@ -68,6 +70,7 @@ namespace CampanhaBD.Model
         public const string PROCEDURE_UPDATE_DATA_EMPRESTIMO = "SP_ATUALIZAR_DATA_EMP_ATUALIZADO";
         public const string PROCEDURE_UPDATE_DATA_TELEFONE = "SP_ATUALIZAR_DATA_TEL_ATUALIZADO";
         public const string PROCEDURE_UPDATE_IMPORTACAO = "SP_TROCAR_IMPORTACAO_CLIENTE";
+        public const string PROCEDURE_UPDATE_ATIVADO = "SP_ATUALIZAR_ATIVADO";
         public const string COLUMN_ID = "Id";
         public const string COLUMN_IMPORTACAO_ID = "ImportacaoId";
         public const string COLUMN_NOME = "Nome";
@@ -89,6 +92,7 @@ namespace CampanhaBD.Model
         public const string COLUMN_DATA_EMP_ATUALIZADOS = "DataEmpAtualizados";
         public const string COLUMN_DATA_TRABALHADO = "DataTrabalhado";
         public const string COLUMN_DATA_EXP_PROCESSA = "DataExpProcessa";
+        public const string COLUMN_ATIVADO = "Ativado";
         #endregion
 
         #region Indices das Propriedades
@@ -143,7 +147,7 @@ namespace CampanhaBD.Model
         {
             try
             {
-                if (!"".Equals(valor))
+                if ((!"".Equals(valor)) && (!"00000000".Equals(valor)))
                 {
                     if (valor.Length == 8)
                     {
@@ -153,6 +157,8 @@ namespace CampanhaBD.Model
 
                         valor = dia + "/" + mes + "/" + ano;
                     }
+
+                    DataNascimento = valor;
                 }
             }
             catch (Exception ex)

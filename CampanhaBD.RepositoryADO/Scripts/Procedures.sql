@@ -208,13 +208,36 @@ CREATE PROCEDURE [DBO].[SP_SALVAR_CLIENTE]
 	@Logradouro varchar(max) = null,
 	@Numero varchar(7) = null,
 	@Complemento varchar(max) = null,
-	@Cep varchar(11) = null
+	@Cep varchar(11) = null,
+	@Ativado bit
 AS
 BEGIN
 	INSERT INTO [Cliente] ([ImportacaoId], [Nome], [Cpf], [Uf], [Cidade], [Bairro], [Ddd], [Telefone], [Ddd2], [Telefone2], [DataNascimento], [Logradouro], [Numero], [Complemento], [Cep],
-		[DataImportado])
+		[DataImportado], [Ativado])
 	VALUES (@ImportacaoId, @Nome, @Cpf, @Uf, @Cidade, @Bairro, @Ddd, @Telefone, @Ddd2, @Telefone2, @DataNascimento, @Logradouro, @Numero, @Complemento, @Cep, 
-		CONVERT(date, GETDATE()))
+		CONVERT(date, GETDATE()), @Ativado)
+
+	DECLARE @ULTIMO_ID INT
+	 
+	SET @ULTIMO_ID = Scope_identity()
+
+	SELECT @ULTIMO_ID
+END
+GO
+
+--Atualizar Ativado
+--===============================================
+IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_ATUALIZAR_ATIVADO]')
+	AND OBJECTPROPERTY(ID, N'IsProcedure') = 1)
+	DROP PROCEDURE [DBO].[SP_ATUALIZAR_ATIVADO]
+GO
+
+CREATE PROCEDURE [DBO].[SP_ATUALIZAR_ATIVADO]
+	@Id bigint,
+	@Ativado bit
+AS
+BEGIN
+	UPDATE [Cliente] SET [Ativado] = @Ativado
 END
 GO
 
@@ -638,12 +661,70 @@ CREATE PROCEDURE [DBO].[SP_SALVAR_BENEFICIO]
 	@OrgaoPagador int = null,
 	@ContaCorrente nvarchar(20) = null,
 	@DataIncluidoInss nvarchar(20) = null,
-	@DataExcluidoInss nvarchar(20) = null
+	@DataExcluidoInss nvarchar(20) = null,
+	@Especie int = null
 AS
 BEGIN
 	INSERT INTO [Beneficio] ([Numero], [ClienteId], [Salario], [DataCompetencia], [DataInicioBeneficio], [BancoPagamento], [AgenciaPagamento], [OrgaoPagador], [ContaCorrente],
-		[DataIncluidoInss], [DataExcluidoInss])
-	VALUES (@Numero, @ClienteId, @Salario, @DataCompetencia, @DataInicioBeneficio, @BancoPagamento, @AgenciaPagamento, @OrgaoPagador, @ContaCorrente, @DataIncluidoInss, @DataExcluidoInss)
+		[DataIncluidoInss], [DataExcluidoInss], [Especie])
+	VALUES (@Numero, @ClienteId, @Salario, @DataCompetencia, @DataInicioBeneficio, @BancoPagamento, @AgenciaPagamento, @OrgaoPagador, 
+		@ContaCorrente, @DataIncluidoInss, @DataExcluidoInss, @Especie)
+END
+GO
+
+--Alterar Beneficio
+--========================================================================
+IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_ALTERAR_BENEFICIO]')
+	AND OBJECTPROPERTY(ID, N'IsProcedure') = 1)
+	DROP PROCEDURE [DBO].[SP_ALTERAR_BENEFICIO]
+GO
+
+CREATE PROCEDURE [DBO].[SP_ALTERAR_BENEFICIO]
+	@Numero bigint,
+	@ClienteId bigint,
+	@Salario float = null,
+	@DataInicioBeneficio date = null,
+	@BancoPagamento int = null,
+	@AgenciaPagamento int = null,
+	@OrgaoPagador int = null,
+	@ContaCorrente nvarchar(20) = null,
+	@DataIncluidoInss nvarchar(20) = null,
+	@DataExcluidoInss nvarchar(20) = null,
+	@Especie int = null
+AS
+BEGIN
+
+	UPDATE [Beneficio] SET [Salario] = @Salario, [DataCompetencia] = CONVERT(date, GETDATE()), [DataInicioBeneficio] = @DataInicioBeneficio, 
+		[BancoPagamento] = @BancoPagamento, [AgenciaPagamento] = @AgenciaPagamento, [OrgaoPagador] = @OrgaoPagador, 
+		[ContaCorrente] = @ContaCorrente, [DataIncluidoInss] = @DataIncluidoInss, [Especie] = @Especie
+END
+GO
+
+--Alterar Beneficio Sem Data Exclusao
+--========================================================================
+IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_ALTERAR_BENEFICIO_SEM_DATA_EXCLU]')
+	AND OBJECTPROPERTY(ID, N'IsProcedure') = 1)
+	DROP PROCEDURE [DBO].[SP_ALTERAR_BENEFICIO_SEM_DATA_EXCLU]
+GO
+
+CREATE PROCEDURE [DBO].[SP_ALTERAR_BENEFICIO_SEM_DATA_EXCLU]
+	@Numero bigint,
+	@ClienteId bigint,
+	@Salario float = null,
+	@DataInicioBeneficio date = null,
+	@BancoPagamento int = null,
+	@AgenciaPagamento int = null,
+	@OrgaoPagador int = null,
+	@ContaCorrente nvarchar(20) = null,
+	@DataIncluidoInss nvarchar(20) = null,
+	@DataExcluidoInss nvarchar(20) = null,
+	@Especie int = null
+AS
+BEGIN
+
+	UPDATE [Beneficio] SET [Salario] = @Salario, [DataCompetencia] = CONVERT(date, GETDATE()), [DataInicioBeneficio] = @DataInicioBeneficio, 
+		[BancoPagamento] = @BancoPagamento, [AgenciaPagamento] = @AgenciaPagamento, [OrgaoPagador] = @OrgaoPagador, 
+		[ContaCorrente] = @ContaCorrente, [DataIncluidoInss] = @DataIncluidoInss, [Especie] = @Especie
 END
 GO
 

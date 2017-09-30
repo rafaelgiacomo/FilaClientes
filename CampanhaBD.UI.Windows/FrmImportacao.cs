@@ -65,29 +65,48 @@ namespace CampanhaBD.UI.Windows
                 Importacao = PreencheImportacao();
                 Filtro = PreencheFiltro();
 
-                int qtdClientes = _impBus.EstimarQuantidade(Filtro);
-
-                if (qtdClientes > 0)
+                if (Importacao.ValidaDadosParaSalvar())
                 {
-                    if (Importacao.ValidaDadosParaSalvar())
+                    lblErro.Text = "Dados validados para criar importacao";
+                    var impBusca = _impBus.ListarPorNome(Importacao.Nome);
+                    lblErro.Text = "Importacao por nome buscada";
+
+                    if (impBusca == null)
                     {
-                        pgbProgresso.Style = ProgressBarStyle.Blocks;
-                        pgbProgresso.Value = 0;
-                        pgbProgresso.Maximum = qtdClientes;
+                        int qtdClientes = _impBus.EstimarQuantidade(Filtro);
+                        lblErro.Text = "Qtd clientes estimada: " + qtdClientes;
 
-                        backgroundWorker1.RunWorkerAsync();
+                        if (qtdClientes > 0)
+                        {
+                            if (Importacao.ValidaDadosParaSalvar())
+                            {
+                                pgbProgresso.Style = ProgressBarStyle.Blocks;
+                                pgbProgresso.Value = 0;
+                                pgbProgresso.Maximum = qtdClientes;
 
-                        TravarTela(true);
+                                backgroundWorker1.RunWorkerAsync();
+
+                                TravarTela(true);
+                            }
+                            else
+                            {
+                                MessageBox.Show("Informe um nome para importação");
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Nenhum cliente foi encotrado para importação");
+                        }
                     }
                     else
                     {
-                        MessageBox.Show("Informe um nome para importação");
+                        MessageBox.Show("Já existe uma importação com esse nome.");
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Nenhum cliente foi encotrado para importação");
-                }                
+                    MessageBox.Show("Importação não pode ser inserida.");
+                }
             }
             catch (Exception ex)
             {
@@ -99,11 +118,13 @@ namespace CampanhaBD.UI.Windows
         {
             try
             {
+                //lblErro.Text = "Trabalho iniciada";
                 //Iniciando Importação
                 _impBus.IniciarImportacaoClientesSql(Importacao, Filtro);
+                //lblErro.Text = "Importacao Iniciada";
 
                 //Loop de Importação
-                for (int i=1; i<=pgbProgresso.Maximum; i++)
+                for (int i = 1; i <= pgbProgresso.Maximum; i++)
                 {
                     if (backgroundWorker1.CancellationPending)
                     {
@@ -123,6 +144,7 @@ namespace CampanhaBD.UI.Windows
             }
             catch (Exception ex)
             {
+                MessageBox.Show(ex.Message);
                 throw;
             }
         }
@@ -134,11 +156,12 @@ namespace CampanhaBD.UI.Windows
                 pgbProgresso.Value = 0;
                 lblProgresso.Text = string.Empty;
                 return;
-            }else
+            }
+            else
             {
                 pgbProgresso.Value = e.ProgressPercentage;
                 lblProgresso.Text = pgbProgresso.Value + " de " + pgbProgresso.Maximum;
-            }            
+            }
         }
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -204,6 +227,7 @@ namespace CampanhaBD.UI.Windows
             grpFiltros.Enabled = !travar;
             grpFiltroConfigurado.Enabled = !travar;
             grpAtualizar.Enabled = !travar;
+            txtNomeImportacao.Enabled = !travar;
         }
 
         private FiltroModel PreencheFiltro()

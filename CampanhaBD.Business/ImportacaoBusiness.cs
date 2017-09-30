@@ -94,7 +94,7 @@ namespace CampanhaBD.Business
             }
             catch (Exception ex)
             {
-
+                throw;
             }
         }
 
@@ -111,19 +111,31 @@ namespace CampanhaBD.Business
                     //unit.Filtros.LerDadosClienteBaseOriginal(_cliente);
                     DadosBaseParaCliente();
 
-                    if (ValidaDadosCliente(_cliente))
+                    if (ValidaDadosCliente())
                     {
-                        SalvarCliente(_cliente, filtro);
+                        SalvarCliente(filtro);
+                    }
+                    else
+                    {
+
                     }
 
-                    if (ValidaDadosBeneficio(_cliente.Beneficios[0]))
+                    if (ValidaDadosBeneficio())
                     {
-                        SalvarBeneficio(_cliente.Beneficios[0]);
+                        SalvarBeneficio(filtro);
+                    }
+                    else
+                    {
+
                     }
 
-                    if (ValidaDadosEmprestimo(_cliente.Emprestimos[0]))
+                    if (ValidaDadosEmprestimo())
                     {
-                        SalvarEmprestimo(_cliente.Emprestimos[0]);
+                        SalvarEmprestimo();
+                    }
+                    else
+                    {
+
                     }
 
                     ClientesImportados.RemoveAt(ClientesImportados.Count - 1);
@@ -294,6 +306,7 @@ namespace CampanhaBD.Business
                 _cliente.Telefone = registro.Telefone;
                 _cliente.Nome = registro.Nome;
                 _cliente.Bairro = registro.Bairro;
+                _cliente.Ativado = (registro.DataExcluidoInss == "00000000");
                 //cl.Complemento = Reader[BaseOriginalDadoModel.COLUMN_COMPLEMENTO].ToString();
                 #endregion
 
@@ -320,6 +333,7 @@ namespace CampanhaBD.Business
                 ben.PreencheDataInicioBeneficio(registro.DataInicioBeneficio);
                 ben.PreencheDataIncluidoInss(registro.DataIncluidoInss);
                 ben.PreencheDataExcluidoInss(registro.DataExcluidoInss);
+                ben.PreencheEspecie(registro.Especie);
                 #endregion
 
                 _cliente.Emprestimos.Clear();
@@ -334,55 +348,84 @@ namespace CampanhaBD.Business
             }
         }
 
-        private void SalvarCliente(ClienteModel cliente, FiltroModel filtro)
+        private void SalvarCliente(FiltroModel filtro)
         {
             try
             {
-                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
-                {
-                    unit.Clientes.Inserir(cliente);
-
-                    cliente.Beneficios[0].IdCliente = cliente.Id;
-                    cliente.Emprestimos[0].ClienteId = cliente.Id;
-                }
+                InserirCliente();
             }
             catch (Exception ex)
             {
-                try
+                if (filtro.AtualizarDadosCliente)
                 {
-                    if (!filtro.AtualizarDadosCliente)
+                    AlterarCliente();
+                }                
+            }
+        }
+
+        private void SalvarBeneficio(FiltroModel filtro)
+        {
+            try
+            {
+                InserirBeneficio();
+            }
+            catch (Exception ex)
+            {
+                if (filtro.AtualizarDadosCliente)
+                {
+                    if (_cliente.Beneficios[0].DataExcluidoInss != null)
                     {
-                        using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
-                        {
-                            var idCliente = unit.Clientes.SelecionarIdPorCpf(cliente);
-
-                            if (idCliente > 0)
-                            {
-                                cliente.Id = idCliente;
-                                cliente.Beneficios[0].IdCliente = cliente.Id;
-                                cliente.Emprestimos[0].ClienteId = cliente.Id;
-
-                                unit.Clientes.Alterar(cliente);
-                            }                        
-                        }
+                        AlterarBeneficio();
                     }
-                }
-                catch (Exception ex2)
+                    else
+                    {
+                        AlterarBeneficioSemDataExclusao();
+                    }
+                    
+                }                
+            }
+        }
+
+        private void InserirBeneficio()
+        {
+            using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+            {
+                _cliente.Beneficios[0].DataCompetencia = DateTime.Now;
+                unit.Beneficios.Inserir(_cliente.Beneficios[0]);
+            }
+        }
+
+        private void AlterarBeneficio()
+        {
+            using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+            {
+                if (_cliente.Beneficios[0].Numero > 0)
                 {
-                    throw;
+                    unit.Beneficios.Alterar(_cliente.Beneficios[0]);
                 }
             }
         }
 
-        private void SalvarBeneficio(BeneficioModel beneficio)
+        private void AlterarBeneficioSemDataExclusao()
+        {
+            using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+            {
+                if (_cliente.Beneficios[0].Numero > 0)
+                {
+                    unit.Beneficios.AlterarSemDataExclusao(_cliente.Beneficios[0]);
+                }
+            }
+        }
+
+        private void SalvarEmprestimo()
         {
             try
             {
                 using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
                 {
-                    beneficio.DataCompetencia = DateTime.Now;
-                    unit.Beneficios.Inserir(beneficio);
+                    unit.Emprestimos.Inserir(_cliente.Emprestimos[0]);
                 }
+
             }
             catch (Exception ex)
             {
@@ -390,32 +433,43 @@ namespace CampanhaBD.Business
             }
         }
 
-        private void SalvarEmprestimo(EmprestimoModel emprestimo)
+        private void InserirCliente()
         {
-            try
+            using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
             {
-                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
-                {
-                    unit.Emprestimos.Inserir(emprestimo);
-                }
+                unit.Clientes.Inserir(_cliente);
 
-            }
-            catch (Exception ex)
-            {
-
+                _cliente.Beneficios[0].IdCliente = _cliente.Id;
+                _cliente.Emprestimos[0].ClienteId = _cliente.Id;
             }
         }
 
-        private bool ValidaDadosCliente(ClienteModel cliente)
+        private void AlterarCliente()
+        {
+            using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+            {
+                var idCliente = unit.Clientes.SelecionarIdPorCpf(_cliente);
+                _cliente.Id = idCliente;
+                _cliente.Beneficios[0].IdCliente = _cliente.Id;
+                _cliente.Emprestimos[0].ClienteId = _cliente.Id;
+
+                if (idCliente > 0)
+                {
+                    unit.Clientes.Alterar(_cliente);
+                }
+            }
+        }
+
+        private bool ValidaDadosCliente()
         {
             try
             {
-                if ("".Equals(cliente.Cpf))
+                if ("".Equals(_cliente.Cpf))
                 {
                     return false;
                 }
 
-                if (cliente.ImportacaoId <= 0)
+                if (_cliente.ImportacaoId <= 0)
                 {
                     return false;
                 }
@@ -428,10 +482,12 @@ namespace CampanhaBD.Business
             }
         }
 
-        private bool ValidaDadosBeneficio(BeneficioModel beneficio)
+        private bool ValidaDadosBeneficio()
         {
             try
             {
+                BeneficioModel beneficio = _cliente.Beneficios[0];
+
                 if (beneficio.IdCliente <= 0)
                 {
                     return false;
@@ -450,10 +506,12 @@ namespace CampanhaBD.Business
             }
         }
 
-        private bool ValidaDadosEmprestimo(EmprestimoModel emprestimo)
+        private bool ValidaDadosEmprestimo()
         {
             try
             {
+                EmprestimoModel emprestimo = _cliente.Emprestimos[0];
+
                 if (emprestimo.BancoId <= 0)
                 {
                     return false;

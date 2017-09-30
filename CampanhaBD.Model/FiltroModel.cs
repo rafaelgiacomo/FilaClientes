@@ -17,6 +17,8 @@ namespace CampanhaBD.Model
 
         public List<int> TiposEmprestimos { get; set; }
 
+        public List<int> Especies { get; set; }
+
         public string MinDataNascimento { get; set; }
 
         public string MaxDataNascimento { get; set; }
@@ -91,6 +93,10 @@ namespace CampanhaBD.Model
 
         public bool AtualizarDadosCliente { get; set; }
 
+        public bool NaoImportarTipo { get; set; }
+
+        public bool NaoImportarEspecie { get; set; }
+
         public int ResultadoImportacao { get; set; }
 
         public FiltroModel()
@@ -99,6 +105,7 @@ namespace CampanhaBD.Model
             Importacoes = new List<int>();
             BasesOriginais = new List<int>();
             TiposEmprestimos = new List<int>();
+            Especies = new List<int>();
         }
 
     }

@@ -19,6 +19,8 @@ namespace CampanhaBD.Model
 
         public int CodigoOrgaoPagador { get; set; }
 
+        public int Especie { get; set; }
+
         public string ContaCorrente { get; set; }
 
         public string DataIncluidoInss{ get; set; }
@@ -31,6 +33,7 @@ namespace CampanhaBD.Model
         #region Colunas e Procs
         public const string PROCEDURE_INSERT = "SP_SALVAR_BENEFICIO";
         public const string PROCEDURE_UPDATE = "SP_ALTERAR_BENEFICIO";
+        public const string PROCEDURE_UPDATE_NO_DATA_EXCLUSAO = "SP_ALTERAR_BENEFICIO_SEM_DATA_EXCLU";
         public const string PROCEDURE_DELETE = "SP_EXCLUIR_BENEFICIO";
         public const string PROCEDURE_SELECT_ALL = "SP_LISTAR_TODOS_BENEFICIOS";
         public const string PROCEDURE_SELECT_BY_ID = "SP_SELECIONAR_BENEFICIO_ID";
@@ -46,6 +49,7 @@ namespace CampanhaBD.Model
         public const string COLUMN_CONTA_CORRENTE = "ContaCorrente";
         public const string COLUMN_DATA_INCLUIDO_INSS = "DataIncluidoInss";
         public const string COLUMN_DATA_EXCLUIDO_INSS = "DataExcluidoInss";
+        public const string COLUMN_ESPECIE = "Especie";
         #endregion
 
         #region Preenchimento de campos
@@ -129,7 +133,7 @@ namespace CampanhaBD.Model
         {
             try
             {
-                if (!"".Equals(valor))
+                if ((!"".Equals(valor)) && (!"00000000".Equals(valor)))
                 {
                     if (valor.Length == 8)
                     {
@@ -139,6 +143,7 @@ namespace CampanhaBD.Model
 
                         valor = dia + "/" + mes + "/" + ano;
                     }
+                    DataIncluidoInss = valor;
                 }
             }
             catch (Exception ex)
@@ -151,7 +156,7 @@ namespace CampanhaBD.Model
         {
             try
             {
-                if (!"".Equals(valor))
+                if ((!"".Equals(valor)) && (!"00000000".Equals(valor)))
                 {
                     if (valor.Length == 8)
                     {
@@ -161,6 +166,8 @@ namespace CampanhaBD.Model
 
                         valor = dia + "/" + mes + "/" + ano;
                     }
+
+                    DataExcluidoInss = valor;
                 }
             }
             catch (Exception ex)
@@ -173,7 +180,7 @@ namespace CampanhaBD.Model
         {
             try
             {
-                if (!"".Equals(valor))
+                if ((!"".Equals(valor)) && (!"00000000".Equals(valor)))
                 {
                     if (valor.Length == 8)
                     {
@@ -183,7 +190,24 @@ namespace CampanhaBD.Model
 
                         valor = dia + "/" + mes + "/" + ano;
                     }
-                }
+
+                    DataInicioBeneficio = valor;
+                }                
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void PreencheEspecie(string valor)
+        {
+            try
+            {
+                if (!"".Equals(valor))
+                {
+                    Especie = int.Parse(valor);
+                }                
             }
             catch (Exception ex)
             {

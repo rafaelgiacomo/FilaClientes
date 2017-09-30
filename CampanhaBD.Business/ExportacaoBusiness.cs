@@ -51,7 +51,7 @@ namespace CampanhaBD.Business
 
                 using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
                 {
-                    unit.Filtros.ExportaCompleto(campanha, ref exportacao);
+                    unit.Filtros.ExportaCompleto(campanha, ref exportacao, false);
                 }
 
                 exportacao.FinalizarRelatorio();
@@ -71,7 +71,7 @@ namespace CampanhaBD.Business
 
                 using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
                 {
-                    unit.Filtros.ExportaCompleto(campanha, ref exportacao);
+                    unit.Filtros.ExportaCompleto(campanha, ref exportacao, true);
                 }
 
                 exportacao.FinalizarRelatorio();

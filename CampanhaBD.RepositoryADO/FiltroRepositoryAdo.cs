@@ -170,7 +170,7 @@ namespace CampanhaBD.RepositoryADO
         //    }
         //}
 
-        public void ExportaCompleto(FiltroModel campanha, ref ExportacaoModel exportacao)
+        public void ExportaCompleto(FiltroModel campanha, ref ExportacaoModel exportacao, bool atualizarDataTrabalhado)
         {
             try
             {
@@ -182,8 +182,10 @@ namespace CampanhaBD.RepositoryADO
                 while (reader.Read())
                 {
                     row.Add(reader[EmprestimoModel.COLUMN_NUM_BENEFICIO].ToString());
+                    row.Add(reader[BeneficioModel.COLUMN_ESPECIE].ToString());
+                    row.Add(reader[BeneficioModel.COLUMN_DATA_EXCLUIDO_INSS].ToString());
                     row.Add(reader[ClienteModel.COLUMN_CPF].ToString());
-                    row.Add(reader[ClienteModel.COLUMN_DATANASCIMENTO].ToString());
+                    row.Add(string.Format("{0:dd/MM/yyy}", DateTime.Parse(reader[ClienteModel.COLUMN_DATANASCIMENTO].ToString())));
                     row.Add(reader[ClienteModel.COLUMN_NOME].ToString());
                     row.Add(reader[ClienteModel.COLUMN_UF].ToString());
                     row.Add(reader[ClienteModel.COLUMN_CIDADE].ToString());
@@ -201,6 +203,7 @@ namespace CampanhaBD.RepositoryADO
                     row.Add(reader[ClienteModel.COLUMN_DATA_TRABALHADO].ToString());
                     row.Add(reader[ClienteModel.COLUMN_DATA_EXP_PROCESSA].ToString());
                     row.Add(reader[ClienteModel.COLUMN_DATA_IMPORTADO].ToString());
+                    row.Add(reader[ClienteModel.COLUMN_ATIVADO].ToString());
 
                     row.Add(reader[EmprestimoModel.COLUMN_BANCO_ID].ToString());
                     row.Add(reader[EmprestimoModel.COLUMN_FIM_PAGAMENTO].ToString());
@@ -219,6 +222,13 @@ namespace CampanhaBD.RepositoryADO
                 }
 
                 reader.Close();
+
+                if (atualizarDataTrabalhado)
+                {
+                    string sqlAtualizacao = GerarSqlAtualizarDataTrabalhado(campanha);
+
+                    _context.ExecuteSqlCommandNoReturn(sqlAtualizacao);
+                }
             }
             catch (Exception)
             {
@@ -245,6 +255,10 @@ namespace CampanhaBD.RepositoryADO
                 }
 
                 reader.Close();
+
+                string sqlAtualizacao = GerarSqlAtualizarDataTelefone(campanha);
+
+                _context.ExecuteSqlCommandNoReturn(sqlAtualizacao);
             }
             catch (Exception ex)
             {
@@ -264,7 +278,7 @@ namespace CampanhaBD.RepositoryADO
                 {
 
                     row.Add(reader[EmprestimoModel.COLUMN_NUM_BENEFICIO].ToString());
-                    row.Add(reader[ClienteModel.COLUMN_DATANASCIMENTO].ToString());
+                    row.Add(string.Format("{0:dd/MM/yyy}", DateTime.Parse(reader[ClienteModel.COLUMN_DATANASCIMENTO].ToString())));
                     row.Add(reader[ClienteModel.COLUMN_CPF].ToString());
                     row.Add(reader[ClienteModel.COLUMN_NOME].ToString());
                     row.Add(string.Empty);
@@ -279,6 +293,10 @@ namespace CampanhaBD.RepositoryADO
                 }
 
                 reader.Close();
+
+                string sqlAtualizacao = GerarSqlAtualizarDataExpProcessa(campanha);
+
+                _context.ExecuteSqlCommandNoReturn(sqlAtualizacao);
             }
             catch (Exception)
             {
@@ -304,7 +322,7 @@ namespace CampanhaBD.RepositoryADO
                     cl.Id = long.Parse(reader[ClienteModel.COLUMN_ID].ToString());
                     cl.Nome = reader[ClienteModel.COLUMN_NOME].ToString();
                     cl.PreencheDataNascimento(reader[ClienteModel.COLUMN_DATANASCIMENTO].ToString());
-                    ben.PreencheNumBeneficio(reader[BeneficioModel.COLUMN_NUMERO].ToString());
+                    ben.PreencheNumBeneficio(reader[EmprestimoModel.COLUMN_NUM_BENEFICIO].ToString());
 
                     cl.Beneficios.Add(ben);
 
@@ -329,7 +347,7 @@ namespace CampanhaBD.RepositoryADO
         {
             try
             {
-                string sql_command = "SELECT COUNT(*) FROM BaseOriginalDados WHERE Id = Id";
+                string sql_command = "SELECT COUNT(*) FROM BaseOriginalDados WHERE [Id] = [Id]";
 
                 sql_command += GerarFiltrosImportacao(filtro);
 
@@ -346,7 +364,7 @@ namespace CampanhaBD.RepositoryADO
         {
             try
             {
-                string sql_command = "SELECT * FROM BaseOriginalDados WHERE Id = Id";
+                string sql_command = "SELECT * FROM BaseOriginalDados WHERE [Id] = [Id]";
 
                 sql_command += GerarFiltrosImportacao(filtro);
 
@@ -435,7 +453,8 @@ namespace CampanhaBD.RepositoryADO
         {
             try
             {
-                string sql_command = "SELECT DISTINCT c.Cpf from Cliente c, Emprestimo e where c.Id = e.ClienteId ";
+                string sql_command = "SELECT DISTINCT c.Cpf from Cliente c, Emprestimo e, Beneficio b where c.Id = e.ClienteId "
+                    + "AND c.Id = b.ClienteId AND e.NumBeneficio = b.Numero AND c.Ativado = 'true' ";
 
                 return sql_command += SqlFiltrosExportacao(filtro);
             }
@@ -451,7 +470,7 @@ namespace CampanhaBD.RepositoryADO
             try
             {
                 string sql_command = "SELECT DISTINCT c.Id, c.Cpf, c.DataNascimento, c.Nome, c.Uf, e.NumBeneficio "
-                + "from Cliente c, Emprestimo e where c.Id = e.ClienteId ";
+                + "from Cliente c, Emprestimo e, Beneficio b where c.Id = e.ClienteId AND c.Id = b.ClienteId AND e.NumBeneficio = b.Numero AND c.Ativado = 'true' ";
 
                 return sql_command += SqlFiltrosExportacao(filtro);
             }
@@ -466,7 +485,24 @@ namespace CampanhaBD.RepositoryADO
         {
             try
             {
-                string sql_command = "SELECT * from Cliente c, Emprestimo e where c.Id = e.ClienteId ";
+                string sql_command = "SELECT * from Cliente c, Emprestimo e, Beneficio b where c.Id = e.ClienteId AND c.Id = b.ClienteId AND "
+                    + "e.NumBeneficio = b.Numero AND c.Ativado = 'true' ";
+
+                return sql_command += SqlFiltrosExportacao(filtro);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        //Gera Filtro de Ids para atualizacao
+        private string GerarSqlFiltroIdParaAtualizacao(FiltroModel filtro)
+        {
+            try
+            {
+                string sql_command = "SELECT DISTINCT [Id] from Cliente c, Emprestimo e, Beneficio b where c.Id = e.ClienteId "
+                    + "AND c.Id = b.ClienteId AND e.NumBeneficio = b.Numero AND c.Ativado = 'true' ";
 
                 return sql_command += SqlFiltrosExportacao(filtro);
             }
@@ -716,6 +752,139 @@ namespace CampanhaBD.RepositoryADO
                     }
                 }
                 #endregion
+
+                #region Tipo Empréstimo
+
+                if (filtro.TiposEmprestimos.Count > 0)
+                {
+                    sql_command += string.Format(" AND ( ");
+
+                    if (filtro.NaoImportarTipo)
+                    {
+                        for (int i = 0; i < filtro.TiposEmprestimos.Count; i++)
+                        {
+                            var tipo = filtro.TiposEmprestimos[i];
+
+                            if (i > 0)
+                            {
+                                sql_command += "AND";
+                            }
+                            sql_command += string.Format(" {0} <> '{1}'", EmprestimoModel.COLUMN_TIPO_EMPRESTIMO, tipo);
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < filtro.TiposEmprestimos.Count; i++)
+                        {
+                            var tipo = filtro.TiposEmprestimos[i];
+
+                            if (i > 0)
+                            {
+                                sql_command += "OR";
+                            }
+                            sql_command += string.Format(" {0} = '{1}'", EmprestimoModel.COLUMN_TIPO_EMPRESTIMO, tipo);
+                        }
+                    }
+
+                    sql_command += string.Format(" )");
+                }
+
+                #endregion
+
+                #region Especie beneficio
+
+                if (filtro.Especies.Count > 0)
+                {
+                    sql_command += string.Format(" AND ( ");
+
+                    if (filtro.NaoImportarEspecie)
+                    {
+                        for (int i = 0; i < filtro.Especies.Count; i++)
+                        {
+                            var espe = filtro.Especies[i];
+
+                            if (i > 0)
+                            {
+                                sql_command += "AND";
+                            }
+                            sql_command += string.Format(" {0} <> '{1}'", BeneficioModel.COLUMN_ESPECIE, espe);
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < filtro.Especies.Count; i++)
+                        {
+                            var esp = filtro.Especies[i];
+
+                            if (i > 0)
+                            {
+                                sql_command += "OR";
+                            }
+                            sql_command += string.Format(" {0} = '{1}'", BeneficioModel.COLUMN_ESPECIE, esp);
+                        }
+                    }
+
+                    sql_command += string.Format(" )");
+                }
+
+                #endregion
+
+                return sql_command;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        //Gera SQL para atualizar DataTrabalhado
+        private string GerarSqlAtualizarDataTrabalhado(FiltroModel filtro)
+        {
+            try
+            {
+                string sql_command = string.Empty;
+                sql_command += "UPDATE Cliente SET DataTrabalhado = CONVERT(date, GETDATE()) WHERE[Id] in ";
+                sql_command += "(";
+                sql_command += GerarSqlFiltroIdParaAtualizacao(filtro);
+                sql_command += ")";
+
+                return sql_command;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        //Gera SQL para atualizar DataTrabalhado
+        private string GerarSqlAtualizarDataExpProcessa(FiltroModel filtro)
+        {
+            try
+            {
+                string sql_command = string.Empty;
+                sql_command += "UPDATE Cliente SET DataExpProcessa = CONVERT(date, GETDATE()) WHERE[Id] in ";
+                sql_command += "(";
+                sql_command += GerarSqlFiltroIdParaAtualizacao(filtro);
+                sql_command += ")";
+
+                return sql_command;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        //Gera SQL para atualizar DataTelAtualizado
+        private string GerarSqlAtualizarDataTelefone(FiltroModel filtro)
+        {
+            try
+            {
+                string sql_command = string.Empty;
+                sql_command += "UPDATE Cliente SET DataTelAtualizado = CONVERT(date, GETDATE()) WHERE[Id] in ";
+                sql_command += "(";
+                sql_command += GerarSqlFiltroIdParaAtualizacao(filtro);
+                sql_command += ")";
 
                 return sql_command;
             }

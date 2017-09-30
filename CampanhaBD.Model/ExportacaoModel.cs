@@ -70,6 +70,8 @@ namespace CampanhaBD.Model
             List<string> lista = new List<string>();
 
             lista.Add("BENEFICIO");
+            lista.Add("ESPECIE_BEN");
+            lista.Add("DATA_EXLCUIDO_INSS");
             lista.Add("CPF");
             lista.Add("DATA_NASCIMENTO");
             lista.Add("NOME");
@@ -89,6 +91,7 @@ namespace CampanhaBD.Model
             lista.Add("DATA_TRABALHADO");
             lista.Add("DATA_EXP_PROCESSA");
             lista.Add("DATA_IMPORTADO");
+            lista.Add("ATIVADO");
 
             lista.Add("BANCO_ID");
             lista.Add("DATA_FIM_PAGAMENTO");

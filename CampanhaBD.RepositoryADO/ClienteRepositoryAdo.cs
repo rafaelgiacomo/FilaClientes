@@ -26,14 +26,14 @@ namespace CampanhaBD.RepositoryADO
                     ClienteModel.COLUMN_IMPORTACAO_ID, ClienteModel.COLUMN_NOME, ClienteModel.COLUMN_CPF,
                     ClienteModel.COLUMN_UF, ClienteModel.COLUMN_CIDADE, ClienteModel.COLUMN_BAIRRO, ClienteModel.COLUMN_DDD,
                     ClienteModel.COLUMN_TELEFONE, ClienteModel.COLUMN_DATANASCIMENTO, ClienteModel.COLUMN_LOGRADOURO,
-                    ClienteModel.COLUMN_NUMERO, ClienteModel.COLUMN_COMPLEMENTO, ClienteModel.COLUMN_CEP
+                    ClienteModel.COLUMN_NUMERO, ClienteModel.COLUMN_COMPLEMENTO, ClienteModel.COLUMN_CEP, ClienteModel.COLUMN_ATIVADO
                 };
 
                 object[] values =
                 {
                     entidade.ImportacaoId, entidade.Nome, entidade.Cpf, entidade.Uf, entidade.Cidade, entidade.Bairro,
                     entidade.Ddd, entidade.Telefone, entidade.DataNascimento, entidade.Logradouro, entidade.Numero,
-                    entidade.Complemento, entidade.Cep
+                    entidade.Complemento, entidade.Cep, entidade.Ativado
                 };
 
                 var reader = _context.ExecuteProcedureWithReturn(
@@ -92,6 +92,29 @@ namespace CampanhaBD.RepositoryADO
                 _context.ExecuteSqlCommandNoReturn(strQuery);
             }
             catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public void AtualizarAtivado(ClienteModel entidade)
+        {
+            try
+            {
+                string[] parameters =
+                {
+                    ClienteModel.COLUMN_ID, ClienteModel.COLUMN_ATIVADO
+                };
+
+                object[] values =
+                {
+                    entidade.Id, entidade.Ativado
+                };
+
+                _context.ExecuteProcedureNoReturn(
+                    ClienteModel.PROCEDURE_UPDATE_ATIVADO, parameters, values);
+            }
+            catch
             {
                 throw;
             }

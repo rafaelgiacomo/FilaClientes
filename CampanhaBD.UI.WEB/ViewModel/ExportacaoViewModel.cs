@@ -123,11 +123,24 @@ namespace CampanhaBD.UI.WEB.ViewModel
 
         [Display(Name = "Importação")]
         public SelectList ListaImportacoes { get; set; }
+
+        [Display(Name = "Tipo de Empréstimo")]
+        public string TipoEmprestimo { get; set; }
+
+        [Display(Name = "Não exportar")]
+        public bool NaoImportarTipos { get; set; }
+
+        [Display(Name = "Espécie")]
+        public string EspecieBeneficio { get; set; }
+
+        [Display(Name = "Não exportar")]
+        public bool NaoImportarEspecie { get; set; }
         #endregion
+
+        #region Metodos Publicos
 
         public ExportacaoViewModel()
         {
-
         }
 
         public ExportacaoViewModel(List<BancoModel> listaBanco, List<ImportacaoModel> listaImportacao)
@@ -150,6 +163,8 @@ namespace CampanhaBD.UI.WEB.ViewModel
             try
             {
                 FiltroModel campanha = new FiltroModel();
+                string[] tipos;
+                string[] especies;
 
                 if (Importacao > 0)
                 {
@@ -188,15 +203,37 @@ namespace CampanhaBD.UI.WEB.ViewModel
                 campanha.NuncaExpProcessa = NuncaExpProcessa;
                 campanha.NuncaExpTelefone = NuncaExpTelefone;
                 campanha.NuncaTrabalhado = NuncaTrabalhado;
+                campanha.NaoImportarEspecie = NaoImportarEspecie;
+                campanha.NaoImportarTipo = NaoImportarTipos;
+
+                if (TipoEmprestimo != null)
+                {
+                    tipos = TipoEmprestimo.Split(';');
+
+                    foreach (string tip in tipos)
+                    {
+                        campanha.TiposEmprestimos.Add(int.Parse(tip));
+                    }
+                }
+
+                if (EspecieBeneficio != null)
+                {
+                    especies = EspecieBeneficio.Split(';');
+
+                    foreach (string esp in especies)
+                    {
+                        campanha.Especies.Add(int.Parse(esp));
+                    }
+                }
 
                 return campanha;
-
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }
         }
 
+        #endregion
     }
 }

@@ -41,7 +41,7 @@ create table Importacao(
 GO
 
 create table Cliente(
-	[Id] [bigint],
+	[Id] [bigint] identity,
 	[ImportacaoId] [int],
 	[Nome] [varchar](max),
 	[Cpf] [nvarchar](15) UNIQUE NONCLUSTERED,
@@ -62,6 +62,7 @@ create table Cliente(
 	[DataTelAtualizado] [datetime],
 	[DataEmpAtualizados] [datetime],
 	[DataTrabalhado] [datetime],
+	[Ativado] [bit],
 	CONSTRAINT [PK_dbo.Cliente] PRIMARY KEY CLUSTERED
 	(
 		[Id] ASC
@@ -81,6 +82,7 @@ create table Beneficio(
 	[DataIncluidoInss] [date],
 	[DataExcluidoInss] [date],
 	[DataCompetencia] [date],
+	[Especie] [int],
 	CONSTRAINT [PK_dbo.Beneficio] PRIMARY KEY CLUSTERED
 	(
 		[Numero] ASC
@@ -283,6 +285,12 @@ CREATE NONCLUSTERED INDEX [IX_CpfCliente] ON [dbo].[Cliente]
 )
 GO
 
+CREATE NONCLUSTERED INDEX [IX_Ativado] ON [dbo].[Cliente]
+(
+	[Ativado] ASC
+)
+GO
+
 CREATE NONCLUSTERED INDEX [IX_Data_Atualizacao_Emp] ON [dbo].[Cliente]
 (
 	[DataEmpAtualizados] ASC
@@ -319,6 +327,12 @@ CREATE NONCLUSTERED INDEX [IX_ParcelasEmAberto] ON [dbo].[Emprestimo]
 ) 
 GO
 
+CREATE NONCLUSTERED INDEX [IX_Especie] ON [dbo].[Beneficio]
+(
+	[Especie] ASC
+) 
+GO
+
 CREATE NONCLUSTERED INDEX [IX_CodigoBanco_BaseOriginalDados] ON [dbo].[BaseOriginalDados]
 (
 	[BancoEmprestimo] ASC
@@ -330,4 +344,55 @@ CREATE NONCLUSTERED INDEX [IX_TipoEmprestimo_BaseOriginalDados] ON [dbo].[BaseOr
 	[TipoEmprestimo] ASC
 ) 
 GO
+
+CREATE NONCLUSTERED INDEX [IX_BaseId_BaseOriginalDados] ON [dbo].[BaseOriginalDados]
+(
+	[BaseId] ASC
+) 
+GO
+
+CREATE NONCLUSTERED INDEX [IX_DataExcluidoINSS_BaseOriginalDados] ON [dbo].[BaseOriginalDados]
+(
+	[DataExcluidoINSS] ASC
+) 
+GO
+
+insert into BaseOriginal(Descricao) values('Janeiro 2016');
+insert into BaseOriginal(Descricao) values('Fevereiro 2016');
+insert into BaseOriginal(Descricao) values('Março 2016');
+insert into BaseOriginal(Descricao) values('Abril 2016');
+insert into BaseOriginal(Descricao) values('Maio 2016');
+insert into BaseOriginal(Descricao) values('Junho 2016');
+insert into BaseOriginal(Descricao) values('Julho 2016');
+insert into BaseOriginal(Descricao) values('Agosto 2016');
+insert into BaseOriginal(Descricao) values('Setembro 2016');
+insert into BaseOriginal(Descricao) values('Outubro 2016');
+insert into BaseOriginal(Descricao) values('Novembro 2016');
+insert into BaseOriginal(Descricao) values('Dezembro 2016');
+insert into BaseOriginal(Descricao) values('Janeiro 2017');
+insert into BaseOriginal(Descricao) values('Fevereiro 2017');
+insert into BaseOriginal(Descricao) values('Março 2017');
+insert into BaseOriginal(Descricao) values('Abril 2017');
+insert into BaseOriginal(Descricao) values('Maio 2017');
+insert into BaseOriginal(Descricao) values('Junho 2017');
+insert into BaseOriginal(Descricao) values('Julho 2017');
+insert into BaseOriginal(Descricao) values('Agosto 2017');
+insert into BaseOriginal(Descricao) values('Setembro 2017');
+insert into BaseOriginal(Descricao) values('Outubro 2017');
+insert into BaseOriginal(Descricao) values('Novembro 2017');
+insert into BaseOriginal(Descricao) values('Dezembro 2017');
+insert into BaseOriginal(Descricao) values('Janeiro 2015');
+insert into BaseOriginal(Descricao) values('Fevereiro 2015');
+insert into BaseOriginal(Descricao) values('Março 2015');
+insert into BaseOriginal(Descricao) values('Abril 2015');
+insert into BaseOriginal(Descricao) values('Maio 2015');
+insert into BaseOriginal(Descricao) values('Junho 2015');
+insert into BaseOriginal(Descricao) values('Julho 2015');
+insert into BaseOriginal(Descricao) values('Agosto 2015');
+insert into BaseOriginal(Descricao) values('Setembro 2015');
+insert into BaseOriginal(Descricao) values('Outubro 2015');
+insert into BaseOriginal(Descricao) values('Novembro 2015');
+insert into BaseOriginal(Descricao) values('Dezembro 2015');
+
+insert into Usuario(Nome, [Login], Senha) values ('Rafael', 'admin', 'teste')
 
