@@ -23,10 +23,6 @@ namespace CampanhaBD.Model
 
         public string ContaCorrente { get; set; }
 
-        public string DataIncluidoInss{ get; set; }
-
-        public string DataExcluidoInss { get; set; }
-
         public DateTime DataCompetencia { get; set; }
         #endregion
 
@@ -47,8 +43,6 @@ namespace CampanhaBD.Model
         public const string COLUMN_AGENCIA_PAGAMENTO = "AgenciaPagamento";
         public const string COLUMN_ORGAO_PAGADOR = "OrgaoPagador";
         public const string COLUMN_CONTA_CORRENTE = "ContaCorrente";
-        public const string COLUMN_DATA_INCLUIDO_INSS = "DataIncluidoInss";
-        public const string COLUMN_DATA_EXCLUIDO_INSS = "DataExcluidoInss";
         public const string COLUMN_ESPECIE = "Especie";
         #endregion
 
@@ -121,53 +115,6 @@ namespace CampanhaBD.Model
                 if (!"".Equals(valor))
                 {
                     CodigoOrgaoPagador = int.Parse(valor);
-                }
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
-
-        public void PreencheDataIncluidoInss(string valor)
-        {
-            try
-            {
-                if ((!"".Equals(valor)) && (!"00000000".Equals(valor)))
-                {
-                    if (valor.Length == 8)
-                    {
-                        string ano = valor.Substring(0, 4);
-                        string mes = valor.Substring(4, 2);
-                        string dia = valor.Substring(6, 2);
-
-                        valor = dia + "/" + mes + "/" + ano;
-                    }
-                    DataIncluidoInss = valor;
-                }
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
-
-        public void PreencheDataExcluidoInss(string valor)
-        {
-            try
-            {
-                if ((!"".Equals(valor)) && (!"00000000".Equals(valor)))
-                {
-                    if (valor.Length == 8)
-                    {
-                        string ano = valor.Substring(0, 4);
-                        string mes = valor.Substring(4, 2);
-                        string dia = valor.Substring(6, 2);
-
-                        valor = dia + "/" + mes + "/" + ano;
-                    }
-
-                    DataExcluidoInss = valor;
                 }
             }
             catch (Exception ex)

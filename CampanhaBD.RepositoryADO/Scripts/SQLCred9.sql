@@ -79,8 +79,6 @@ create table Beneficio(
 	[AgenciaPagamento] [int],
 	[OrgaoPagador] [int],
 	[ContaCorrente] [nvarchar](20),
-	[DataIncluidoInss] [date],
-	[DataExcluidoInss] [date],
 	[DataCompetencia] [date],
 	[Especie] [int],
 	CONSTRAINT [PK_dbo.Beneficio] PRIMARY KEY CLUSTERED
@@ -104,6 +102,9 @@ create table Emprestimo(
 	[FimPagamento] [date],
 	[TipoEmprestimo] [int],
 	[SituacaoEmprestimo] [int],
+	[DataIncluidoInss] [date],
+	[DataExcluidoInss] [date],
+	[CodigoContrato] [bigint],
 	CONSTRAINT [PK_dbo.Emprestimo] PRIMARY KEY CLUSTERED
 	(
 		[ClienteId] ASC,
@@ -324,6 +325,12 @@ GO
 CREATE NONCLUSTERED INDEX [IX_ParcelasEmAberto] ON [dbo].[Emprestimo]
 (
 	[ParcelasEmAberto] ASC
+) 
+GO
+
+CREATE NONCLUSTERED INDEX [IX_CodigoContrato] ON [dbo].[Emprestimo]
+(
+	[CodigoContrato] ASC
 ) 
 GO
 

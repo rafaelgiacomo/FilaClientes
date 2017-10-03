@@ -26,15 +26,13 @@ namespace CampanhaBD.RepositoryADO
                     BeneficioModel.COLUMN_DATA_COMPETENCIA, BeneficioModel.COLUMN_DATA_INICIO_BENEFICIO, 
                     BeneficioModel.COLUMN_BANCO_PAGAMENTO, BeneficioModel.COLUMN_AGENCIA_PAGAMENTO, 
                     BeneficioModel.COLUMN_ORGAO_PAGADOR, BeneficioModel.COLUMN_CONTA_CORRENTE,
-                    BeneficioModel.COLUMN_DATA_INCLUIDO_INSS, BeneficioModel.COLUMN_DATA_EXCLUIDO_INSS,
                     BeneficioModel.COLUMN_ESPECIE
                 };
 
                 object[] values = {
                     entidade.Numero, entidade.IdCliente, entidade.Salario, entidade.DataCompetencia,
                     entidade.DataInicioBeneficio, entidade.BancoPagamento, entidade.AgenciaPagamento,
-                    entidade.CodigoOrgaoPagador, entidade.ContaCorrente, entidade.DataIncluidoInss,
-                    entidade.DataExcluidoInss, entidade.Especie
+                    entidade.CodigoOrgaoPagador, entidade.ContaCorrente, entidade.Especie
                 };
 
                 _context.ExecuteProcedureNoReturn(
@@ -56,15 +54,13 @@ namespace CampanhaBD.RepositoryADO
                     BeneficioModel.COLUMN_DATA_INICIO_BENEFICIO,
                     BeneficioModel.COLUMN_BANCO_PAGAMENTO, BeneficioModel.COLUMN_AGENCIA_PAGAMENTO,
                     BeneficioModel.COLUMN_ORGAO_PAGADOR, BeneficioModel.COLUMN_CONTA_CORRENTE,
-                    BeneficioModel.COLUMN_DATA_INCLUIDO_INSS, BeneficioModel.COLUMN_DATA_EXCLUIDO_INSS,
                     BeneficioModel.COLUMN_ESPECIE
                 };
 
                 object[] values = {
                     entidade.Numero, entidade.IdCliente, entidade.Salario,
                     entidade.DataInicioBeneficio, entidade.BancoPagamento, entidade.AgenciaPagamento,
-                    entidade.CodigoOrgaoPagador, entidade.ContaCorrente, entidade.DataIncluidoInss,
-                    entidade.DataExcluidoInss, entidade.Especie
+                    entidade.CodigoOrgaoPagador, entidade.ContaCorrente, entidade.Especie
                 };
 
                 _context.ExecuteProcedureNoReturn(
@@ -74,36 +70,7 @@ namespace CampanhaBD.RepositoryADO
             {
                 throw;
             }
-        }
-
-        public void AlterarSemDataExclusao(BeneficioModel entidade)
-        {
-            try
-            {
-                string[] parameters =
-                {
-                    BeneficioModel.COLUMN_NUMERO, BeneficioModel.COLUMN_CLIENTE_ID, BeneficioModel.COLUMN_SALARIO,
-                    BeneficioModel.COLUMN_DATA_INICIO_BENEFICIO,
-                    BeneficioModel.COLUMN_BANCO_PAGAMENTO, BeneficioModel.COLUMN_AGENCIA_PAGAMENTO,
-                    BeneficioModel.COLUMN_ORGAO_PAGADOR, BeneficioModel.COLUMN_CONTA_CORRENTE,
-                    BeneficioModel.COLUMN_DATA_INCLUIDO_INSS, BeneficioModel.COLUMN_ESPECIE
-                };
-
-                object[] values = {
-                    entidade.Numero, entidade.IdCliente, entidade.Salario,
-                    entidade.DataInicioBeneficio, entidade.BancoPagamento, entidade.AgenciaPagamento,
-                    entidade.CodigoOrgaoPagador, entidade.ContaCorrente, entidade.DataIncluidoInss,
-                    entidade.Especie
-                };
-
-                _context.ExecuteProcedureNoReturn(
-                    BeneficioModel.PROCEDURE_UPDATE_NO_DATA_EXCLUSAO, parameters, values);
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
+        }       
 
         public void Excluir(BeneficioModel entidade)
         {
@@ -193,6 +160,5 @@ namespace CampanhaBD.RepositoryADO
                 throw;
             }    
         }
-
     }
 }

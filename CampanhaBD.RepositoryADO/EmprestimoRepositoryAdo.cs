@@ -26,14 +26,16 @@ namespace CampanhaBD.RepositoryADO
                     EmprestimoModel.COLUMN_BANCO_ID, EmprestimoModel.COLUMN_CLIENTE_ID, EmprestimoModel.COLUMN_NUM_BENEFICIO,
                     EmprestimoModel.COLUMN_VALOR_PARCELA, EmprestimoModel.COLUMN_PARCELAS_NO_CONTRATO,
                     EmprestimoModel.COLUMN_PARCELAS_EM_ABERTO, EmprestimoModel.COLUMN_SALDO, EmprestimoModel.COLUMN_INICIO_PAGAMENTO,
-                    EmprestimoModel.COLUMN_FIM_PAGAMENTO, EmprestimoModel.COLUMN_TIPO_EMPRESTIMO, EmprestimoModel.COLUMN_SITUACAO_EMPRESTIMO
+                    EmprestimoModel.COLUMN_FIM_PAGAMENTO, EmprestimoModel.COLUMN_TIPO_EMPRESTIMO, EmprestimoModel.COLUMN_SITUACAO_EMPRESTIMO,
+                    EmprestimoModel.COLUMN_DATA_INCLUIDO_INSS, EmprestimoModel.COLUMN_DATA_EXCLUIDO_INSS, EmprestimoModel.COLUMN_CODIGO_CONTRATO
                 };
 
                 object[] values = 
                 {
                     entidade.BancoId, entidade.ClienteId, entidade.NumBeneficio, entidade.ValorParcela,
                     entidade.ParcelasNoContrato, entidade.ParcelasEmAberto, entidade.Saldo, entidade.DataInicioPagamento,
-                    entidade.DataFimPagamento, entidade.TipoEmprestimo,entidade.SituacaoEmprestimo
+                    entidade.DataFimPagamento, entidade.TipoEmprestimo, entidade.SituacaoEmprestimo,
+                    entidade.DataIncluidoInss, entidade.DataExcluidoInss, entidade.CodigoContrato
                 };
 
                 _context.ExecuteProcedureNoReturn(
@@ -93,6 +95,29 @@ namespace CampanhaBD.RepositoryADO
             //                             "AND pessoa_id = '{2}' ", entidade.NumEmprestimo, entidade.NumBeneficio, 
             //                             entidade.ClienteId);
             //_context.ExecutaComando(strQuery);
+        }
+
+        public void ExcluirPorContrato(EmprestimoModel entidade)
+        {
+            try
+            {
+                string[] parameters =
+                {
+                    EmprestimoModel.COLUMN_CLIENTE_ID, EmprestimoModel.COLUMN_BANCO_ID, EmprestimoModel.COLUMN_CODIGO_CONTRATO
+                };
+
+                object[] values =
+                {
+                    entidade.ClienteId, entidade.BancoId, entidade.CodigoContrato
+                };
+
+                _context.ExecuteProcedureNoReturn(
+                    EmprestimoModel.PROCEDURE_DELETE_CONTRATO, parameters, values);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public void ExcluirPorBeneficio(EmprestimoModel entidade)
@@ -185,6 +210,41 @@ namespace CampanhaBD.RepositoryADO
             //var strQuery = string.Format(" SELECT * FROM Emprestimo  WHERE emp_id = '{0}' AND  numero = '{1}' AND  pessoa_id = '{2}' ", id, numero, pessoa_id);
             //var retornoDataReader = _context.ExecutaComandoComRetorno(strQuery);
             //return TransformaReaderEmListaDeObjeto(retornoDataReader).FirstOrDefault();
+        }
+
+        public EmprestimoModel ListarPorContrato(EmprestimoModel entidade)
+        {
+            try
+            {
+                SqlDataReader reader = null;
+                EmprestimoModel retorno = null;
+
+                string[] parameters =
+                {
+                    EmprestimoModel.COLUMN_CLIENTE_ID, EmprestimoModel.COLUMN_BANCO_ID, EmprestimoModel.COLUMN_CODIGO_CONTRATO
+                };
+
+                object[] values =
+                {
+                    entidade.ClienteId, entidade.BancoId, entidade.CodigoContrato
+                };
+
+                reader = _context.ExecuteProcedureWithReturn(
+                    EmprestimoModel.PROCEDURE_SELECT_BY_CONTRATO, parameters, values);
+
+                if (reader.Read())
+                {
+                    retorno = TransformaReaderEmObjeto(reader);
+                }
+
+                reader.Close();
+
+                return retorno;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         private EmprestimoModel TransformaReaderEmObjeto(SqlDataReader reader)

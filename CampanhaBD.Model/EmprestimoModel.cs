@@ -19,6 +19,8 @@ namespace CampanhaBD.Model
 
         public string DataFimPagamento { get; set; }
 
+        public long CodigoContrato { get; set; }
+
         public int ParcelasNoContrato { get; set; }
 
         public int ParcelasEmAberto { get; set; }
@@ -26,6 +28,10 @@ namespace CampanhaBD.Model
         public int TipoEmprestimo { get; set; }
 
         public int SituacaoEmprestimo { get; set; }
+
+        public string DataIncluidoInss { get; set; }
+
+        public string DataExcluidoInss { get; set; }
 
         public float Saldo { get; set; }
 
@@ -39,9 +45,11 @@ namespace CampanhaBD.Model
         public const string PROCEDURE_DELETE = "SP_EXCLUIR_EMPRESTIMO";
         public const string PROCEDURE_DELETE_BENEFICIO = "SP_EXCLUIR_EMPRESTIMO_BENEFICIO";
         public const string PROCEDURE_DELETE_CLIENTE = "SP_EXCLUIR_EMPRESTIMO_CLIENTE";
+        public const string PROCEDURE_DELETE_CONTRATO = "SP_EXCLUIR_EMPRESTIMO_CONTRATO";
         public const string PROCEDURE_SELECT_ALL = "SP_LISTAR_TODOS_EMPRESTIMOS";
         public const string PROCEDURE_SELECT_BY_ID = "SP_SELECIONAR_EMPRESTIMO_ID";
         public const string PROCEDURE_SELECT_BY_CLIENTE_ID = "SP_SELECIONAR_EMPRESTIMOS_CLIENTE_ID";
+        public const string PROCEDURE_SELECT_BY_CONTRATO = "SP_SELECIONAR_EMPRESTIMO_CONTRATO";
         public const string COLUMN_BANCO_ID = "BancoId";
         public const string COLUMN_CLIENTE_ID = "ClienteId";
         public const string COLUMN_NUM_BENEFICIO = "NumBeneficio";
@@ -55,6 +63,9 @@ namespace CampanhaBD.Model
         public const string COLUMN_FIM_PAGAMENTO = "FimPagamento";
         public const string COLUMN_TIPO_EMPRESTIMO = "TipoEmprestimo";
         public const string COLUMN_SITUACAO_EMPRESTIMO = "SituacaoEmprestimo";
+        public const string COLUMN_DATA_INCLUIDO_INSS = "DataIncluidoInss";
+        public const string COLUMN_DATA_EXCLUIDO_INSS = "DataExcluidoInss";
+        public const string COLUMN_CODIGO_CONTRATO = "CodigoContrato";
         #endregion
 
         #region Preenchimento de campos
@@ -63,11 +74,20 @@ namespace CampanhaBD.Model
         {
             try
             {
-                //10 é o dia de desconta na folha de pagamento
-                string anoIni = valor.Substring(0, 4);
-                string mesIni = valor.Substring(4, 2);
-                string diaIni = "10";
-                DataInicioPagamento = (diaIni + "/" + mesIni + "/" + anoIni);
+                if ((!"".Equals(valor)))
+                {
+                    if (valor.Length == 6)
+                    {
+                        string anoIni = valor.Substring(0, 4);
+                        string mesIni = valor.Substring(4, 2);
+                        string diaIni = "10";
+
+                        if (!"00".Equals(diaIni) && !"00".Equals(mesIni) && !"0000".Equals(anoIni))
+                        {
+                            DataInicioPagamento = (diaIni + "/" + mesIni + "/" + anoIni);
+                        }                        
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -79,11 +99,20 @@ namespace CampanhaBD.Model
         {
             try
             {
-                //10 é o dia de desconta na folha de pagamento
-                string anoIni = valor.Substring(0, 4);
-                string mesIni = valor.Substring(4, 2);
-                string diaIni = "10";
-                DataFimPagamento = (diaIni + "/" + mesIni + "/" + anoIni);
+                if ((!"".Equals(valor)))
+                {
+                    if (valor.Length == 6)
+                    {
+                        string anoIni = valor.Substring(0, 4);
+                        string mesIni = valor.Substring(4, 2);
+                        string diaIni = "10";
+
+                        if (!"00".Equals(diaIni) && !"00".Equals(mesIni) && !"0000".Equals(anoIni))
+                        {
+                            DataFimPagamento = (diaIni + "/" + mesIni + "/" + anoIni);
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -142,7 +171,7 @@ namespace CampanhaBD.Model
             {
                 if (!"".Equals(valor))
                 {
-                    ParcelasNoContrato = int.Parse(valor);
+                    ParcelasNoContrato = (int) float.Parse(valor);
                 }
             }
             catch (Exception ex)
@@ -218,6 +247,68 @@ namespace CampanhaBD.Model
                 if (!"".Equals(valor))
                 {
                     BancoId = int.Parse(valor);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void PreencheDataIncluidoInss(string valor)
+        {
+            try
+            {
+                if ((!"".Equals(valor)) && (!"00000000".Equals(valor)))
+                {
+                    if (valor.Length == 8)
+                    {
+                        string ano = valor.Substring(0, 4);
+                        string mes = valor.Substring(4, 2);
+                        string dia = valor.Substring(6, 2);
+
+                        valor = dia + "/" + mes + "/" + ano;
+                    }
+                    DataIncluidoInss = valor;
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void PreencheDataExcluidoInss(string valor)
+        {
+            try
+            {
+                if ((!"".Equals(valor)) && (!"00000000".Equals(valor)))
+                {
+                    if (valor.Length == 8)
+                    {
+                        string ano = valor.Substring(0, 4);
+                        string mes = valor.Substring(4, 2);
+                        string dia = valor.Substring(6, 2);
+
+                        valor = dia + "/" + mes + "/" + ano;
+                    }
+
+                    DataExcluidoInss = valor;
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void PreencheCodigoContrato(string valor)
+        {
+            try
+            {
+                if (!"".Equals(valor))
+                {
+                    CodigoContrato = long.Parse(valor);
                 }
             }
             catch (Exception ex)

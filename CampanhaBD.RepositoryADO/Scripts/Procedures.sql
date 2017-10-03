@@ -579,6 +579,40 @@ BEGIN
 END
 GO
 
+--Selecionar Emprestimo por contrato
+--=================================================================
+IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_SELECIONAR_EMPRESTIMO_CONTRATO]')
+	AND OBJECTPROPERTY(ID, N'IsProcedure') = 1)
+	DROP PROCEDURE [DBO].[SP_SELECIONAR_EMPRESTIMO_CONTRATO]
+GO
+
+CREATE PROCEDURE [DBO].[SP_SELECIONAR_EMPRESTIMO_CONTRATO]
+	@ClienteId bigint,
+	@BancoId int,
+	@CodigoContrato bigint
+AS
+BEGIN
+	SELECT * FROM Emprestimo WHERE [ClienteId] = @ClienteId AND [BancoId] = @BancoId AND [CodigoContrato] = @CodigoContrato
+END
+GO
+
+--Excluir Emprestimo por contrato
+--=================================================================
+IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_EXCLUIR_EMPRESTIMO_CONTRATO]')
+	AND OBJECTPROPERTY(ID, N'IsProcedure') = 1)
+	DROP PROCEDURE [DBO].[SP_EXCLUIR_EMPRESTIMO_CONTRATO]
+GO
+
+CREATE PROCEDURE [DBO].[SP_EXCLUIR_EMPRESTIMO_CONTRATO]
+	@ClienteId bigint,
+	@BancoId int,
+	@CodigoContrato bigint
+AS
+BEGIN
+	DELETE FROM Emprestimo WHERE [ClienteId] = @ClienteId AND [BancoId] = @BancoId AND [CodigoContrato] = @CodigoContrato
+END
+GO
+
 --Salvar Emprestimo
 --===============================================
 IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_SALVAR_EMPRESTIMO]')
@@ -598,7 +632,10 @@ CREATE PROCEDURE [DBO].[SP_SALVAR_EMPRESTIMO]
 	@FimPagamento date = null,
 	@BancoId int,
 	@TipoEmprestimo int = null,
-	@SituacaoEmprestimo int = null
+	@SituacaoEmprestimo int = null,
+	@DataIncluidoInss date = null,
+	@DataExcluidoInss date = null,
+	@CodigoContrato bigint = null
 AS
 BEGIN
 	DECLARE @NumEmprestimo INT 
@@ -606,9 +643,9 @@ BEGIN
 	SET @NumEmprestimo = (SELECT (COUNT(*) + 1) FROM [Emprestimo] WHERE [ClienteId] = @ClienteId AND [NumBeneficio] = @NumBeneficio)
 
 	INSERT INTO [Emprestimo] ([ClienteId], [NumBeneficio], [NumEmprestimo], [ValorParcela], [ParcelasNoContrato], [ParcelasEmAberto], [Saldo], [InicioPagamento], [BancoId],
-		[ValorBruto], [FimPagamento], [TipoEmprestimo], [SituacaoEmprestimo])
+		[ValorBruto], [FimPagamento], [TipoEmprestimo], [SituacaoEmprestimo], [DataIncluidoInss], [DataExcluidoInss], [CodigoContrato])
 	VALUES (@ClienteId, @NumBeneficio, @NumEmprestimo, @ValorParcela, @ParcelasNoContrato, @ParcelasEmAberto, @Saldo, @InicioPagamento, @BancoId, @ValorBruto, @FimPagamento,
-		@TipoEmprestimo, @SituacaoEmprestimo)
+		@TipoEmprestimo, @SituacaoEmprestimo, @DataIncluidoInss, @DataExcluidoInss, @CodigoContrato)
 END
 GO
 
@@ -660,15 +697,13 @@ CREATE PROCEDURE [DBO].[SP_SALVAR_BENEFICIO]
 	@AgenciaPagamento int = null,
 	@OrgaoPagador int = null,
 	@ContaCorrente nvarchar(20) = null,
-	@DataIncluidoInss nvarchar(20) = null,
-	@DataExcluidoInss nvarchar(20) = null,
 	@Especie int = null
 AS
 BEGIN
 	INSERT INTO [Beneficio] ([Numero], [ClienteId], [Salario], [DataCompetencia], [DataInicioBeneficio], [BancoPagamento], [AgenciaPagamento], [OrgaoPagador], [ContaCorrente],
-		[DataIncluidoInss], [DataExcluidoInss], [Especie])
+		[Especie])
 	VALUES (@Numero, @ClienteId, @Salario, @DataCompetencia, @DataInicioBeneficio, @BancoPagamento, @AgenciaPagamento, @OrgaoPagador, 
-		@ContaCorrente, @DataIncluidoInss, @DataExcluidoInss, @Especie)
+		@ContaCorrente, @Especie)
 END
 GO
 
@@ -688,43 +723,13 @@ CREATE PROCEDURE [DBO].[SP_ALTERAR_BENEFICIO]
 	@AgenciaPagamento int = null,
 	@OrgaoPagador int = null,
 	@ContaCorrente nvarchar(20) = null,
-	@DataIncluidoInss nvarchar(20) = null,
-	@DataExcluidoInss nvarchar(20) = null,
 	@Especie int = null
 AS
 BEGIN
 
 	UPDATE [Beneficio] SET [Salario] = @Salario, [DataCompetencia] = CONVERT(date, GETDATE()), [DataInicioBeneficio] = @DataInicioBeneficio, 
 		[BancoPagamento] = @BancoPagamento, [AgenciaPagamento] = @AgenciaPagamento, [OrgaoPagador] = @OrgaoPagador, 
-		[ContaCorrente] = @ContaCorrente, [DataIncluidoInss] = @DataIncluidoInss, [Especie] = @Especie
-END
-GO
-
---Alterar Beneficio Sem Data Exclusao
---========================================================================
-IF EXISTS (SELECT * FROM DBO.SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[SP_ALTERAR_BENEFICIO_SEM_DATA_EXCLU]')
-	AND OBJECTPROPERTY(ID, N'IsProcedure') = 1)
-	DROP PROCEDURE [DBO].[SP_ALTERAR_BENEFICIO_SEM_DATA_EXCLU]
-GO
-
-CREATE PROCEDURE [DBO].[SP_ALTERAR_BENEFICIO_SEM_DATA_EXCLU]
-	@Numero bigint,
-	@ClienteId bigint,
-	@Salario float = null,
-	@DataInicioBeneficio date = null,
-	@BancoPagamento int = null,
-	@AgenciaPagamento int = null,
-	@OrgaoPagador int = null,
-	@ContaCorrente nvarchar(20) = null,
-	@DataIncluidoInss nvarchar(20) = null,
-	@DataExcluidoInss nvarchar(20) = null,
-	@Especie int = null
-AS
-BEGIN
-
-	UPDATE [Beneficio] SET [Salario] = @Salario, [DataCompetencia] = CONVERT(date, GETDATE()), [DataInicioBeneficio] = @DataInicioBeneficio, 
-		[BancoPagamento] = @BancoPagamento, [AgenciaPagamento] = @AgenciaPagamento, [OrgaoPagador] = @OrgaoPagador, 
-		[ContaCorrente] = @ContaCorrente, [DataIncluidoInss] = @DataIncluidoInss, [Especie] = @Especie
+		[ContaCorrente] = @ContaCorrente, [Especie] = @Especie
 END
 GO
 

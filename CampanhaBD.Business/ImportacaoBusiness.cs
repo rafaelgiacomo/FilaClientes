@@ -306,7 +306,7 @@ namespace CampanhaBD.Business
                 _cliente.Telefone = registro.Telefone;
                 _cliente.Nome = registro.Nome;
                 _cliente.Bairro = registro.Bairro;
-                _cliente.Ativado = (registro.DataExcluidoInss == "00000000");
+                _cliente.Ativado = (true);
                 //cl.Complemento = Reader[BaseOriginalDadoModel.COLUMN_COMPLEMENTO].ToString();
                 #endregion
 
@@ -321,6 +321,9 @@ namespace CampanhaBD.Business
                 emp.PreencheBancoId(registro.BancoEmprestimo);
                 emp.PreencheTipoEmprestimo(registro.TipoEmprestimo);
                 emp.PreencheSituacaoEmprestimo(registro.SituacaoEmprestimo);
+                emp.PreencheDataIncluidoInss(registro.DataIncluidoInss);
+                emp.PreencheDataExcluidoInss(registro.DataExcluidoInss);
+                emp.PreencheCodigoContrato(registro.ContratoEmprestimo);
                 #endregion
 
                 #region DadosBeneficio
@@ -331,8 +334,6 @@ namespace CampanhaBD.Business
                 ben.PreencheOrgaoPagador(registro.OrgaoPagador);
                 ben.PreencheSalario(registro.ValorBeneficio);
                 ben.PreencheDataInicioBeneficio(registro.DataInicioBeneficio);
-                ben.PreencheDataIncluidoInss(registro.DataIncluidoInss);
-                ben.PreencheDataExcluidoInss(registro.DataExcluidoInss);
                 ben.PreencheEspecie(registro.Especie);
                 #endregion
 
@@ -356,10 +357,18 @@ namespace CampanhaBD.Business
             }
             catch (Exception ex)
             {
-                if (filtro.AtualizarDadosCliente)
+                using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
+                {
+                    var idCliente = unit.Clientes.SelecionarIdPorCpf(_cliente);
+                    _cliente.Id = idCliente;
+                    _cliente.Beneficios[0].IdCliente = _cliente.Id;
+                    _cliente.Emprestimos[0].ClienteId = _cliente.Id;
+                }
+
+                if (filtro.AtualizarDadosCliente && ValidaDadosCliente())
                 {
                     AlterarCliente();
-                }                
+                }
             }
         }
 
@@ -373,16 +382,8 @@ namespace CampanhaBD.Business
             {
                 if (filtro.AtualizarDadosCliente)
                 {
-                    if (_cliente.Beneficios[0].DataExcluidoInss != null)
-                    {
-                        AlterarBeneficio();
-                    }
-                    else
-                    {
-                        AlterarBeneficioSemDataExclusao();
-                    }
-                    
-                }                
+                    AlterarBeneficio();
+                }
             }
         }
 
@@ -406,26 +407,29 @@ namespace CampanhaBD.Business
             }
         }
 
-        private void AlterarBeneficioSemDataExclusao()
-        {
-            using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
-            {
-                if (_cliente.Beneficios[0].Numero > 0)
-                {
-                    unit.Beneficios.AlterarSemDataExclusao(_cliente.Beneficios[0]);
-                }
-            }
-        }
-
         private void SalvarEmprestimo()
         {
             try
             {
                 using (UnityOfWorkAdo unit = new UnityOfWorkAdo(_connectionString))
                 {
-                    unit.Emprestimos.Inserir(_cliente.Emprestimos[0]);
-                }
+                    if (_cliente.Emprestimos[0].DataExcluidoInss == null)
+                    {
+                        unit.Emprestimos.Inserir(_cliente.Emprestimos[0]);
+                    }
+                    else
+                    {
+                        if (_cliente.Emprestimos[0].CodigoContrato != 0)
+                        {
+                            var emp = unit.Emprestimos.ListarPorContrato(_cliente.Emprestimos[0]);
 
+                            if (emp != null)
+                            {
+                                unit.Emprestimos.ExcluirPorContrato(_cliente.Emprestimos[0]);
+                            }                            
+                        }                        
+                    }                    
+                }
             }
             catch (Exception ex)
             {

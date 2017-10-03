@@ -71,7 +71,6 @@ namespace CampanhaBD.Model
 
             lista.Add("BENEFICIO");
             lista.Add("ESPECIE_BEN");
-            lista.Add("DATA_EXLCUIDO_INSS");
             lista.Add("CPF");
             lista.Add("DATA_NASCIMENTO");
             lista.Add("NOME");
@@ -93,6 +92,7 @@ namespace CampanhaBD.Model
             lista.Add("DATA_IMPORTADO");
             lista.Add("ATIVADO");
 
+            lista.Add("DATA_EXLCUIDO_INSS");
             lista.Add("BANCO_ID");
             lista.Add("DATA_FIM_PAGAMENTO");
             lista.Add("DATA_INICIO_PAGAMENTO");

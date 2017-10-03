@@ -6,7 +6,7 @@ using CampanhaBD.Interface;
 using CampanhaBD.Model;
 
 namespace CampanhaBD.RepositoryADO
-{
+{   
     public class ClienteRepositoryAdo : IRepository<ClienteModel>
     {
         private Context _context;

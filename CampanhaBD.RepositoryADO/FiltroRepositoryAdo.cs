@@ -183,7 +183,7 @@ namespace CampanhaBD.RepositoryADO
                 {
                     row.Add(reader[EmprestimoModel.COLUMN_NUM_BENEFICIO].ToString());
                     row.Add(reader[BeneficioModel.COLUMN_ESPECIE].ToString());
-                    row.Add(reader[BeneficioModel.COLUMN_DATA_EXCLUIDO_INSS].ToString());
+                    
                     row.Add(reader[ClienteModel.COLUMN_CPF].ToString());
                     row.Add(string.Format("{0:dd/MM/yyy}", DateTime.Parse(reader[ClienteModel.COLUMN_DATANASCIMENTO].ToString())));
                     row.Add(reader[ClienteModel.COLUMN_NOME].ToString());
@@ -205,6 +205,7 @@ namespace CampanhaBD.RepositoryADO
                     row.Add(reader[ClienteModel.COLUMN_DATA_IMPORTADO].ToString());
                     row.Add(reader[ClienteModel.COLUMN_ATIVADO].ToString());
 
+                    row.Add(reader[EmprestimoModel.COLUMN_DATA_EXCLUIDO_INSS].ToString());
                     row.Add(reader[EmprestimoModel.COLUMN_BANCO_ID].ToString());
                     row.Add(reader[EmprestimoModel.COLUMN_FIM_PAGAMENTO].ToString());
                     row.Add(reader[EmprestimoModel.COLUMN_INICIO_PAGAMENTO].ToString());
@@ -518,6 +519,8 @@ namespace CampanhaBD.RepositoryADO
             try
             {
                 string sql_command = "";
+
+                sql_command += " AND e.DataExcluidoInss IS NULL ";
 
                 #region Valor Parcela
 
